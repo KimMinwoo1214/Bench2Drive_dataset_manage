@@ -1,0 +1,59 @@
+{
+  "paths": {
+    "full_manifest": "data/bench2drive_full+sup_13638.json",
+    "base_manifest": "data/bench2drive_base_1000.json",
+    "base_file_list": null,
+    "evaluation_results": "results/result.json",
+    "evaluation_results_finetuned": null,
+    "evaluation_plan": null,
+    "ability_map": "ability_map.json",
+    "output_dir": "outputs/experiment_001",
+    "download_dir": "downloads/experiment_001"
+  },
+  "evaluation": {
+    "expected_routes": 220,
+    "success_policy": "strict_score",
+    "score_epsilon": 1e-06,
+    "allow_duplicate_route_ids": false,
+    "runtime_failure_patterns": [
+      "TickRuntime",
+      "Simulation crashed",
+      "Agent setup failed",
+      "RuntimeError",
+      "Evaluator exception"
+    ]
+  },
+  "weakness_thresholds": {
+    "driving_score_below": 50,
+    "route_completion_below": 80,
+    "success_rate_below": 1.0,
+    "exclude_runtime_failures": true,
+    "collision_always_weak": true,
+    "blocked_always_weak": true,
+    "timeout_always_weak": true,
+    "yield_violation_always_weak": true,
+    "signal_violation_always_weak": true
+  },
+  "selection": {
+    "quota_per_scenario": 100,
+    "scenario_quotas": {},
+    "max_weak_scenarios": null,
+    "failed_condition_focus_fraction": 0.5,
+    "random_seed": 42
+  },
+  "replay": {
+    "base_replay_ratio": 0.4,
+    "random_seed": 42
+  },
+  "huggingface": {
+    "enabled": false,
+    "repo_id": "",
+    "remote_prefix": ""
+  },
+  "commands": {
+    "train_base": "",
+    "evaluate_base": "",
+    "fine_tune": "",
+    "evaluate_finetuned": ""
+  }
+}

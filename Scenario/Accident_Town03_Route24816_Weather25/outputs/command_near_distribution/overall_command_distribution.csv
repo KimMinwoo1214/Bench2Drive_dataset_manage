@@ -1,0 +1,9 @@
+﻿command_id,command_name,frame_count,percentage,clip_count,run_count
+-1,VOID,0,0.0,0,0
+0,VOID_OR_UNKNOWN,0,0.0,0,0
+1,LEFT,0,0.0,0,0
+2,RIGHT,0,0.0,0,0
+3,STRAIGHT,0,0.0,0,0
+4,LANEFOLLOW,208,100.0,1,1
+5,CHANGELANELEFT,0,0.0,0,0
+6,CHANGELANERIGHT,0,0.0,0,0

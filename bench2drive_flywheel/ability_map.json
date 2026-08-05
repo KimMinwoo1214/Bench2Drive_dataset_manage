@@ -1,0 +1,77 @@
+{
+  "abilities": {
+    "Merging": [
+      "CrossingBicycleFlow",
+      "EnterActorFlow",
+      "HighwayExit",
+      "InterurbanActorFlow",
+      "HighwayCutIn",
+      "InterurbanAdvancedActorFlow",
+      "MergerIntoSlowTrafficV2",
+      "MergerIntoSlowTraffic",
+      "NonSignalizedJunctionLeftTurn",
+      "NonSignalizedJunctionRightTurn",
+      "NonSignalizedJunctionLeftTurnEnterFlow",
+      "ParkingExit",
+      "LaneChange",
+      "SignalizedJunctionLeftTurn",
+      "SignalizedJunctionRightTurn",
+      "SignalizedJunctionLeftTurnEnterFlow"
+    ],
+    "Overtaking": [
+      "Accident",
+      "AccidentTwoWays",
+      "ConstructionObstacle",
+      "ConstructionObstacleTwoWays",
+      "HazardAtSideLaneTwoWays",
+      "HazardAtSideLane",
+      "ParkedObstacleTwoWays",
+      "ParkedObstacle",
+      "VehicleOpensDoorTwoWays"
+    ],
+    "Emergency Brake": [
+      "BlockedIntersection",
+      "DynamicObjectCrossing",
+      "HardBreakRoute",
+      "OppositeVehicleTakingPriority",
+      "OppositeVehicleRunningRedLight",
+      "ParkingCutIn",
+      "PedestrianCrossing",
+      "ParkingCrossingPedestrian",
+      "StaticCutIn",
+      "VehicleTurningRoute",
+      "VehicleTurningRoutePedestrian",
+      "ControlLoss"
+    ],
+    "Give Way": [
+      "InvadingTurn",
+      "YieldToEmergencyVehicle"
+    ],
+    "Traffic Sign": [
+      "EnterActorFlow",
+      "CrossingBicycleFlow",
+      "NonSignalizedJunctionLeftTurn",
+      "NonSignalizedJunctionRightTurn",
+      "NonSignalizedJunctionLeftTurnEnterFlow",
+      "OppositeVehicleTakingPriority",
+      "OppositeVehicleRunningRedLight",
+      "PedestrianCrossing",
+      "SignalizedJunctionLeftTurn",
+      "SignalizedJunctionRightTurn",
+      "SignalizedJunctionLeftTurnEnterFlow",
+      "TJunction",
+      "VanillaNonSignalizedTurn",
+      "VanillaSignalizedTurnEncounterGreenLight",
+      "VanillaSignalizedTurnEncounterRedLight",
+      "VanillaNonSignalizedTurnEncounterStopsign",
+      "VehicleTurningRoute",
+      "VehicleTurningRoutePedestrian"
+    ]
+  },
+  "aliases": {
+    "SequentialLaneChange": "LaneChange",
+    "SequentialLaneChange_1": "LaneChange",
+    "VehicleOpenDoorTwoWays": "VehicleOpensDoorTwoWays",
+    "VehicleOpensDoorTwoWays": "VehicleOpensDoorTwoWays"
+  }
+}
