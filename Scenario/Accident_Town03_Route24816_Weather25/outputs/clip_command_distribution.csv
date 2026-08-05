@@ -1,2 +1,0 @@
-﻿clip,clip_path,valid_frame_count,missing_command_count,error_count,selected_command_frame_count,contains_selected_command,VOID_frames,VOID_runs,VOID_OR_UNKNOWN_frames,VOID_OR_UNKNOWN_runs,LEFT_frames,LEFT_runs,RIGHT_frames,RIGHT_runs,STRAIGHT_frames,STRAIGHT_runs,LANEFOLLOW_frames,LANEFOLLOW_runs,CHANGELANELEFT_frames,CHANGELANELEFT_runs,CHANGELANERIGHT_frames,CHANGELANERIGHT_runs
-Accident_Town03_Route24816_Weather25,/home/kmw/Summer_Intership/Carla/Scenario/Accident_Town03_Route24816_Weather25,208,0,0,0,False,0,0,0,0,0,0,0,0,0,0,208,1,0,0,0,0

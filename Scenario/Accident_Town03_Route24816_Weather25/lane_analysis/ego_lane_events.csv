@@ -1,3 +1,0 @@
-﻿event_type,counted,source_stable,destination_stable,source_frames,destination_frames,frame,frame_number,timestamp,x,y,z,from_road_id,from_section_id,from_lane_id,to_road_id,to_section_id,to_lane_id
-LANE_CHANGE,True,True,True,100,38,00100,100,,92.54561614990234,195.2831268310547,1.1308772563934326,67,0,-2,67,0,-1
-LANE_CHANGE,True,True,True,38,70,00138,138,,63.51820755004883,195.06448364257812,0.48525142669677734,67,0,-1,67,0,-2
