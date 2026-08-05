@@ -1,0 +1,7 @@
+# Ignore all files
+*
+
+# Except for Python files, Markdown files, and the .gitignore file itself
+!*.py
+!*.md
+!.gitignore
