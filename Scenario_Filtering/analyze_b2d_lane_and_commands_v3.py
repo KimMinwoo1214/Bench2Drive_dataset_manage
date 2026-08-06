@@ -40,7 +40,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 
-SCRIPT_VERSION = "all-child-scenarios"
+SCRIPT_VERSION = "2.2-all-child-scenarios"
 
 
 COMMAND_NAMES = {
