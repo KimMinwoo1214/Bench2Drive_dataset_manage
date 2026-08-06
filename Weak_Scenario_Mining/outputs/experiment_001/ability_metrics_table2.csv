@@ -1,0 +1,6 @@
+﻿ability,aggregation_mode,episodes_total,episodes_valid,runtime_failure_count,scenario_count,mean_driving_score,mean_route_completion,mean_infraction_penalty,success_rate,collision_total,blocked_total,timeout_total
+Merging,table2,2,2,0,2,68.0,100.0,0.68,0.5,2,0,0
+Overtaking,table2,2,1,1,1,100.0,100.0,1.0,1.0,0,0,0
+Emergency Brake,table2,2,2,0,2,100.0,100.0,1.0,1.0,0,0,0
+Give Way,table2,2,2,0,2,85.0,100.0,0.85,0.5,0,0,0
+Traffic Sign,table2,3,3,0,3,33.333333,33.333333,1.0,0.333333,0,2,0

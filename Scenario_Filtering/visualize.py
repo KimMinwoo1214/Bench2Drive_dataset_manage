@@ -42,7 +42,7 @@ def get_stable_object_color(npc):
 
     return (int(blue * 255), int(green * 255), int(red * 255))
 
-def visualize_data(file_path, map_path, vis_bbox=True,  vis_top_down=False, vis_road=True, vis_lidar_bev=False, vis_lidar_to_back_image=False, vis_lidar_to_front_image=False, vis_lidar_to_front_left_image=False):
+def visualize_data(file_path, map_path, vis_bbox=True,  vis_top_down=True, vis_road=True, vis_lidar_bev=True, vis_lidar_to_back_image=False, vis_lidar_to_front_image=False, vis_lidar_to_front_left_image=False):
     print(f'file_path={file_path}')
     print(f'map_path={map_path}')
 

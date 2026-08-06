@@ -1,0 +1,48 @@
+[
+  {
+    "source_file": "/home/kmw/Summer_Intership/Carla/Bench2Drive_dataset_manage/Weak_Scenario_Mining/results/result.json",
+    "format": "bench2drive_native",
+    "entry_status": "Finished",
+    "eligible": true,
+    "progress": [
+      10,
+      10
+    ],
+    "b2d_metrics": {
+      "driving_score": 62.7684,
+      "success_rate": 50.0,
+      "efficiency": 126.41513699690404,
+      "comfortness": 0.300047619047619,
+      "route_completion": 73.336,
+      "infraction_penalty": 0.8709999999999999,
+      "success_num": 5,
+      "eval_num": 10,
+      "expected": 10
+    },
+    "global_record": {
+      "index": -1,
+      "route_id": -1,
+      "status": "Finished",
+      "infractions": {
+        "route_dev": 0.0,
+        "min_speed_infractions": 141.2797,
+        "outside_route_lanes": 0.0,
+        "yield_emergency_vehicle_infractions": 0.9696999999999999,
+        "scenario_timeouts": 0.0,
+        "vehicle_blocked": 200.0,
+        "red_light": 0.0,
+        "collisions_vehicle": 1.7337,
+        "collisions_pedestrian": 0.0,
+        "collisions_layout": 2.2698,
+        "route_timeout": 0.0,
+        "stop_infraction": 0.0
+      },
+      "scores_mean": {
+        "score_composed": 62.7684,
+        "score_route": 73.336,
+        "score_penalty": 0.8709999999999999
+      }
+    },
+    "record_count": 10
+  }
+]

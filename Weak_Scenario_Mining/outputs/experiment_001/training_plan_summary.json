@@ -1,0 +1,8 @@
+{
+  "base_unique_count": 500,
+  "targeted_new_unique_count": 329,
+  "combined_unique_count": 829,
+  "mixed_file_list_length": 1250,
+  "requested_base_replay_ratio": 0.4,
+  "actual_base_fraction_in_mixed_list": 0.4
+}

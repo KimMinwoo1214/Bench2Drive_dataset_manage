@@ -1,0 +1,79 @@
+[
+  {
+    "priority_rank": 1,
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ],
+    "priority_score": 8.05,
+    "requested_quota": 100,
+    "available_after_base_exclusion": 246,
+    "selected_count": 100,
+    "selected_town_count": 2,
+    "selected_weather_count": 22,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ]
+  },
+  {
+    "priority_rank": 2,
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ],
+    "priority_score": 8.05,
+    "requested_quota": 100,
+    "available_after_base_exclusion": 833,
+    "selected_count": 100,
+    "selected_town_count": 3,
+    "selected_weather_count": 23,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ]
+  },
+  {
+    "priority_rank": 3,
+    "scenario": "LaneChange",
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ],
+    "priority_score": 7.66,
+    "requested_quota": 100,
+    "available_after_base_exclusion": 50,
+    "selected_count": 50,
+    "selected_town_count": 7,
+    "selected_weather_count": 20,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ]
+  },
+  {
+    "priority_rank": 4,
+    "scenario": "YieldToEmergencyVehicle",
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ],
+    "priority_score": 4.55,
+    "requested_quota": 100,
+    "available_after_base_exclusion": 79,
+    "selected_count": 79,
+    "selected_town_count": 3,
+    "selected_weather_count": 21,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ]
+  }
+]
