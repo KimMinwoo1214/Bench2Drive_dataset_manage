@@ -4,4 +4,5 @@
 # Except for Python files, Markdown files, and the .gitignore file itself
 !*.py
 !*.md
+!requirements.txt
 !.gitignore

@@ -190,6 +190,10 @@ outputs/experiment_001/base_distribution/
 └── distribution_summary.json
 ```
 
+`outputs/` 아래 결과는 실행할 때마다 다시 생성할 수 있어 Git에는
+올리지 않습니다. 팀원은 같은 `config.json`과 입력 `result.json`으로 동일한
+결과를 재생성할 수 있습니다.
+
 주요 의미:
 
 - `scenario_distribution.csv`: 시나리오별 Base 데이터 개수와 비율

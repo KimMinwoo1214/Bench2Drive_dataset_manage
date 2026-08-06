@@ -1,5 +1,7 @@
 # Bench2Drive Data Flywheel & Analysis Toolkit
 
+> 현재 `b2d/data`의 clip을 신호등 분석·보정하고 카메라/LiDAR 영상까지 만들려면 [Scenario_Filtering/PIPELINE.md](Scenario_Filtering/PIPELINE.md)를 먼저 보십시오. clip 폴더 하나 또는 `data` 폴더 하나만 입력하면 됩니다.
+
 Bench2Drive closed-loop 평가 결과를 분석하여 취약 시나리오를 찾고, Full 데이터에서 추가 학습 데이터를 선택한 뒤 Base replay와 혼합하는 데이터 플라이휠 도구입니다.
 
 추가로 Bench2Drive annotation의 `command_near`, Ego 차선 변경, 신호등 `affects_ego` 라벨을 분석·검증하기 위한 유틸리티와 공식 평가·시각화 도구를 포함합니다.

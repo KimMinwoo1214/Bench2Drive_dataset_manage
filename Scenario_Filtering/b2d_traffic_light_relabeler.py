@@ -672,9 +672,21 @@ def write_corrected_annotations(
         write_annotation(output_dir / frame.path.name, data)
 
 
-def safe_scenario_output(output_root: Path, scenario: str) -> Path:
+def safe_relative_parts(value: str) -> list[str]:
+    """Return safe relative path parts and reject absolute/parent traversal."""
+    path = Path(value)
+    if path.is_absolute() or any(part == ".." for part in path.parts):
+        raise ValueError(f"절대 경로나 상위 경로는 사용할 수 없습니다: {value}")
+    return [part for part in path.parts if part not in {"", "."}]
+
+
+def safe_scenario_output(
+    output_root: Path,
+    scenario: str,
+    scenario_subdir: str = "",
+) -> Path:
     parts = [part for part in Path(scenario).parts if part not in {"", ".", ".."}]
-    return output_root.joinpath(*parts)
+    return output_root.joinpath(*parts, *safe_relative_parts(scenario_subdir))
 
 
 def write_per_scenario(
@@ -683,8 +695,9 @@ def write_per_scenario(
     frames: Sequence[Frame],
     labels: Sequence[FrameLabel],
     events: Sequence[Event],
+    scenario_subdir: str = "",
 ) -> None:
-    scenario_output = safe_scenario_output(output_root, scenario)
+    scenario_output = safe_scenario_output(output_root, scenario, scenario_subdir)
     scenario_output.mkdir(parents=True, exist_ok=True)
     with (scenario_output / "traffic_light_frame_labels.csv").open(
         "w", newline="", encoding="utf-8-sig"
@@ -706,6 +719,7 @@ def process_scenario(
     output_root: Path,
     config: Config,
     write_corrected: bool,
+    scenario_subdir: str = "",
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], int]:
     files = annotation_files(anno_dir)
     frames = load_frames(files, config)
@@ -716,10 +730,19 @@ def process_scenario(
 
     frame_data = list(frame_rows(scenario, frames, labels))
     event_data = list(event_rows(scenario, frames, events))
-    write_per_scenario(output_root, scenario, frames, labels, events)
+    write_per_scenario(
+        output_root,
+        scenario,
+        frames,
+        labels,
+        events,
+        scenario_subdir=scenario_subdir,
+    )
     if write_corrected:
         write_corrected_annotations(
-            safe_scenario_output(output_root, scenario), frames, labels
+            safe_scenario_output(output_root, scenario, scenario_subdir),
+            frames,
+            labels,
         )
     review_count = sum(row["needs_review"] == "true" for row in event_data)
     return frame_data, event_data, review_count
@@ -746,6 +769,21 @@ def build_parser() -> argparse.ArgumentParser:
         "--output",
         default="traffic_light_relabel_output",
         help="결과 폴더 (기본값: traffic_light_relabel_output)",
+    )
+    parser.add_argument(
+        "--scenario-output-root",
+        help=(
+            "클립별 CSV/corrected_anno를 저장할 별도 루트. "
+            "생략하면 --output 아래에 저장"
+        ),
+    )
+    parser.add_argument(
+        "--scenario-output-subdir",
+        default="",
+        help=(
+            "각 클립 폴더 아래에 붙일 상대 경로 "
+            "(예: traffic_lights/relabel)"
+        ),
     )
     parser.add_argument(
         "--write-corrected-anno",
@@ -796,8 +834,15 @@ def main(argv: Sequence[str] | None = None) -> int:
         config = validate_args(args)
         input_path = Path(args.input)
         output_root = Path(args.output).resolve()
+        scenario_output_root = (
+            Path(args.scenario_output_root).resolve()
+            if args.scenario_output_root
+            else output_root
+        )
+        safe_relative_parts(args.scenario_output_subdir)
         scenarios = discover_scenarios(input_path)
         output_root.mkdir(parents=True, exist_ok=True)
+        scenario_output_root.mkdir(parents=True, exist_ok=True)
 
         frames_csv = (output_root / "all_traffic_light_frame_labels.csv").open(
             "w", newline="", encoding="utf-8-sig"
@@ -824,9 +869,10 @@ def main(argv: Sequence[str] | None = None) -> int:
                 frame_data, event_data, review_count = process_scenario(
                     scenario=scenario,
                     anno_dir=anno_dir,
-                    output_root=output_root,
+                    output_root=scenario_output_root,
                     config=config,
                     write_corrected=args.write_corrected_anno,
+                    scenario_subdir=args.scenario_output_subdir,
                 )
                 frame_writer.writerows(frame_data)
                 event_writer.writerows(event_data)
@@ -854,7 +900,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"프레임: {total_frames}")
         print(f"선택된 신호등 이벤트: {total_events}")
         print(f"검토 필요 이벤트: {total_reviews}")
-        print(f"결과 폴더: {output_root}")
+        print(f"공통 집계 폴더: {output_root}")
+        print(f"클립별 결과 폴더: {scenario_output_root}")
         return 0
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"오류: {error}", file=sys.stderr)
