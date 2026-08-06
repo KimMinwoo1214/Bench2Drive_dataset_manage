@@ -10,11 +10,44 @@ os.environ.setdefault(
 
 import numpy as np
 import cv2
-import random
+import hashlib
+import colorsys
 import laspy
 import matplotlib.cm as cm
 from tqdm import trange
 from utils import get_image_point, point_in_canvas_wh, edges, world_to_ego, get_forward_vector, calculate_cube_vertices, draw_dashed_line, vector_angle
+
+
+def get_stable_object_color(npc):
+    """Return a deterministic, bright OpenCV BGR color for one tracked object.
+
+    Bench2Drive annotations keep the same actor ID across frames.  Hashing that
+    ID means the same vehicle receives the same color in every frame and across
+    repeated executions.
+    """
+    object_id = None
+    for key in ("id", "actor_id", "track_id", "instance_id"):
+        if key in npc and npc[key] is not None:
+            object_id = npc[key]
+            break
+
+    if object_id is None:
+        # Without a persistent ID, assigning a per-instance temporal color is not
+        # possible.  Use a stable class color rather than frame-wise randomness.
+        object_id = f"class:{npc.get('class', 'unknown')}"
+
+    digest = hashlib.sha256(str(object_id).encode("utf-8")).digest()
+
+    # Quantize hue to evenly spaced bins and keep saturation/value high so that
+    # boxes remain visible on dark/night images.
+    hue_bins = 36
+    hue = (int.from_bytes(digest[:2], byteorder="big") % hue_bins) / hue_bins
+    saturation = 0.72
+    value = 1.0
+    red, green, blue = colorsys.hsv_to_rgb(hue, saturation, value)
+
+    return (int(blue * 255), int(green * 255), int(red * 255))
+
 
 def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=None, max_frames=None, vis_bbox=True,  vis_top_down=True, vis_road=True, vis_lidar_bev=True, vis_lidar_to_back_image=True, vis_lidar_to_front_image=True, vis_lidar_to_front_left_image=True):
     file_path = pathlib.Path(file_path).expanduser().resolve()
@@ -25,26 +58,30 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
         if anno_dir is not None
         else file_path / 'anno'
     )
-    # 원본/보정본 비교 시 차량 bbox 색이 실행마다 바뀌지 않게 합니다.
-    color_rng = random.Random(0)
-
     print(f'file_path={file_path}')
     print(f'anno_dir={annotation_dir}')
     print(f'map_path={map_path}')
     print(f'output_dir={save_path}')
 
-    (save_path / 'camera' / 'rgb_front_3d_bbox').mkdir(parents=True, exist_ok=True)
-    (save_path / 'camera' / 'rgb_front_landmark').mkdir(parents=True, exist_ok=True)
-    (save_path / 'camera' / 'rgb_front_left_3d_bbox').mkdir(parents=True, exist_ok=True)
-    (save_path / 'camera' / 'rgb_front_right_3d_bbox').mkdir(parents=True, exist_ok=True)
-    (save_path / 'camera' / 'rgb_back_3d_bbox').mkdir(parents=True, exist_ok=True)
-    (save_path / 'camera' / 'rgb_back_left_3d_bbox').mkdir(parents=True, exist_ok=True)
-    (save_path / 'camera' / 'rgb_back_right_3d_bbox').mkdir(parents=True, exist_ok=True)
-    (save_path / 'camera' / 'rgb_top_down_3d_bbox').mkdir(parents=True, exist_ok=True)
-    (save_path / 'lidar'  / 'bev').mkdir(parents=True, exist_ok=True)
-    (save_path / 'lidar'  / 'front').mkdir(parents=True, exist_ok=True)
-    (save_path / 'lidar'  / 'front_left').mkdir(parents=True, exist_ok=True)
-    (save_path / 'lidar'  / 'back').mkdir(parents=True, exist_ok=True)
+    if vis_bbox:
+        (save_path / 'camera' / 'rgb_front_3d_bbox').mkdir(parents=True, exist_ok=True)
+        (save_path / 'camera' / 'rgb_front_left_3d_bbox').mkdir(parents=True, exist_ok=True)
+        (save_path / 'camera' / 'rgb_front_right_3d_bbox').mkdir(parents=True, exist_ok=True)
+        (save_path / 'camera' / 'rgb_back_3d_bbox').mkdir(parents=True, exist_ok=True)
+        (save_path / 'camera' / 'rgb_back_left_3d_bbox').mkdir(parents=True, exist_ok=True)
+        (save_path / 'camera' / 'rgb_back_right_3d_bbox').mkdir(parents=True, exist_ok=True)
+    if vis_road:
+        (save_path / 'camera' / 'rgb_front_landmark').mkdir(parents=True, exist_ok=True)
+    if vis_top_down:
+        (save_path / 'camera' / 'rgb_top_down_3d_bbox').mkdir(parents=True, exist_ok=True)
+    if vis_lidar_bev:
+        (save_path / 'lidar' / 'bev').mkdir(parents=True, exist_ok=True)
+    if vis_lidar_to_front_image:
+        (save_path / 'lidar' / 'front').mkdir(parents=True, exist_ok=True)
+    if vis_lidar_to_front_left_image:
+        (save_path / 'lidar' / 'front_left').mkdir(parents=True, exist_ok=True)
+    if vis_lidar_to_back_image:
+        (save_path / 'lidar' / 'back').mkdir(parents=True, exist_ok=True)
 
     cam_map = {
         'CAM_FRONT': 'rgb_front',
@@ -86,7 +123,7 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
         sensors_anno = anno['sensors']
         # ========================== bbox ==========================
         if vis_bbox:            
-            for key in ['CAM_FRONT','CAM_FRONT_LEFT','CAM_FRONT_RIGHT','CAM_BACK', 'CAM_BACK_LEFT', 'CAM_BACK_RIGHT']:
+            for key in ['CAM_FRONT']:
                 K = sensors_anno[key]['intrinsic']
                 world2cam = sensors_anno[key]['world2cam']
                 visulize_img = cv2.imread(os.path.join(file_path, f'camera/{cam_map[key]}/{frame}.jpg'))
@@ -97,11 +134,7 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
                     if 'vehicle' in npc['class']: # vehicle
                         forward_vec = get_forward_vector(sensors_anno[key]['rotation'][2])
                         ray = np.array(npc['location']) - np.array(sensors_anno[key]['location'])
-                        color = (
-                            color_rng.randint(0, 255),
-                            color_rng.randint(0, 255),
-                            color_rng.randint(0, 255),
-                        )
+                        color = get_stable_object_color(npc)
                         if forward_vec.dot(ray) > 1 and vector_angle(forward_vec, ray)<45:
                             verts = np.array(npc['world_cord'])
                             for edge in edges:

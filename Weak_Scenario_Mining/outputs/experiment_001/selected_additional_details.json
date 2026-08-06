@@ -1,0 +1,6703 @@
+[
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16551_Weather18.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16551",
+    "weather": "18",
+    "sha256": "1fc2d66f3f4f84e951ae5f6a1d83af83f0a977fdebf24927c8b61e109aad1ef4",
+    "size": 180621993,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16552_Weather19.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16552",
+    "weather": "19",
+    "sha256": "185d0b565784ec00ae6174aa479ea925f702e0070cb5a4fef2a398ca106047a9",
+    "size": 124094602,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16553_Weather20.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16553",
+    "weather": "20",
+    "sha256": "870a19b85cb64a5fc8b995f1a4f79c5964d4485af447fd4f800a82b6292c82da",
+    "size": 149895832,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16556_Weather23.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16556",
+    "weather": "23",
+    "sha256": "bc2398d5a169b768c3a0fa1d14deaa2023c0d70e8d879a420f99bb0283d61d9c",
+    "size": 119612890,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16562_Weather3.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16562",
+    "weather": "3",
+    "sha256": "926c5ca1938d37f8bb178f2f5abe081a0f82525b852738edc34f20f4e7029914",
+    "size": 143737390,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16564_Weather5.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16564",
+    "weather": "5",
+    "sha256": "adb43fc1e5acfbe261124421ad36cfba1e29d5fc51137f0387b0c9554ad99f33",
+    "size": 250064768,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16565_Weather6.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16565",
+    "weather": "6",
+    "sha256": "f31a7d00c5d2711f1c8bf1fc7bded21871f37a9ea5c5356cdbc3dd9a28106eb6",
+    "size": 156396031,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16566_Weather7.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16566",
+    "weather": "7",
+    "sha256": "533f52068f5d4fbbe80d463606dc2a2c689db578017e5b242d16c9216cd051a6",
+    "size": 71937742,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16567_Weather8.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16567",
+    "weather": "8",
+    "sha256": "0259504042e9d6f02a0556df1dd71cfa2890a2e0dd6e765b2fce2591ec78f3a4",
+    "size": 234535642,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16568_Weather9.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16568",
+    "weather": "9",
+    "sha256": "6421ca9f6133c9002f3e40cf7fb23ad141c97e00e71223f5ba7c1d0d38dcb933",
+    "size": 94750573,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16569_Weather10.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16569",
+    "weather": "10",
+    "sha256": "47f1f697273063001ad3c59985c1c9952d61cba95d39fc5245cf1205755eed10",
+    "size": 168464416,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16570_Weather11.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16570",
+    "weather": "11",
+    "sha256": "43cd3f2362f95ec3516358526bf5db091dff0e4ad0f2e52baa3f7d6d45de82fb",
+    "size": 167661584,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16572_Weather13.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16572",
+    "weather": "13",
+    "sha256": "426c54f97f30a2643e64a62ae9d6452b0a6d84d92d53ae415459b8ac0db0d6cf",
+    "size": 154378113,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16573_Weather14.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16573",
+    "weather": "14",
+    "sha256": "130aea652345963b8246908c1f1d8ab683d1e5021e49cc84da88573907bcdb52",
+    "size": 130469188,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16574_Weather15.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16574",
+    "weather": "15",
+    "sha256": "ab4bef73c9b4c42dc97f5e6585664583de0597a169e6926019e554fa57ee34f0",
+    "size": 98849096,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16580_Weather21.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16580",
+    "weather": "21",
+    "sha256": "94ebfc78191cf302fa189e7ab08dbc4c64fdf05f3d5cc7cd2730f46999ff42ba",
+    "size": 211577485,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16581_Weather22.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16581",
+    "weather": "22",
+    "sha256": "a03182094c25228e63aac520274a626cdc58510944ce6769493efeaa18451ddf",
+    "size": 113222366,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16585_Weather0.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16585",
+    "weather": "0",
+    "sha256": "e157ea020be589e1bd04ab90e13ad658debe4740f5d80273c3dadcdeb7517fe5",
+    "size": 223905312,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16586_Weather1.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16586",
+    "weather": "1",
+    "sha256": "2a5ae772467d1f562db463de5f65ce5f3f1ab4279093131d86738ea6ac08ad80",
+    "size": 220912194,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16597_Weather12.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16597",
+    "weather": "12",
+    "sha256": "bc44d3f6ef68ba3cae5c01cf92f59813e045d3437f22351910e5316c6fa22534",
+    "size": 154763568,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16610_Weather25.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16610",
+    "weather": "25",
+    "sha256": "71016b5cae8e7f31656390bdc944b1ae66d21898bd47cbefa802535c68830476",
+    "size": 267199803,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16639_Weather2.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16639",
+    "weather": "2",
+    "sha256": "39f0a5f460540e5be607fa8f061611b32aaa182c045b6b98abc289e2362d5d86",
+    "size": 223725483,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16563_Weather3.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16563",
+    "weather": "3",
+    "sha256": "fa393d81199c810109e385802dcfaa88a97509be4037fcd4dcc0a518a868cf13",
+    "size": 180174889,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16575_Weather8.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16575",
+    "weather": "8",
+    "sha256": "7b73cff579576d3583a919cd0b781c7851a1209b79513133c06bc103a97be252",
+    "size": 274661086,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16576_Weather9.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16576",
+    "weather": "9",
+    "sha256": "d1fa1468de131dd9796778582c729f8fd22995f838933a7d8604ab84cb851e5d",
+    "size": 150866445,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16577_Weather18.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16577",
+    "weather": "18",
+    "sha256": "ee2dd97d0d13d26e86c2391f58c4c3dc47e7897534c6f8c6f08555310534038f",
+    "size": 99605762,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16582_Weather23.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16582",
+    "weather": "23",
+    "sha256": "e071f29832a9ec6cb37ac49820563f54703751002dbcded5dfc5c0677b651c5f",
+    "size": 110955692,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16590_Weather5.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16590",
+    "weather": "5",
+    "sha256": "7dd58da3b0343132f585b2da783d19a2bf0aa2d5a42894d10b51af2e3e6e5260",
+    "size": 191392879,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16591_Weather6.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16591",
+    "weather": "6",
+    "sha256": "8c2c6934c86634ac921d589da629da96fb1ea8d2f4aacf80d108d2c8a29882e8",
+    "size": 139528921,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16592_Weather7.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16592",
+    "weather": "7",
+    "sha256": "f02cac528a987a9e12f513a073805a3e22f7d6607ecd3f6a7553f928994bfc3d",
+    "size": 141353668,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16595_Weather10.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16595",
+    "weather": "10",
+    "sha256": "a959bfee41379b3bc3308206dfa014ff5438ac3daecf88889f0e12d4bcb52e2e",
+    "size": 169072492,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16596_Weather11.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16596",
+    "weather": "11",
+    "sha256": "0e937b32f8cd7ad85894416614484e138009a999e626b47d584d131ccf89571a",
+    "size": 110357197,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16599_Weather14.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16599",
+    "weather": "14",
+    "sha256": "0903ee3409183357f61d6d275b740a931e8357838e05a56763e03fac13bb8d0f",
+    "size": 200937792,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16600_Weather15.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16600",
+    "weather": "15",
+    "sha256": "9d96b976232aa489dc67ab9e4af4da858e375221e91ab0a3e82d425e5d94c2ab",
+    "size": 172133310,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16604_Weather19.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16604",
+    "weather": "19",
+    "sha256": "833aff4570281474960d2db3fef884274c886e0450ebda10938b6ad9d0294501",
+    "size": 162420797,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16605_Weather20.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16605",
+    "weather": "20",
+    "sha256": "1a24afd9312ab83df98139ecd491c85ab50d21984c419534ebe415cfc2d780d2",
+    "size": 157720613,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16606_Weather21.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16606",
+    "weather": "21",
+    "sha256": "e0c91362a508f217e2eaef101409ebcae4e75a7b77813d76d591f07139dd32e5",
+    "size": 164272480,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16611_Weather0.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16611",
+    "weather": "0",
+    "sha256": "9633fc8dc9e1795f729acebf763d0b3d8c544b83b77b8481db6ae4a297e9b8e5",
+    "size": 291258520,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16623_Weather12.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16623",
+    "weather": "12",
+    "sha256": "4dc1ad4e3b686f0935a41d9cab58ed9de696201d67904135fa57ca030a3fcc91",
+    "size": 132329986,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16633_Weather22.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16633",
+    "weather": "22",
+    "sha256": "26800519ac3954ffbd7d40f52a9cb2d03d19082316136bc1832aa979099e01c3",
+    "size": 195716495,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16636_Weather25.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16636",
+    "weather": "25",
+    "sha256": "c114ca24ba25ed9424ac5e2db40c22686e2457ae723dc6367d67f8385a08d9c2",
+    "size": 119071315,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16638_Weather1.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16638",
+    "weather": "1",
+    "sha256": "5bfa5500b6cc80a4fd2a55ed640064982b0d8983a49929e5fa146b6f08ce9b3a",
+    "size": 138264509,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16650_Weather13.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16650",
+    "weather": "13",
+    "sha256": "269e2ac6d774277f76234ebc9fb9e50d7110f40f98dc8d6ca97b59395a261572",
+    "size": 164518383,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16665_Weather2.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16665",
+    "weather": "2",
+    "sha256": "c74aae229636e62c11c570fb6ca06c9fdf1692ef625f069c2995b04ca29b6b69",
+    "size": 167591396,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16583_Weather23.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16583",
+    "weather": "23",
+    "sha256": "f149e2759f2b78c72b7a93b075b0540f02da33cafb9ee8138e0c0c53aed77148",
+    "size": 125589775,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16588_Weather3.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16588",
+    "weather": "3",
+    "sha256": "e0130d17b673f9d96c21da1e26a9030039d35b269d816f116b53f54f6c2479aa",
+    "size": 77434778,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16593_Weather8.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16593",
+    "weather": "8",
+    "sha256": "a97ca801f9bec969aaff57834cee8a154f1b6085b4cb40c95d7e43feca4c08fd",
+    "size": 189897901,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16594_Weather9.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16594",
+    "weather": "9",
+    "sha256": "503256b68cdfc13bbb93f3fe4650db659f65a8d42ba22bc2d2d25e1f9a5371e4",
+    "size": 181467032,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16616_Weather5.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16616",
+    "weather": "5",
+    "sha256": "03de389a748899038c42dd209f34006e20b0b7cd97e73eba95629679718a13a1",
+    "size": 113969481,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16617_Weather6.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16617",
+    "weather": "6",
+    "sha256": "464254120b4e9b240cce08792642a0a14cf220c08ee045f0616abe7fe82f49ea",
+    "size": 182166318,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3904_Weather25.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3904",
+    "weather": "25",
+    "sha256": "728ba729692a726d38e8095550679b3f1476d4b2c6ec2cf93f265567965f8e79",
+    "size": 136385878,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3905_Weather0.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3905",
+    "weather": "0",
+    "sha256": "49694d26cbb170f723c28640393472707e4dd3db0a105e17edfcb2c773904562",
+    "size": 108118237,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3906_Weather1.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3906",
+    "weather": "1",
+    "sha256": "1deb2175f4c22d9a383fa10088bfa9c8ce3334f3f64cc9e17a6d8c225b342b88",
+    "size": 234681642,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3907_Weather2.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3907",
+    "weather": "2",
+    "sha256": "3de01c8a4e022b138dafed13e93cc0cb649600bfb702c9a7d2d91123f872fb44",
+    "size": 126498932,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3915_Weather10.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3915",
+    "weather": "10",
+    "sha256": "ba0f15bfddc6ddf448cf67986dc7c1c7074b27e56f4ec1cd1cee6c592a37b15e",
+    "size": 92519199,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3916_Weather11.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3916",
+    "weather": "11",
+    "sha256": "ca47a1586128f55e9c151603e59afbfc30fc5b0964381d9d656503d866378953",
+    "size": 77044587,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3918_Weather13.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3918",
+    "weather": "13",
+    "sha256": "673a0260c73300bf0c168698c7bb2a7898c5389cd45e53a0fde95eb05fdd7e7d",
+    "size": 121692754,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3919_Weather14.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3919",
+    "weather": "14",
+    "sha256": "53c7bccd203820c479925369b2f5309b1ae5546aebb050a6375bb7e6a8add717",
+    "size": 176949586,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3920_Weather15.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3920",
+    "weather": "15",
+    "sha256": "a5bf5b9378235f92e3efeadf7ca642cea8d95b6d17998b45a9a7009ed8c090f5",
+    "size": 122881398,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3903_Weather23.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3903",
+    "weather": "23",
+    "sha256": "f29f75aa0c45fe23264463cf955263eb79b2d86d77d104cd6a8dd265e21d322d",
+    "size": 121927737,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3908_Weather3.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3908",
+    "weather": "3",
+    "sha256": "6976af2ef8233a7785c29d9a4949f7b9347f91cc44431a667095168b72bc4c66",
+    "size": 153020057,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3910_Weather5.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3910",
+    "weather": "5",
+    "sha256": "d2248cb107c3a7018195737d52bc98853ebac578a4da35c1ee6492741bde5874",
+    "size": 115176921,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3911_Weather6.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3911",
+    "weather": "6",
+    "sha256": "488f820f8006204b2726d4e8f38448a9836862a6f5227a2233cfdec02b8ca140",
+    "size": 148734610,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3913_Weather8.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3913",
+    "weather": "8",
+    "sha256": "bdb38ff4f4885b734e9a027e022e44483005ef51459be0640a33152f65e88689",
+    "size": 161445617,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3914_Weather9.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3914",
+    "weather": "9",
+    "sha256": "7e83d408ccfdc4ba37bc9a6bb36990a2c0f7f9b03730365488d27430b3002c12",
+    "size": 139539288,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3909_Weather3.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3909",
+    "weather": "3",
+    "sha256": "b757e0d48e633719892f232b2051c09c21618288b970bd100c8c099711483855",
+    "size": 138888923,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3921_Weather8.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3921",
+    "weather": "8",
+    "sha256": "6342995da7f4cf3e622efa5a77d3c1a422e9c50cad342acfac44f1e7d20baf94",
+    "size": 102483772,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town13_Route3922_Weather9.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town13",
+    "route": "3922",
+    "weather": "9",
+    "sha256": "2e6f614cf6e2cd2d34d5422a68e038d17af1746b9d0f209a006cd1df8896336d",
+    "size": 81783853,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16630_Weather19.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16630",
+    "weather": "19",
+    "sha256": "bbef85d093d85c2a57e49a321052f00836bb53f04f0947698069ce8173eab03a",
+    "size": 274387602,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16631_Weather20.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16631",
+    "weather": "20",
+    "sha256": "6afe34919b2f5e708a46bff6e32f0faa1c58f01839721c146b2c17adb78d87aa",
+    "size": 133308240,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16632_Weather21.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16632",
+    "weather": "21",
+    "sha256": "a4e40c4cfbe4d0c237ffa689278980437d0253eca824f5f8154e7bc7052376e1",
+    "size": 164408587,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16644_Weather7.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16644",
+    "weather": "7",
+    "sha256": "907b9c372ca011cedc98f72f5b84ef78416bd2dd8380f746fe38f71d66ec6731",
+    "size": 368296651,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16649_Weather12.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16649",
+    "weather": "12",
+    "sha256": "d6ba10d5acdb71fe7748238271e06662b922be0e13eea91d4806d607d19776ee",
+    "size": 197108111,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16655_Weather18.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16655",
+    "weather": "18",
+    "sha256": "f38d8b87d5d22b2fd72ea06ae937f4af37c3010b3ecc91ab3d3071f0f7e83d93",
+    "size": 190643031,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16659_Weather22.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16659",
+    "weather": "22",
+    "sha256": "f43a06b8964ac15ee4c527b3f4d20aea3739086bfa3a54065762f3cca80625c3",
+    "size": 188214875,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16625_Weather14.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16625",
+    "weather": "14",
+    "sha256": "fb591f6164030bcca5d13ba66a025b92246070735e77341c8c68cd578e37f7b2",
+    "size": 128509610,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16637_Weather0.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16637",
+    "weather": "0",
+    "sha256": "37c5aea34e0c9ccdde78aaf3c9c12da5d50953c63d2236d6210d76cb6d95378d",
+    "size": 282399683,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16648_Weather11.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16648",
+    "weather": "11",
+    "sha256": "b851cda45389eca05261d91474cb0924663fc6042ca82902fba3cbf5649ec863",
+    "size": 272484934,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16657_Weather20.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16657",
+    "weather": "20",
+    "sha256": "0037a4c63bf0d20b3b949382009dacef20f83b593e6a083308212785dcb941f5",
+    "size": 195043411,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16658_Weather21.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16658",
+    "weather": "21",
+    "sha256": "97281cd04cc2e30c802a2c80f9276da16627987d1396335c5e7cb137561a0fd1",
+    "size": 193362201,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16662_Weather25.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16662",
+    "weather": "25",
+    "sha256": "1bfe77a3dbf7679d85be4035d2af8ba2dbc765d313c08dbc03a7ad610c6affb4",
+    "size": 138555468,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16664_Weather1.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16664",
+    "weather": "1",
+    "sha256": "f7bbb50f29bd44f1ab73a600812b55ddecc98f356f1415744999a58e69460229",
+    "size": 149948326,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16670_Weather7.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16670",
+    "weather": "7",
+    "sha256": "da8eb094ee73357d52afa860900c722064bd33d06736cabf784e511da486fbd6",
+    "size": 303062182,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16673_Weather10.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16673",
+    "weather": "10",
+    "sha256": "2cca933f2fe73388a15444b426469a0d39ad79724df683e62c0fbfdee1f781b1",
+    "size": 158972570,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16676_Weather13.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16676",
+    "weather": "13",
+    "sha256": "a3e4f81045591d8b408d635432a7b72295e13b0b1cb585193014dc85b9ab6697",
+    "size": 172550339,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16681_Weather18.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16681",
+    "weather": "18",
+    "sha256": "a297167c6f4e98fb6bcbc35d7f2494a7dc331fb483a7718b89cea60cdf94ebd9",
+    "size": 188615508,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16682_Weather19.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16682",
+    "weather": "19",
+    "sha256": "6a2b91d4c9c0225d6a91170ae020c2b0f8c7997f0bc9816f22868d5a763b1a9f",
+    "size": 165978515,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16685_Weather22.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16685",
+    "weather": "22",
+    "sha256": "97612581e7ea20d9415df8e02aecec1f7ff41d1b1d74e118c9ab365ae25bd7e2",
+    "size": 222790881,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16691_Weather2.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16691",
+    "weather": "2",
+    "sha256": "256c633e27cf75661c58889baafeca58d8b6b491af9fc2de2b63ada306fcf12f",
+    "size": 172539956,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16701_Weather12.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16701",
+    "weather": "12",
+    "sha256": "e06dc1253dc3d715fdbcd2d72d7b03c7a4fbd5b8069c0247316a45461d964e26",
+    "size": 164600365,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16704_Weather15.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16704",
+    "weather": "15",
+    "sha256": "ca9783f2b07200229507809242db55601aaccacffc2819b69a00307053b4f227",
+    "size": 198769879,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16608_Weather23.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16608",
+    "weather": "23",
+    "sha256": "6476cec6edbf23482279df0c6c0e40beafae206b37dfc432c56b10299f8a05cc",
+    "size": 138437039,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16642_Weather5.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16642",
+    "weather": "5",
+    "sha256": "435cc45d570384f785a3408d4fbe871513beb24ccb739ca4d45400f529c048f5",
+    "size": 154231060,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16643_Weather6.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16643",
+    "weather": "6",
+    "sha256": "63d57cef88d02dc263aa577df965ea47a5878fa4624d7cb5bc7ef95986f78158",
+    "size": 79886176,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16651_Weather14.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16651",
+    "weather": "14",
+    "sha256": "bc60d4ed195a934810ad7af8a9d8a21afd1b8ba6381d350c804904ec973c4bd3",
+    "size": 169502710,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16663_Weather0.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16663",
+    "weather": "0",
+    "sha256": "f0f08242c74ef3a58964f01e347c2398bd51154be0c8aca8af06ba5c3143de43",
+    "size": 329077751,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16683_Weather20.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16683",
+    "weather": "20",
+    "sha256": "5c6ad8892cd190dc6e65f0c46210e381fc07efac01cb4684eb45665467f68536",
+    "size": 123876778,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16684_Weather21.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16684",
+    "weather": "21",
+    "sha256": "2da3200576bf85ee9899ffc689813c8a0eba751dc2e50623d6a646826ba74677",
+    "size": 137045641,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16688_Weather25.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16688",
+    "weather": "25",
+    "sha256": "654fefaf0af7087d2dfa847abafd0482a1dee41101867421c3e98b11d8d20339",
+    "size": 128179803,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaNonSignalizedTurnEncounterStopsign_Town12_Route16690_Weather1.tar.gz",
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "town": "Town12",
+    "route": "16690",
+    "weather": "1",
+    "sha256": "e3516487de781763bace9e627da74ab3fed43a70950fff4ab6d92a60a7d052d0",
+    "size": 149433039,
+    "priority_rank": 1,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15458_Weather9.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15458",
+    "weather": "9",
+    "sha256": "2dd3720a6ac3959a19173f338972768b8e25ceb87397bea6f70f28e643dbb5fe",
+    "size": 472298262,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3871_Weather18.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3871",
+    "weather": "18",
+    "sha256": "c6dc52e4951faad4c650a78f8f8764ba37ff86c96916fd1e93a4ccea049c03f8",
+    "size": 756756110,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15460_Weather19.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15460",
+    "weather": "19",
+    "sha256": "42d1ebd7817e4102d3bd82ed37dd74247135ddb9ac615abfa41615be0189a392",
+    "size": 517626497,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15461_Weather20.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15461",
+    "weather": "20",
+    "sha256": "b349c5b04be9b1d01c2ea9784c30819972faf33a8266284999186bfbd91af7bf",
+    "size": 566846894,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15462_Weather21.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15462",
+    "weather": "21",
+    "sha256": "3260d3b9eee5f90d36ea66124ca7cf20593d08011ede94738dd485f6e64d9e0f",
+    "size": 458566826,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15463_Weather22.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15463",
+    "weather": "22",
+    "sha256": "f85b2ff642960f82ab362855a8b245770f8154900ea0ed7baafc64137aa04ecd",
+    "size": 141320106,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15464_Weather23.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15464",
+    "weather": "23",
+    "sha256": "a54d4c5bf073c5415f6498a2b5ff7bfe80473c8aaa38d00113cd3afd551527f3",
+    "size": 246158059,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15466_Weather25.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15466",
+    "weather": "25",
+    "sha256": "63a82c27339bda968e7471b838691b13f240cc1e847ee12d480074791f8dc008",
+    "size": 376791037,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15467_Weather0.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15467",
+    "weather": "0",
+    "sha256": "e497d5d317d295e1733a533bc76c5cefcd4905758d88b172cf10e4d2a7477f6f",
+    "size": 470095022,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15468_Weather1.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15468",
+    "weather": "1",
+    "sha256": "8c62f944abac3e3d451097885784d06e9ea4deca2855dc07aade73d0f3ec8d64",
+    "size": 577195238,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15469_Weather2.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15469",
+    "weather": "2",
+    "sha256": "e26abd102c5fccbaf1bf3a14a59ac37ce4961ead12f7e5a6e573605686498cea",
+    "size": 695379687,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15470_Weather3.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15470",
+    "weather": "3",
+    "sha256": "fe4cc5283a3620ed716c7729d61076bc663e98596609580c11ee519b80dbe459",
+    "size": 167870657,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15472_Weather5.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15472",
+    "weather": "5",
+    "sha256": "31a3ae1096d712a5e21f70490377376ced02479d8efa9e87cce4ddb0b2974fdd",
+    "size": 404251896,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15473_Weather6.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15473",
+    "weather": "6",
+    "sha256": "f59c481838f80bd8f17d3e451285ddecfba4d6a976f27c007dbc981c1de7cbbf",
+    "size": 859827977,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15474_Weather7.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15474",
+    "weather": "7",
+    "sha256": "9f19fc05ef3fcd9e6e49a32d5054b7a5113af068b3d1553ae2550a2f5857cf72",
+    "size": 316440313,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15475_Weather8.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15475",
+    "weather": "8",
+    "sha256": "dd71823e2775aed4decdfde6c7dcec342322aa0f3f3ab4b9ad2ec048e7d187b0",
+    "size": 436343971,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15477_Weather10.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15477",
+    "weather": "10",
+    "sha256": "ca4837fedee327738fa8937a922b66e1f1f4636687ee8b2705babc015b71e88a",
+    "size": 517481631,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15478_Weather11.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15478",
+    "weather": "11",
+    "sha256": "7aac7597c16c735d9d345dfe486f4a91ac0881fbf71b542c6b675b879c07b027",
+    "size": 244882578,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15479_Weather12.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15479",
+    "weather": "12",
+    "sha256": "fdb693bbeb662c804d2c0cc1b8acc7f2935c19c8b417dbb568c07a190d2ce3fc",
+    "size": 110787808,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15481_Weather14.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15481",
+    "weather": "14",
+    "sha256": "13cc53508387c82149cc6d85b571df1fd22304476fc43f490330b612300d8ec0",
+    "size": 260672999,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15482_Weather15.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15482",
+    "weather": "15",
+    "sha256": "38792ae8446f26d0db0e4fbbc44d35d31ef3e8fa81282b15cfbfeaa1c8608541",
+    "size": 201069726,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15506_Weather13.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15506",
+    "weather": "13",
+    "sha256": "8b0d3056cf1d6e13151de4c26889c126448b5ec609f914131fbe19520fde20b5",
+    "size": 112806772,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15459_Weather18.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15459",
+    "weather": "18",
+    "sha256": "ba0b5a034695b95e6769e0f940e8e8846efb4e0aac6ab2c328e9dc14c83cfcb2",
+    "size": 343073430,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15465_Weather23.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15465",
+    "weather": "23",
+    "sha256": "7431a705eebe93418ea570919f828b2677415a6d74ff2c1e42d5f046dcb7df64",
+    "size": 221548691,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15483_Weather8.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15483",
+    "weather": "8",
+    "sha256": "66a6b0f9c33d933d209d19c1d9e96d7746c6b357b4e030ff38397b46589831d4",
+    "size": 376279262,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15484_Weather9.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15484",
+    "weather": "9",
+    "sha256": "7b8fa016676ed23080e3fb5fff6a4a397c4db3559d6df81809a9e11d41d07273",
+    "size": 268587619,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15486_Weather19.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15486",
+    "weather": "19",
+    "sha256": "45fcb6642a65aa2c8247c67ba419e708d836b5aa274f98ccf1bc7c0473d2ada2",
+    "size": 266050303,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15487_Weather20.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15487",
+    "weather": "20",
+    "sha256": "f6e455d5ca5f2373f4c2b3a6608ae266cbbb2ef97f38a94cfaf436c14430b4d0",
+    "size": 378769498,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15488_Weather21.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15488",
+    "weather": "21",
+    "sha256": "065b1171e132aaa9459a85fe5e0ddb027e3e01b4fa56fe3bc8355d99bf351d40",
+    "size": 175873314,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15489_Weather22.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15489",
+    "weather": "22",
+    "sha256": "035f8532f303a42ecc0a11cdf626686d68489b9cfa8f2fa2639787c5cb209ad2",
+    "size": 265634481,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15493_Weather0.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15493",
+    "weather": "0",
+    "sha256": "14f95ba1ade1e30500804619428c31064116e00f239454c4ed8e9267e8647669",
+    "size": 610580450,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15494_Weather1.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15494",
+    "weather": "1",
+    "sha256": "c04b62ae70cfdc55398fef187adf8995d290c754e2a972e084e4ca93239a3d67",
+    "size": 433712761,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15495_Weather2.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15495",
+    "weather": "2",
+    "sha256": "e1658842eea78a6cd2eaf82cf9c73219cf4c857f43882656c9d68734d7defb3c",
+    "size": 913610278,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15496_Weather3.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15496",
+    "weather": "3",
+    "sha256": "afea16671afe102f2a7c4faaaf7314643ebaa95a40322ac98d86f63ab737eae8",
+    "size": 309217098,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15498_Weather5.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15498",
+    "weather": "5",
+    "sha256": "1a1d33cdcb4236eeeb266da9fd420f974347441a8a11b00d54394db4a81bd33c",
+    "size": 774874414,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15500_Weather7.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15500",
+    "weather": "7",
+    "sha256": "12fb75244a52235e735dab246074b2bf3cdb2ade230ba458a96bb052b2459b09",
+    "size": 149830710,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15503_Weather10.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15503",
+    "weather": "10",
+    "sha256": "f44088a5061bbfa6c7cbcfc9ba12de284a91e15261c15b1cdc4d8ce0cace8f3a",
+    "size": 266102306,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15504_Weather11.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15504",
+    "weather": "11",
+    "sha256": "189b88c776dd82b361ce053b096bb00b7e90392dd9dc11cb8d24f2b8f89a3609",
+    "size": 366223177,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15505_Weather12.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15505",
+    "weather": "12",
+    "sha256": "3cf96b8d5b2b2ac95b887a310b4098573431c295d47287a882113ba486e8f01f",
+    "size": 549658222,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15507_Weather14.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15507",
+    "weather": "14",
+    "sha256": "28d475652ec2869b9234fb13f1cd2c206df8209df080193b20e2bf84080fc666",
+    "size": 227758601,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15508_Weather15.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15508",
+    "weather": "15",
+    "sha256": "1334a3fb4f6dd35a8c727a7869db5ae90961c8973f1cdbfc441c5dca0f2d5961",
+    "size": 136765472,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15518_Weather25.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15518",
+    "weather": "25",
+    "sha256": "88dd663cb39b26f8d63452d6123e820a8c5e1565a019773d195a5f595a2b07ef",
+    "size": 565289487,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15525_Weather6.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15525",
+    "weather": "6",
+    "sha256": "2e5c493b60f7bb5cb3afc867103c295fa78d9c8597f8bcb81d9a7d774cbd6458",
+    "size": 539932392,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15532_Weather13.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15532",
+    "weather": "13",
+    "sha256": "5e1e90a0cd68675d4722c3c01f44de5fb181a0bba373229d95662325b2bb8ae8",
+    "size": 426339473,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15485_Weather18.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15485",
+    "weather": "18",
+    "sha256": "b7ece957bb6a7c37e291ab357cd95741b75e7a8d7151bda6ac76cf771f90fe81",
+    "size": 226023802,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15490_Weather23.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15490",
+    "weather": "23",
+    "sha256": "b82e5c0359af9a44efed6b4a4b7e01ec3f08d396b4e6b5993df5557da26845fb",
+    "size": 574206881,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15497_Weather3.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15497",
+    "weather": "3",
+    "sha256": "39f6544cebb6b92f682c523e013d3d2e4ee82b1adfb614d9d36b70762e2ce3ff",
+    "size": 123426297,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15501_Weather8.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15501",
+    "weather": "8",
+    "sha256": "75791d76b9d641b64b5632676417cc75f4d51603059fe9432eaf7d8b7046625f",
+    "size": 518901634,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15502_Weather9.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15502",
+    "weather": "9",
+    "sha256": "a079ecfc9f64ce1b1d0e240a6ffe5435dfabade0d7a063dddac06221f2fc65a1",
+    "size": 527889502,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15512_Weather19.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15512",
+    "weather": "19",
+    "sha256": "2cbc6ab7bcb0fee55a95179ec46fce8542827107d04e6ccf856a8a1bab8c041f",
+    "size": 271097793,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town10HD_Route24840_Weather26.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town10HD",
+    "route": "24840",
+    "weather": "26",
+    "sha256": "486ad28dafb9521e702f3bd45054058ba09a1d721a5cd5f60696fe6730ef21d8",
+    "size": 238094088,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3865_Weather12.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3865",
+    "weather": "12",
+    "sha256": "2df1a353ee57e67bc8d3e9d2638006bdd4dd1baebaa0b99bf98fc71ea7623add",
+    "size": 613306574,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3866_Weather13.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3866",
+    "weather": "13",
+    "sha256": "70c66907e62a3b023bf16641aab71b6ef190b4d5093374d5bc648e7915d771a3",
+    "size": 252041350,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3873_Weather20.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3873",
+    "weather": "20",
+    "sha256": "7112e97f6d0aee3ce46ebb88da5e195f57f9852e2d46182ef9d4c7fb7a81600d",
+    "size": 187863536,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3874_Weather21.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3874",
+    "weather": "21",
+    "sha256": "5c231ff1a535eb03d59b006bbac4b7dd6b70e534303f59f83d90d83d084cbafe",
+    "size": 543349294,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3878_Weather25.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3878",
+    "weather": "25",
+    "sha256": "bb4f5cdd8f9f33c88935da8d183f9c1072ba583222f44e70d37d4cea02ee6a7a",
+    "size": 116158371,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3879_Weather0.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3879",
+    "weather": "0",
+    "sha256": "0e0c118a644b0f675454c13406165587e9ebe234399b603c169371276a4f4a19",
+    "size": 1771450092,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3880_Weather1.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3880",
+    "weather": "1",
+    "sha256": "bfd83ee62aa3d1bf2490f2177bf7d67cf036ed044d544fc23b241022d78bc8e8",
+    "size": 688495832,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3881_Weather2.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3881",
+    "weather": "2",
+    "sha256": "fa0e9b340de84f335584d706ae52a46f05264af21a269d99bbe8b9d8e13ae7fe",
+    "size": 587501024,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3870_Weather9.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3870",
+    "weather": "9",
+    "sha256": "817fe6f48eab99125a1e6e04f827ad8805e3e148f24f659dbfb936dda31e3f23",
+    "size": 319826152,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3872_Weather19.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3872",
+    "weather": "19",
+    "sha256": "dded1d797cd876f9ec6e0d3bc401a311b7a826d12b3d498c8a011653b26ef39d",
+    "size": 367039256,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3876_Weather23.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3876",
+    "weather": "23",
+    "sha256": "14f9fb30c11bc0f7f48c806d14a44d05303059cc847fed4384182bcf22d6e87e",
+    "size": 251345839,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3882_Weather3.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3882",
+    "weather": "3",
+    "sha256": "4211cf324dc535bd75f479f0d35334385453cb57bc9ac35b60aca81d18818f68",
+    "size": 366572203,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3877_Weather23.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town13",
+    "route": "3877",
+    "weather": "23",
+    "sha256": "e46a286b9f20276a5cbe161d980e5bf9ecc88ef77acc1fad2d169ff84422ff1f",
+    "size": 535331857,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15515_Weather22.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15515",
+    "weather": "22",
+    "sha256": "f5233e37c81357c4acb13a21b91b2ebc4c33ea4cc6dd2cdacfeb8403944d1c7c",
+    "size": 471610455,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15524_Weather5.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15524",
+    "weather": "5",
+    "sha256": "4acf00bc1ef1090fdfb3685eaff15483812cba37d262a091325a52a6c1fd9048",
+    "size": 150991638,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15526_Weather7.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15526",
+    "weather": "7",
+    "sha256": "e7fd023fc82136ec99b74357dec23484fda2b71cd28d3fa6ec3c7e427ab6b6ad",
+    "size": 553334506,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15529_Weather10.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15529",
+    "weather": "10",
+    "sha256": "f771b3f99b87eefe3b8a24c776931ffb6c2980f671cf9827b764a42a1acdf886",
+    "size": 741136647,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15530_Weather11.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15530",
+    "weather": "11",
+    "sha256": "616ad92dfbfecf9a4054680e2cc275fb895f70d591363bcacff35ef82278cd32",
+    "size": 263723184,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15533_Weather14.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15533",
+    "weather": "14",
+    "sha256": "43f5666bb45aa362843a4cb2a8ec9c879fb8324233a984f3b84dfcbe29e1e024",
+    "size": 460167965,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15534_Weather15.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15534",
+    "weather": "15",
+    "sha256": "68747426bc997f158fbed0cd24922f6a3aa316de6bb12c9684c05b50f6655dbb",
+    "size": 193998728,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15551_Weather6.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15551",
+    "weather": "6",
+    "sha256": "5acd64eb51cadf2a0433d6916a50ff68ef720a43a86cd039181966107db2b059",
+    "size": 737560148,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15509_Weather8.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15509",
+    "weather": "8",
+    "sha256": "45289088953ceb168243dd6c283c08f9625c5c2ec5a98c6ba60b3fa91ae91410",
+    "size": 180043520,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15511_Weather18.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15511",
+    "weather": "18",
+    "sha256": "8158b0b1de16ee377c258da16993b1a7a1915920ef74d3ba8a8e0b177a849a71",
+    "size": 138172859,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15513_Weather20.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15513",
+    "weather": "20",
+    "sha256": "9b18b982db7def2a1bbb3474f83479502d81beeb86f1896638a2ed2e60c31960",
+    "size": 167680550,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15514_Weather21.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15514",
+    "weather": "21",
+    "sha256": "e90e0307de0d97b8361e5c232d8553ef199b5cd90706d9a230bb63e1b44b871c",
+    "size": 372982991,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15519_Weather0.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15519",
+    "weather": "0",
+    "sha256": "57435cea2e503789d51da99bf52fde4b3e7a06a82a7b39be265edefa343b126a",
+    "size": 139457959,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15520_Weather1.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15520",
+    "weather": "1",
+    "sha256": "fefba3b1d001d6b7b8cd70c690f9c3400ab2f2710128ba7f10b866a089f5a30a",
+    "size": 310570322,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15521_Weather2.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15521",
+    "weather": "2",
+    "sha256": "ba970210b31eda1fe3fa470c26de19079f5ce47e3560cc07560503850068d38b",
+    "size": 752212007,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15531_Weather12.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15531",
+    "weather": "12",
+    "sha256": "6e361e3cb627239d27ffc837bd429392d0bd0cfc837d4dd6c21f55d16cb49c73",
+    "size": 111297504,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15541_Weather22.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15541",
+    "weather": "22",
+    "sha256": "5e2ceb94cd5fa61aa8039e45ff2298815a5041e67e0970a13c4341a5825068ba",
+    "size": 607330324,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15544_Weather25.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15544",
+    "weather": "25",
+    "sha256": "cd3c414cea61a10458dd1ea8c2a4d00adb097ff9f3f3e3b0b28cb4a0a818c144",
+    "size": 337746270,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15550_Weather5.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15550",
+    "weather": "5",
+    "sha256": "6ad64adc2397a7fcfd2a96134e0ce7b51c46efdcffb9f3b9f4492f7dd9e5dc13",
+    "size": 375729071,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15552_Weather7.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15552",
+    "weather": "7",
+    "sha256": "b6209f2917f4ff9ad603a9c3fd87a65ef09cc20c84119afdc753392e448b1670",
+    "size": 721661365,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15555_Weather10.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15555",
+    "weather": "10",
+    "sha256": "f94669131a81dd3ad23c08b492d8bd2a9aebbfe541f3811b924be07445e57f50",
+    "size": 970457801,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15558_Weather13.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15558",
+    "weather": "13",
+    "sha256": "348a0160571e1a80082b99a5172dc75bae75acd222824fff7d9cfdff3ce0f96a",
+    "size": 237288870,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15559_Weather14.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15559",
+    "weather": "14",
+    "sha256": "e320461e9fb3abd5c5aaedc3025113dc77b749cf2b21886c772952370522a167",
+    "size": 276713051,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15560_Weather15.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15560",
+    "weather": "15",
+    "sha256": "fef796b6f972c944617c3b85f20572456529c063b0e7add46636fa13feb45798",
+    "size": 1059910941,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15577_Weather6.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15577",
+    "weather": "6",
+    "sha256": "a4d362dcc6e75928fe6c796478fba6d8f43564a47fe2934a802169a4ffd7f020",
+    "size": 351453266,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15582_Weather11.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15582",
+    "weather": "11",
+    "sha256": "7d25e777c2ae95930a999180d6376d500c849a60dd33ab5b74ef8bca148b79cb",
+    "size": 182995583,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15510_Weather9.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15510",
+    "weather": "9",
+    "sha256": "c2e79636b4166cab7ac0e76207e605937484784334d62de29617f5541c971554",
+    "size": 188852703,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15523_Weather3.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15523",
+    "weather": "3",
+    "sha256": "38b3079b52f6177f1113cdc4a6dec7fdc67ccfc93877ddd9175e2130f505a065",
+    "size": 267421387,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15527_Weather8.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15527",
+    "weather": "8",
+    "sha256": "653f585d346a08ada0265b3ac1d1ca809860750c5459043cd4c86516cf195027",
+    "size": 363550599,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15537_Weather18.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15537",
+    "weather": "18",
+    "sha256": "3ec59928bb6ab912b415b527aac91ed999eed71b019fe8cdbfc52d446c6b0737",
+    "size": 462063466,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15539_Weather20.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15539",
+    "weather": "20",
+    "sha256": "374bca549cbaa612b51370d0b1828e69eb97a2517d468b7d1980f4697641eb45",
+    "size": 399001647,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15540_Weather21.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15540",
+    "weather": "21",
+    "sha256": "0e3ebd0d058458045569d3c6a01aaa2567504cef619b1606a7292e52d006d0e4",
+    "size": 362789457,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15545_Weather0.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15545",
+    "weather": "0",
+    "sha256": "f18750b876a03a4464f00a0c3adea2a573853eb1412f7927cbf0a9b0c8cb95c3",
+    "size": 550840171,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15547_Weather2.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15547",
+    "weather": "2",
+    "sha256": "dad78559781349abc9aae3d38ea039e4e38b0fd3726d695f1dc822bd0a080c6b",
+    "size": 175423815,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15564_Weather19.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15564",
+    "weather": "19",
+    "sha256": "f2c62bfb792db2cf4fc36f28115d5addb6c691f760c00f1d2f7fb878173acd4d",
+    "size": 194371230,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15567_Weather22.tar.gz",
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "town": "Town12",
+    "route": "15567",
+    "weather": "22",
+    "sha256": "2403eb1a24aaca81ba858431caea773d81734187c7bc034cad6e7eb6b9279986",
+    "size": 333309425,
+    "priority_rank": 2,
+    "priority_score": 8.05,
+    "weakness_reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Traffic Sign"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route1644_Weather0.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "1644",
+    "weather": "0",
+    "sha256": "27f284e39e0b2cd6faf652d5706f85d279ff6e596ef478bfd5ed7116d9119d3c",
+    "size": 367121744,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route1654_Weather10.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "1654",
+    "weather": "10",
+    "sha256": "b664472d01c131524bd9ba422bf1df34a538c29be279830ad8cb5d6729bc6250",
+    "size": 204584925,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route1656_Weather12.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "1656",
+    "weather": "12",
+    "sha256": "d4bd27f6444bc2dae824111afc5ff67daa81e65104cd96a0425ecedda674c7bc",
+    "size": 370342329,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route1659_Weather15.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "1659",
+    "weather": "15",
+    "sha256": "30f931fedc744df5f5f83c82801a778b9561559d51a65273e0f2402cb412facc",
+    "size": 202267059,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17553_Weather2.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17553",
+    "weather": "2",
+    "sha256": "4b1d5e1cd488e667f003a2765e9963fbc8574c1ef458dbb119f0f8ce0e77dd32",
+    "size": 215619720,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17569_Weather18.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17569",
+    "weather": "18",
+    "sha256": "fedc8d93ee1639fa8991bfd5fb7f462483330254daae81b40578a5c65da8b981",
+    "size": 403291536,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17570_Weather19.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17570",
+    "weather": "19",
+    "sha256": "f8d89301389e33d43b0e2060add0e86b4850f39803b994bd05206f8fca0d2083",
+    "size": 329695678,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17572_Weather21.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17572",
+    "weather": "21",
+    "sha256": "afef0ddae0f0bc1f2ed69e497e2f5338974910b33ce1fbc1e0289e25c5d52478",
+    "size": 230817499,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17575_Weather23.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17575",
+    "weather": "23",
+    "sha256": "fb11e2e177c1d44cddf324befba0afded1e3f5fe58e4560e281046fbea16faba",
+    "size": 267762124,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17578_Weather1.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17578",
+    "weather": "1",
+    "sha256": "6e3f5dc08eb132a763260643830a91d9da5cec991119ee3cd67fa3b0e5f754c2",
+    "size": 262440263,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17581_Weather3.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17581",
+    "weather": "3",
+    "sha256": "e225b1e94ba3d2e23ee22f0c033aac652deda415e1d20d0911a1ed19a69d2ebd",
+    "size": 257846151,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17588_Weather11.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17588",
+    "weather": "11",
+    "sha256": "b5c24c38d3c2164fb328c839c7d8b0c3d108e01c3adf13680db9559f9fc5ee89",
+    "size": 184127968,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17611_Weather8.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17611",
+    "weather": "8",
+    "sha256": "f9c20c1d0a8c2ecc9c34b1458411f9086109c4ca3c152be3d640c128110bf508",
+    "size": 257466282,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17612_Weather9.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17612",
+    "weather": "9",
+    "sha256": "4dbfd671b52b2a9085e47f395bbbee1583aa9f570d4de0427e3824a479950bbe",
+    "size": 350451802,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17635_Weather6.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17635",
+    "weather": "6",
+    "sha256": "90f5d8e51bb652e7232ac3e5a2c2a728e2fc1214e1a4e95dceb619d7b02a1505",
+    "size": 332222246,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17668_Weather13.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17668",
+    "weather": "13",
+    "sha256": "fed4e458d5b3d55aa95e584198ffb927610784313d7df2719e27df0ce8466e68",
+    "size": 328935832,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17695_Weather14.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17695",
+    "weather": "14",
+    "sha256": "98707d7cf66dea7d7e2c47b5cdc7d935992c91321aaac8f6098ce89b85d84d15",
+    "size": 209674460,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route2431_Weather7.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "2431",
+    "weather": "7",
+    "sha256": "8e685365e6810c9a353719ffc3c2c9eae6f119da0bd62296aaa57df602626591",
+    "size": 266714896,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17563_Weather12.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17563",
+    "weather": "12",
+    "sha256": "96aead66917da732612edfd1f4462ba266bec861318a993a83cfcadb5016f74b",
+    "size": 293471952,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17587_Weather10.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17587",
+    "weather": "10",
+    "sha256": "61de665c32d137c7769893a7d7edcd9ec37587fb40c058be10b0ef142ac8a750",
+    "size": 348349052,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17598_Weather21.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17598",
+    "weather": "21",
+    "sha256": "982d8d18eb1f95dec7260fa306de64a02c128cd7aea7c6005e7dec83cae79c87",
+    "size": 242812005,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17604_Weather1.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17604",
+    "weather": "1",
+    "sha256": "deca3fd6e97cebfc418d59301e4664df8a9ec21b8691a83d8a0496d68998d7ea",
+    "size": 460254941,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17614_Weather11.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17614",
+    "weather": "11",
+    "sha256": "899f6562f8085781b9200e4420bb46aab7b897c49bd019cf702021910283fa11",
+    "size": 282792547,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17629_Weather0.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17629",
+    "weather": "0",
+    "sha256": "09cccd7f70f484d4402afe889a38184f366e1bde00cacf218c653b1f2fe93096",
+    "size": 253730472,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17646_Weather9.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17646",
+    "weather": "9",
+    "sha256": "1e789460942e6965906526263dbce6bdd7857130bd35be34c7337f8d1acec773",
+    "size": 276426926,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17663_Weather8.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17663",
+    "weather": "8",
+    "sha256": "d79b3dce5fd89efbdcad78fb834f0d9b479859f0e6dd80a180149f0e5f4ba2ff",
+    "size": 563241200,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route2427_Weather3.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "2427",
+    "weather": "3",
+    "sha256": "505fa521210f80640bb29dbb42b62137da5ca8ef61bae46e637949a68a7311d1",
+    "size": 320912731,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17624_Weather21.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17624",
+    "weather": "21",
+    "sha256": "fd3537bdf1855d1f6f8f16621470c94bd151ffb9ff8394cde67ccfab06047c64",
+    "size": 150506728,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17655_Weather0.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17655",
+    "weather": "0",
+    "sha256": "eafd78fb49d43535e026f81e91c72e60b01c2005e0bb27e1ce1c8842890f1ee8",
+    "size": 393230869,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17671_Weather8.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17671",
+    "weather": "8",
+    "sha256": "22b57d4b3e7b09478b965e33d620399f06462f324191d14e1315d19fa0fe9e34",
+    "size": 290577326,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17672_Weather9.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17672",
+    "weather": "9",
+    "sha256": "3474a9e72ae807f96183a7158c82f6d139026a96f779beb8dae887344f399302",
+    "size": 322775662,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17691_Weather10.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17691",
+    "weather": "10",
+    "sha256": "0895c1fdd95e7d75aac1d5101d0aea762081999bf21986a577e15f2d5bf91983",
+    "size": 318095727,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route2425_Weather1.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "2425",
+    "weather": "1",
+    "sha256": "b7d71be26ad0490cd25590a898cf82d05e0ba761fcb82b7cb15c9bb04bc112ee",
+    "size": 237701286,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route2435_Weather11.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "2435",
+    "weather": "11",
+    "sha256": "ffa98034eb532717612d3b499673af66ec5fc81364fbc739a031f10995fa1ea4",
+    "size": 251781622,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17689_Weather8.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17689",
+    "weather": "8",
+    "sha256": "0368ecbb2982650ada643aec516911e6efecf8cadad71c33d0d3faf02e80048c",
+    "size": 302394503,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17690_Weather9.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17690",
+    "weather": "9",
+    "sha256": "9a75ffdeb8982f20ee215803745caa9eb562c17c02519d0612dd05f4ba0052d8",
+    "size": 316299145,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route17707_Weather0.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "17707",
+    "weather": "0",
+    "sha256": "3c6684b028568f14648a0041e857aa45d29d9a2c1ae2a45e604fd17aed04f3e7",
+    "size": 378936906,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town12_Route2432_Weather8.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town12",
+    "route": "2432",
+    "weather": "8",
+    "sha256": "e2531fb99972bc03e31eac5fd8adf1451d068260c45328e00c6e92e5cd1145a3",
+    "size": 330643821,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town06_Route24237_Weather20.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town06",
+    "route": "24237",
+    "weather": "20",
+    "sha256": "a4ed701d716b2f8e0e91cc3755cbd55c024fe4362d919afe18b18f1fc9507d55",
+    "size": 166206224,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town13_Route3208_Weather5.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town13",
+    "route": "3208",
+    "weather": "5",
+    "sha256": "16dfe04f7dee86447abc5712481b19f98e1767b5d3e0df6d57e0be2e286d0086",
+    "size": 684798768,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town04_Route24325_Weather14.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town04",
+    "route": "24325",
+    "weather": "14",
+    "sha256": "f3fbe9ca5da9e6af9b219e700c7c3e9e359959d54aef70e1c3dfeb71d25654b6",
+    "size": 201460917,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town05_Route24259_Weather19.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town05",
+    "route": "24259",
+    "weather": "19",
+    "sha256": "02927fdcca1137c74824a9ca46eacd5f4dfb9d32b4cc31e27f712f708d8529cc",
+    "size": 232928802,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town15_Route24303_Weather15.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town15",
+    "route": "24303",
+    "weather": "15",
+    "sha256": "a275478b89d4bbb59fb4d720bfa58b2be9d08ea3746f3c4b8282a94f4058d6bb",
+    "size": 447871181,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town10HD_Route24200_Weather3.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town10HD",
+    "route": "24200",
+    "weather": "3",
+    "sha256": "ee3d1d38e66a8bb360ac91109e84dfebe472a807896eb6332aa156f4477038c0",
+    "size": 227052919,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town06_Route24247_Weather5.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town06",
+    "route": "24247",
+    "weather": "5",
+    "sha256": "bfec27965e2c1cf4ff7f679bbbe4c05cc074d7d733a390c13fb77708739b129a",
+    "size": 175667535,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town13_Route3217_Weather14.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town13",
+    "route": "3217",
+    "weather": "14",
+    "sha256": "0d1c26ebbb44628679a69aaa16fdd0b444f042e57b66dbf88f976d324cf1c446",
+    "size": 132141428,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town04_Route24315_Weather3.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town04",
+    "route": "24315",
+    "weather": "3",
+    "sha256": "dad1ff6941430e09a45e01b31822b658bc3e42d53dbce4648ad85f38f9cdbc55",
+    "size": 230213557,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town05_Route24359_Weather1.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town05",
+    "route": "24359",
+    "weather": "1",
+    "sha256": "15b9d43e3a46f5c8c9fe4fd3ca2d6fc8b6bf7449564eba65920675986a97d553",
+    "size": 239377500,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town06_Route24277_Weather12.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town06",
+    "route": "24277",
+    "weather": "12",
+    "sha256": "30e5687dfabb98b10421612d9b8c1ec4ad4d02a713c4fa68e83f28c18a8ccdbe",
+    "size": 148519653,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "LaneChange_Town13_Route3207_Weather3.tar.gz",
+    "scenario": "LaneChange",
+    "town": "Town13",
+    "route": "3207",
+    "weather": "3",
+    "sha256": "20d97aae6d511d2ceab2d99fef77d3d69927e83c6ab98768e72e41dbd93ee74d",
+    "size": 665546446,
+    "priority_rank": 3,
+    "priority_score": 7.66,
+    "weakness_reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Merging"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20815_Weather14.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20815",
+    "weather": "14",
+    "sha256": "824f642cf2f6f23a1be5607fc1bff0d899fd08b58ea3bc63ffccedf98b09a3a1",
+    "size": 104041353,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town13_Route3366_Weather7.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town13",
+    "route": "3366",
+    "weather": "7",
+    "sha256": "64cac8d916ffcd22c83fc664638aa351c64c5fe2225d4a348e6834dedf01bdbf",
+    "size": 421995463,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town13_Route3368_Weather9.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town13",
+    "route": "3368",
+    "weather": "9",
+    "sha256": "d03906eba79502e65ae2445711647bb0501e24c8c01e1555076506fb41ce07f9",
+    "size": 169880405,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20867_Weather14.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20867",
+    "weather": "14",
+    "sha256": "d83128b507a53c9e50f9b772c0befc18cef39e047c06af78391106497e25bf48",
+    "size": 624978200,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town03_Route25427_Weather12.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town03",
+    "route": "25427",
+    "weather": "12",
+    "sha256": "5df5dfa88ccbee1ccfa5fc46c12162e1eb31480714f64eeb87e08161d3d0dacd",
+    "size": 153750874,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town03_Route25378_Weather9.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town03",
+    "route": "25378",
+    "weather": "9",
+    "sha256": "3f31c296f3ec814945d1cbd073886146bce57e9998aba016918e97f24baeef79",
+    "size": 120084660,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20598_Weather5.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20598",
+    "weather": "5",
+    "sha256": "cd38b6a21ee44a72cb6c9403ba21154a609b2af2e7e0f517c85f83642f5c6d7c",
+    "size": 142366081,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20604_Weather11.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20604",
+    "weather": "11",
+    "sha256": "10ed2f24ed4671310a6bd1cb9bff48b1a163c74e0fe3d43d488007d01e30d201",
+    "size": 1079611986,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20606_Weather13.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20606",
+    "weather": "13",
+    "sha256": "6727d652988c98ddc0cc625616ca0a0166d21e85fd9b8e0827b1c3c61104bcca",
+    "size": 1102761740,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20614_Weather21.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20614",
+    "weather": "21",
+    "sha256": "1787af85ed87e0bdc41e2634b05a0f6cb5be19476bced89bfe07f9c0ba779f37",
+    "size": 229601175,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20623_Weather3.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20623",
+    "weather": "3",
+    "sha256": "2a92b27b7786c7b97a7fff451613d17683495dcdeb6a15454946f3a54d057ae9",
+    "size": 299865624,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20625_Weather6.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20625",
+    "weather": "6",
+    "sha256": "03234d3557dfe9a8fc0297d6c60561b559cdd42901619812dfd7231f78d046f4",
+    "size": 340296035,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20629_Weather10.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20629",
+    "weather": "10",
+    "sha256": "981098da3f5dd0cb792b3beee816d326380f552ca36ba29cdff8821354a9d158",
+    "size": 231003962,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20639_Weather20.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20639",
+    "weather": "20",
+    "sha256": "1de9e72121d1073d298565e52e8283c52471a4944b27d9d795ff03ee78e1acd3",
+    "size": 252148715,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20641_Weather22.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20641",
+    "weather": "22",
+    "sha256": "75dc643cad28c0b6e028318fef4c0492fec0681c03acf6be4770c950f9565691",
+    "size": 1252658348,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20646_Weather1.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20646",
+    "weather": "1",
+    "sha256": "30657ce98d5a1a784901564c85467d6191e34fcaa8ae527d00631236a335429a",
+    "size": 423391376,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20647_Weather2.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20647",
+    "weather": "2",
+    "sha256": "f23bc1f8d5b2d077d31e4160ac7084addbed6dac33db388cf75bfb36ee46bf6d",
+    "size": 331905270,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20663_Weather18.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20663",
+    "weather": "18",
+    "sha256": "e8a7d4bd30a4ca19704a76202a260985d83d621d73b4bbf64528f329ddc4988f",
+    "size": 325637745,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20668_Weather23.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20668",
+    "weather": "23",
+    "sha256": "e2a47eabfd1fe4d1745c767e70bb0cd3ae702ed03d46d87653851327f456ed8a",
+    "size": 107407079,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20679_Weather8.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20679",
+    "weather": "8",
+    "sha256": "29cef0429503ea3691f75c0a300f20da4b14a37aa6a159bd549534f44c8da74d",
+    "size": 343449024,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20768_Weather19.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20768",
+    "weather": "19",
+    "sha256": "b8e0468f8d55982f6ac23266bf82bc9bfcff55d84f48719fab83133c7f3ed8c3",
+    "size": 316554713,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20774_Weather25.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20774",
+    "weather": "25",
+    "sha256": "4a36e522f02f046c1e8c610e2dee7c912251a7a731cdc38c28b810991523eea9",
+    "size": 250563522,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20775_Weather0.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20775",
+    "weather": "0",
+    "sha256": "37b6b55c42776ffd9a441950b1da996092af6e62dea996c251e02614b7e89d4a",
+    "size": 123119705,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20626_Weather7.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20626",
+    "weather": "7",
+    "sha256": "189f95025ce78ce8e6b51e80e5909bf9324ca8a6926388fcb05d0b1956495234",
+    "size": 249841207,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20648_Weather3.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20648",
+    "weather": "3",
+    "sha256": "7d2edee8b8a727abe691aa17689789a432229dbf53e793e8eb45d2e67ebc60e5",
+    "size": 391970939,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20666_Weather21.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20666",
+    "weather": "21",
+    "sha256": "59f5a9d0e927ecd4ce9a98e1e355e7b2f79ec51f45fcece88a576fd733c724cb",
+    "size": 152741780,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20667_Weather22.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20667",
+    "weather": "22",
+    "sha256": "8d336e9a333e272dac360435d9e05faecfe169b4e10b12284c63cedf969a4ea8",
+    "size": 133493006,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20672_Weather1.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20672",
+    "weather": "1",
+    "sha256": "aafc202de37e96f871061739b8040259c43a0752e331c409c1486ef55a755a85",
+    "size": 291048636,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20681_Weather10.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20681",
+    "weather": "10",
+    "sha256": "45c9060d38d182cf9e39033a49edd4578b356cc822a0a2898b47f3217c220c88",
+    "size": 266703872,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20682_Weather11.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20682",
+    "weather": "11",
+    "sha256": "8877b84667e7ec889c781d9bc0033ed3c7b8ae3c093ed50f3923fa75e482ed96",
+    "size": 307582741,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20687_Weather8.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20687",
+    "weather": "8",
+    "sha256": "35703fcc0e1ac2feab9b34e25dd1588d0ef72491c94e4ff9c4423f2cf900f7c4",
+    "size": 250309755,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20691_Weather20.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20691",
+    "weather": "20",
+    "sha256": "5434797e1fe1657673b23db03b6b4b8baa63ce1cadece929a4178f00a061b6c7",
+    "size": 323921121,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20694_Weather23.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20694",
+    "weather": "23",
+    "sha256": "3684bb2ed7d0910cc70fb98c2c991aa263463e701bf103324797b97944659bf6",
+    "size": 356874081,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20703_Weather6.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20703",
+    "weather": "6",
+    "sha256": "98f638a1802e1996da14b1cc9f5a17ded361465c8840ca4f1f082130f831806a",
+    "size": 1239384353,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20751_Weather2.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20751",
+    "weather": "2",
+    "sha256": "bd4c4c34733daa43f35deeb6beb643f632c456e5e313674dc92f00a54b3a210a",
+    "size": 117925381,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20762_Weather13.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20762",
+    "weather": "13",
+    "sha256": "871698ed624b201077ab08bdaf0fb50d6244a0fcdb0ad341b6c4d7cccfd77316",
+    "size": 1008371965,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20806_Weather5.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20806",
+    "weather": "5",
+    "sha256": "9c646bc6b92eba0610ea93b8aeb43291b8cc37466285b63061fd8bdc88be166c",
+    "size": 1440956037,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20826_Weather25.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20826",
+    "weather": "25",
+    "sha256": "255c67027b7ba5e521f84e186c34140bb8e69aed7d8acd698ae14f9067551501",
+    "size": 319354712,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20865_Weather12.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20865",
+    "weather": "12",
+    "sha256": "9a4523de9c9265f30ab50aecfd3fc3e48499d787024b5538792a1a726d35762c",
+    "size": 419658950,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route2599_Weather19.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "2599",
+    "weather": "19",
+    "sha256": "ce9854b540f6d2a9ba8a7a8702654d2e35b4c7ea9b0f665ccb452851e05157af",
+    "size": 195756282,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route1809_Weather9.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "1809",
+    "weather": "9",
+    "sha256": "fea0c6acf0e449bff163897f72f846d92a28869d08906a1db4e910082881475d",
+    "size": 306700337,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20652_Weather7.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20652",
+    "weather": "7",
+    "sha256": "1a9faf5f4b7cd94b3661d27b03a210d72f9b3feb6bad1b5081cd6d36629c43e5",
+    "size": 463094073,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20698_Weather1.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20698",
+    "weather": "1",
+    "sha256": "8e670b752c56b23c4d0c994f8aff00314b01b9706b22b5becc25f40cf9b1303f",
+    "size": 1452283507,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20701_Weather3.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20701",
+    "weather": "3",
+    "sha256": "5be2af4cbcb500a3578280e81fc5ae8fc3a60045a8895f7e914deee65629129a",
+    "size": 447402851,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20705_Weather8.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20705",
+    "weather": "8",
+    "sha256": "5f098bee7a171baec27a474101b1a7fdd56728a9d482ecbbaea70225bdbcaac4",
+    "size": 1144181101,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20708_Weather11.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20708",
+    "weather": "11",
+    "sha256": "bba672c134f70ef444a8ebee3925032c533eaa6dd4f1a66553e66d38c3f24a95",
+    "size": 1130215317,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20718_Weather21.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20718",
+    "weather": "21",
+    "sha256": "ab89b2e330b2c2adf19297d42ce993a76ebcf547bb7bffcc8ca4dccba3a49130",
+    "size": 515326147,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20720_Weather23.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20720",
+    "weather": "23",
+    "sha256": "6e715339dc51f19de04c70a0a69027aa784c56bc0f5d00a7bbf5f267a899e6e6",
+    "size": 252118664,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20729_Weather6.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20729",
+    "weather": "6",
+    "sha256": "6e9bb4d06234535f82f21b3b77ff59d83b9d5a03da090490885e786cd785d33a",
+    "size": 348350205,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20733_Weather10.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20733",
+    "weather": "10",
+    "sha256": "5e01b8a8b8d5c811a338bf9e602edf7e17996b25344d1f171fabb079e7d4b612",
+    "size": 213462669,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20745_Weather22.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20745",
+    "weather": "22",
+    "sha256": "510bbd7c2084822c31c06872ca1c2a8e26ec2590a5abd060df7670819fb4a6bc",
+    "size": 287548418,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20769_Weather20.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20769",
+    "weather": "20",
+    "sha256": "3b68e76d80fa1e02aef079ddb9023eb1b168bf6e6d4a4f7c66662cb731ad520e",
+    "size": 1356592457,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20777_Weather2.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20777",
+    "weather": "2",
+    "sha256": "8f2189620dcf322e4e5b53c1a8ecd9f390bd82a1bc834cfc516fddb2d91caf9f",
+    "size": 441778692,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20832_Weather5.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20832",
+    "weather": "5",
+    "sha256": "e9e04c0aa170140f69378c2ea71f26f69c6d6bb86e888e50c4ee6b838a38d60f",
+    "size": 237304708,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20840_Weather13.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20840",
+    "weather": "13",
+    "sha256": "d51c04e0557ac425100a8f8ae168205aa989b5417fa59f55b7fc287f346fad30",
+    "size": 258503680,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20654_Weather9.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20654",
+    "weather": "9",
+    "sha256": "a9ec61867c21c2a9713c18d51f8e10ba5587d938e2810826387233bbcd97125c",
+    "size": 234480762,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20726_Weather3.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20726",
+    "weather": "3",
+    "sha256": "3eefb1cea5c94fa55e40b1527d621dae6e31002686668410ac1053f14b0be7ff",
+    "size": 487284620,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20734_Weather11.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20734",
+    "weather": "11",
+    "sha256": "3e78b1bf2dba56fa6f29df178be23ff00a8d3ed8615533cb3de74587aa890233",
+    "size": 120875413,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20750_Weather1.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20750",
+    "weather": "1",
+    "sha256": "acaf47f6e1fbfb0ac3910bb43ff58a47686997c64643409e2e34ca69fec574f8",
+    "size": 423830712,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20755_Weather6.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20755",
+    "weather": "6",
+    "sha256": "1e8b18a45f823013472bbf7f0b7fb97ec9614cd4eeecbd109e66e527a23bc91e",
+    "size": 257237803,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20773_Weather23.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20773",
+    "weather": "23",
+    "sha256": "4c4ee954add22809af8d48301b6380a808fa914887cf83c54e7bbb0f344a50c2",
+    "size": 279998315,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20785_Weather10.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20785",
+    "weather": "10",
+    "sha256": "76ba2c489dd7cd163fab0a07e6da3a15276c7b7fd20a48cb61bc1bc30e32a9e8",
+    "size": 139757232,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20791_Weather8.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20791",
+    "weather": "8",
+    "sha256": "7a71b4c6c17c5fa30320d6bfdd55597457b82bde58b41e6685a27a23419f3056",
+    "size": 377679021,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20796_Weather21.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20796",
+    "weather": "21",
+    "sha256": "21803eb8fedbc26fd4c8d73bd378af655faba520235e8dd870888c5dc6970ff9",
+    "size": 1396251953,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20855_Weather2.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20855",
+    "weather": "2",
+    "sha256": "957caa6aaee5853f263f3c82f8f48f3e7a5a1c3f718cd45a649a0b0a8a1269c7",
+    "size": 690506193,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20860_Weather7.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20860",
+    "weather": "7",
+    "sha256": "057e374e43ca6cc533e9feafab570dd5bab564d919e33c22c0c6eeaafb2a7636",
+    "size": 239925061,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20866_Weather13.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20866",
+    "weather": "13",
+    "sha256": "af52f511c8b8c494b74cc501e09116aa3bc8872b4c479950d83e1a838f2a2ace",
+    "size": 812089285,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20662_Weather9.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20662",
+    "weather": "9",
+    "sha256": "8306525d946f5b558724ddc73a697177829431038eebc3431a3cd9be5d854177",
+    "size": 90932924,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20727_Weather3.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20727",
+    "weather": "3",
+    "sha256": "a13cdf49fa12c2a995395b44ac24717adbb03845418138e5f81408c08fdcdcc4",
+    "size": 372118359,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20802_Weather1.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20802",
+    "weather": "1",
+    "sha256": "c8cf1f0c8689e17bc035463ebee0c6701b5e8a14f9e6b3b778c46de44c52817a",
+    "size": 140552801,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20811_Weather10.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20811",
+    "weather": "10",
+    "sha256": "0af5713b364441ca6196d802bd77187ed02acd72b988f6315e4c272e26fb9437",
+    "size": 581589381,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20843_Weather8.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20843",
+    "weather": "8",
+    "sha256": "016312a3ff3886313b0eb83ad34f3db726dd0712e833e64db7d45628f6bffe54",
+    "size": 351504705,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route2587_Weather7.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "2587",
+    "weather": "7",
+    "sha256": "98fab75f891848a72b7c8f4fc19e760098483803d055491272d285629a7d8886",
+    "size": 188164334,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20740_Weather9.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20740",
+    "weather": "9",
+    "sha256": "5e66272c392d6f8883434a139589c94a08220991f10c284915ff56f0de5847e3",
+    "size": 321198954,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20778_Weather3.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20778",
+    "weather": "3",
+    "sha256": "86369696eca2638a19212b8f54594579e0fb8ce934dfac256d2d4c0342c106b9",
+    "size": 258638700,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20828_Weather1.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20828",
+    "weather": "1",
+    "sha256": "25ae46a9ac3cc746cf1d6c1f9c8a252c36973982b11de4ec9ad242cae07a78b1",
+    "size": 216286549,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20830_Weather3.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20830",
+    "weather": "3",
+    "sha256": "385023cae91ad22651ad58f1c026a0f6a79c8d6c174b6994269eda3faf4efb04",
+    "size": 390777950,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20836_Weather9.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20836",
+    "weather": "9",
+    "sha256": "491c0e694f1dfc104924c585b5187970bb636ebab762ba69ad4a7ac007de982f",
+    "size": 122687079,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  },
+  {
+    "filename": "YieldToEmergencyVehicle_Town12_Route20862_Weather9.tar.gz",
+    "scenario": "YieldToEmergencyVehicle",
+    "town": "Town12",
+    "route": "20862",
+    "weather": "9",
+    "sha256": "e240fdd510c8b3fa59452b52e6875d398be3fe4b7d44376fe5e418cf2add124a",
+    "size": 202299686,
+    "priority_rank": 4,
+    "priority_score": 4.55,
+    "weakness_reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "target_abilities": [],
+    "table2_abilities": [
+      "Give Way"
+    ]
+  }
+]

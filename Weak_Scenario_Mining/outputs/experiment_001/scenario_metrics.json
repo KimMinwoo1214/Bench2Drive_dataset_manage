@@ -1,0 +1,342 @@
+[
+  {
+    "scenario": "VanillaNonSignalizedTurnEncounterStopsign",
+    "table2_abilities": [
+      "Traffic Sign"
+    ],
+    "target_abilities": [],
+    "episodes_total": 1,
+    "episodes_valid": 1,
+    "runtime_failure_count": 0,
+    "needs_rerun": false,
+    "mean_driving_score": 0.0,
+    "min_driving_score": 0.0,
+    "mean_route_completion": 0.0,
+    "min_route_completion": 0.0,
+    "mean_infraction_penalty": 1.0,
+    "success_rate": 0.0,
+    "collision_total": 0,
+    "blocked_total": 1,
+    "timeout_total": 0,
+    "yield_violation_total": 0,
+    "red_light_total": 0,
+    "stop_infraction_total": 0,
+    "critical_infraction_total": 1,
+    "is_weak": true,
+    "priority_score": 8.05,
+    "reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "failed_route_ids": [
+      "RouteScenario_2416_rep0"
+    ],
+    "rerun_route_ids": [],
+    "failed_towns": [
+      "Town12"
+    ],
+    "failed_weathers": [
+      "18"
+    ]
+  },
+  {
+    "scenario": "VanillaSignalizedTurnEncounterRedLight",
+    "table2_abilities": [
+      "Traffic Sign"
+    ],
+    "target_abilities": [],
+    "episodes_total": 1,
+    "episodes_valid": 1,
+    "runtime_failure_count": 0,
+    "needs_rerun": false,
+    "mean_driving_score": 0.0,
+    "min_driving_score": 0.0,
+    "mean_route_completion": 0.0,
+    "min_route_completion": 0.0,
+    "mean_infraction_penalty": 1.0,
+    "success_rate": 0.0,
+    "collision_total": 0,
+    "blocked_total": 1,
+    "timeout_total": 0,
+    "yield_violation_total": 0,
+    "red_light_total": 0,
+    "stop_infraction_total": 0,
+    "critical_infraction_total": 1,
+    "is_weak": true,
+    "priority_score": 8.05,
+    "reasons": [
+      "blocked=1",
+      "mean_DS=0.000<50",
+      "mean_RC=0.000<80",
+      "success_rate=0.000<1"
+    ],
+    "failed_route_ids": [
+      "RouteScenario_3144_rep0"
+    ],
+    "rerun_route_ids": [],
+    "failed_towns": [
+      "Town12"
+    ],
+    "failed_weathers": [
+      "18"
+    ]
+  },
+  {
+    "scenario": "LaneChange",
+    "table2_abilities": [
+      "Merging"
+    ],
+    "target_abilities": [],
+    "episodes_total": 1,
+    "episodes_valid": 1,
+    "runtime_failure_count": 0,
+    "needs_rerun": false,
+    "mean_driving_score": 36.0,
+    "min_driving_score": 36.0,
+    "mean_route_completion": 100.0,
+    "min_route_completion": 100.0,
+    "mean_infraction_penalty": 0.36,
+    "success_rate": 0.0,
+    "collision_total": 2,
+    "blocked_total": 0,
+    "timeout_total": 0,
+    "yield_violation_total": 0,
+    "red_light_total": 0,
+    "stop_infraction_total": 0,
+    "critical_infraction_total": 2,
+    "is_weak": true,
+    "priority_score": 7.66,
+    "reasons": [
+      "collision=2",
+      "mean_DS=36.000<50",
+      "success_rate=0.000<1"
+    ],
+    "failed_route_ids": [
+      "RouteScenario_17569_rep0"
+    ],
+    "rerun_route_ids": [],
+    "failed_towns": [
+      "Town12"
+    ],
+    "failed_weathers": [
+      "18"
+    ]
+  },
+  {
+    "scenario": "YieldToEmergencyVehicle",
+    "table2_abilities": [
+      "Give Way"
+    ],
+    "target_abilities": [],
+    "episodes_total": 1,
+    "episodes_valid": 1,
+    "runtime_failure_count": 0,
+    "needs_rerun": false,
+    "mean_driving_score": 70.0,
+    "min_driving_score": 70.0,
+    "mean_route_completion": 100.0,
+    "min_route_completion": 100.0,
+    "mean_infraction_penalty": 0.7,
+    "success_rate": 0.0,
+    "collision_total": 0,
+    "blocked_total": 0,
+    "timeout_total": 0,
+    "yield_violation_total": 1,
+    "red_light_total": 0,
+    "stop_infraction_total": 0,
+    "critical_infraction_total": 1,
+    "is_weak": true,
+    "priority_score": 4.55,
+    "reasons": [
+      "yield_violation=1",
+      "success_rate=0.000<1"
+    ],
+    "failed_route_ids": [
+      "RouteScenario_3373_rep0"
+    ],
+    "rerun_route_ids": [],
+    "failed_towns": [
+      "Town13"
+    ],
+    "failed_weathers": [
+      "14"
+    ]
+  },
+  {
+    "scenario": "ConstructionObstacle",
+    "table2_abilities": [
+      "Overtaking"
+    ],
+    "target_abilities": [],
+    "episodes_total": 1,
+    "episodes_valid": 0,
+    "runtime_failure_count": 1,
+    "needs_rerun": true,
+    "is_weak": false,
+    "priority_score": 0.0,
+    "reasons": [
+      "all_routes_are_runtime_failures"
+    ],
+    "rerun_route_ids": [
+      "RouteScenario_24367_rep0"
+    ]
+  },
+  {
+    "scenario": "HazardAtSideLane",
+    "table2_abilities": [
+      "Overtaking"
+    ],
+    "target_abilities": [],
+    "episodes_total": 1,
+    "episodes_valid": 1,
+    "runtime_failure_count": 0,
+    "needs_rerun": false,
+    "mean_driving_score": 100.0,
+    "min_driving_score": 100.0,
+    "mean_route_completion": 100.0,
+    "min_route_completion": 100.0,
+    "mean_infraction_penalty": 1.0,
+    "success_rate": 1.0,
+    "collision_total": 0,
+    "blocked_total": 0,
+    "timeout_total": 0,
+    "yield_violation_total": 0,
+    "red_light_total": 0,
+    "stop_infraction_total": 0,
+    "critical_infraction_total": 0,
+    "is_weak": false,
+    "priority_score": 0.0,
+    "reasons": [],
+    "failed_route_ids": [],
+    "rerun_route_ids": [],
+    "failed_towns": [],
+    "failed_weathers": []
+  },
+  {
+    "scenario": "HighwayCutIn",
+    "table2_abilities": [
+      "Merging"
+    ],
+    "target_abilities": [],
+    "episodes_total": 1,
+    "episodes_valid": 1,
+    "runtime_failure_count": 0,
+    "needs_rerun": false,
+    "mean_driving_score": 100.0,
+    "min_driving_score": 100.0,
+    "mean_route_completion": 100.0,
+    "min_route_completion": 100.0,
+    "mean_infraction_penalty": 1.0,
+    "success_rate": 1.0,
+    "collision_total": 0,
+    "blocked_total": 0,
+    "timeout_total": 0,
+    "yield_violation_total": 0,
+    "red_light_total": 0,
+    "stop_infraction_total": 0,
+    "critical_infraction_total": 0,
+    "is_weak": false,
+    "priority_score": 0.0,
+    "reasons": [],
+    "failed_route_ids": [],
+    "rerun_route_ids": [],
+    "failed_towns": [],
+    "failed_weathers": []
+  },
+  {
+    "scenario": "InvadingTurn",
+    "table2_abilities": [
+      "Give Way"
+    ],
+    "target_abilities": [],
+    "episodes_total": 1,
+    "episodes_valid": 1,
+    "runtime_failure_count": 0,
+    "needs_rerun": false,
+    "mean_driving_score": 100.0,
+    "min_driving_score": 100.0,
+    "mean_route_completion": 100.0,
+    "min_route_completion": 100.0,
+    "mean_infraction_penalty": 1.0,
+    "success_rate": 1.0,
+    "collision_total": 0,
+    "blocked_total": 0,
+    "timeout_total": 0,
+    "yield_violation_total": 0,
+    "red_light_total": 0,
+    "stop_infraction_total": 0,
+    "critical_infraction_total": 0,
+    "is_weak": false,
+    "priority_score": 0.0,
+    "reasons": [],
+    "failed_route_ids": [],
+    "rerun_route_ids": [],
+    "failed_towns": [],
+    "failed_weathers": []
+  },
+  {
+    "scenario": "PedestrianCrossing",
+    "table2_abilities": [
+      "Emergency Brake",
+      "Traffic Sign"
+    ],
+    "target_abilities": [],
+    "episodes_total": 1,
+    "episodes_valid": 1,
+    "runtime_failure_count": 0,
+    "needs_rerun": false,
+    "mean_driving_score": 100.0,
+    "min_driving_score": 100.0,
+    "mean_route_completion": 100.0,
+    "min_route_completion": 100.0,
+    "mean_infraction_penalty": 1.0,
+    "success_rate": 1.0,
+    "collision_total": 0,
+    "blocked_total": 0,
+    "timeout_total": 0,
+    "yield_violation_total": 0,
+    "red_light_total": 0,
+    "stop_infraction_total": 0,
+    "critical_infraction_total": 0,
+    "is_weak": false,
+    "priority_score": 0.0,
+    "reasons": [],
+    "failed_route_ids": [],
+    "rerun_route_ids": [],
+    "failed_towns": [],
+    "failed_weathers": []
+  },
+  {
+    "scenario": "StaticCutIn",
+    "table2_abilities": [
+      "Emergency Brake"
+    ],
+    "target_abilities": [],
+    "episodes_total": 1,
+    "episodes_valid": 1,
+    "runtime_failure_count": 0,
+    "needs_rerun": false,
+    "mean_driving_score": 100.0,
+    "min_driving_score": 100.0,
+    "mean_route_completion": 100.0,
+    "min_route_completion": 100.0,
+    "mean_infraction_penalty": 1.0,
+    "success_rate": 1.0,
+    "collision_total": 0,
+    "blocked_total": 0,
+    "timeout_total": 0,
+    "yield_violation_total": 0,
+    "red_light_total": 0,
+    "stop_infraction_total": 0,
+    "critical_infraction_total": 0,
+    "is_weak": false,
+    "priority_score": 0.0,
+    "reasons": [],
+    "failed_route_ids": [],
+    "rerun_route_ids": [],
+    "failed_towns": [],
+    "failed_weathers": []
+  }
+]

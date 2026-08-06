@@ -1,0 +1,11 @@
+﻿scenario,table2_abilities,target_abilities,episodes_total,episodes_valid,runtime_failure_count,needs_rerun,mean_driving_score,min_driving_score,mean_route_completion,min_route_completion,mean_infraction_penalty,success_rate,collision_total,blocked_total,timeout_total,yield_violation_total,red_light_total,stop_infraction_total,critical_infraction_total,is_weak,priority_score,reasons,failed_route_ids,rerun_route_ids,failed_towns,failed_weathers
+VanillaNonSignalizedTurnEncounterStopsign,"[""Traffic Sign""]",[],1,1,0,False,0.0,0.0,0.0,0.0,1.0,0.0,0,1,0,0,0,0,1,True,8.05,"[""blocked=1"", ""mean_DS=0.000<50"", ""mean_RC=0.000<80"", ""success_rate=0.000<1""]","[""RouteScenario_2416_rep0""]",[],"[""Town12""]","[""18""]"
+VanillaSignalizedTurnEncounterRedLight,"[""Traffic Sign""]",[],1,1,0,False,0.0,0.0,0.0,0.0,1.0,0.0,0,1,0,0,0,0,1,True,8.05,"[""blocked=1"", ""mean_DS=0.000<50"", ""mean_RC=0.000<80"", ""success_rate=0.000<1""]","[""RouteScenario_3144_rep0""]",[],"[""Town12""]","[""18""]"
+LaneChange,"[""Merging""]",[],1,1,0,False,36.0,36.0,100.0,100.0,0.36,0.0,2,0,0,0,0,0,2,True,7.66,"[""collision=2"", ""mean_DS=36.000<50"", ""success_rate=0.000<1""]","[""RouteScenario_17569_rep0""]",[],"[""Town12""]","[""18""]"
+YieldToEmergencyVehicle,"[""Give Way""]",[],1,1,0,False,70.0,70.0,100.0,100.0,0.7,0.0,0,0,0,1,0,0,1,True,4.55,"[""yield_violation=1"", ""success_rate=0.000<1""]","[""RouteScenario_3373_rep0""]",[],"[""Town13""]","[""14""]"
+ConstructionObstacle,"[""Overtaking""]",[],1,0,1,True,,,,,,,,,,,,,,False,0.0,"[""all_routes_are_runtime_failures""]",,"[""RouteScenario_24367_rep0""]",,
+HazardAtSideLane,"[""Overtaking""]",[],1,1,0,False,100.0,100.0,100.0,100.0,1.0,1.0,0,0,0,0,0,0,0,False,0.0,[],[],[],[],[]
+HighwayCutIn,"[""Merging""]",[],1,1,0,False,100.0,100.0,100.0,100.0,1.0,1.0,0,0,0,0,0,0,0,False,0.0,[],[],[],[],[]
+InvadingTurn,"[""Give Way""]",[],1,1,0,False,100.0,100.0,100.0,100.0,1.0,1.0,0,0,0,0,0,0,0,False,0.0,[],[],[],[],[]
+PedestrianCrossing,"[""Emergency Brake"", ""Traffic Sign""]",[],1,1,0,False,100.0,100.0,100.0,100.0,1.0,1.0,0,0,0,0,0,0,0,False,0.0,[],[],[],[],[]
+StaticCutIn,"[""Emergency Brake""]",[],1,1,0,False,100.0,100.0,100.0,100.0,1.0,1.0,0,0,0,0,0,0,0,False,0.0,[],[],[],[],[]
