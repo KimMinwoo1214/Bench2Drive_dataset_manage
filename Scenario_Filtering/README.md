@@ -7,8 +7,9 @@
 | 코드 | 목적 | 원본 수정 여부 |
 |---|---|---|
 | `b2d_traffic_light_relabeler.py` | Ego 전체 궤적으로 신호등 통과 이벤트를 찾고 누락된 `affects_ego`를 보정 | 기본 실행은 수정 안 함. `--write-corrected-anno` 사용 시 복사본만 생성 |
-| `check_ego_lane_change(1).py` | 프레임별 Ego의 `road_id`, `section_id`, `lane_id`를 이용해 차선 변경 시점 검출 | 수정 안 함 |
-| `read_json_gz.py` | `command_near`의 전체·시나리오별 분포, 연속 구간 수, 선택 명령이 포함된 시나리오를 집계 | 수정 안 함 |
+| `read_ego_lane_change.py` | 프레임별 Ego의 `road_id`, `section_id`, `lane_id`를 이용해 차선 변경 시점 검출 | 수정 안 함 |
+| `read_near_cmd.py` | `command_near`의 전체·시나리오별 분포, 연속 구간 수, 선택 명령이 포함된 시나리오를 집계 | 수정 안 함 |
+| `read_json_gz.py` | `read_ego_lane_change`의 코드와 `read_near_cmd`의 코드를 합친 버젼 이 때 input을 따로 주지 않으면 같은 폴더 내 전체 시나리오에 대해서 점검 | 수정 안 함 |
 | `traffic_light_affect.py` | 기존 또는 보정 annotation에서 `affects_ego=true`인 신호등을 프레임별로 추출 | 수정 안 함 |
 
 `b2d_check/` 폴더는 직접 만든 알고리즘이 아니라 Bench2Drive의 데이터 확인, 시각화, 평가를 위해 정리한 공식 코드 묶음입니다. 이 문서 뒤쪽에 자주 사용하는 파일과 실행 방법만 따로 정리합니다.
@@ -406,7 +407,7 @@ road_points = map_info[anno['bounding_boxes'][0]['road_id']]
 ## 4.1 파일
 
 ```text
-check_ego_lane_change(1).py
+read_ego_lane_change.py
 ```
 
 파일명에 괄호가 있으므로 셸 명령에서는 파일명을 따옴표로 감싸는 것이 안전합니다. 괄호 없는 이름으로 바꾸어 사용해도 코드 동작은 같습니다.
@@ -428,21 +429,21 @@ check_ego_lane_change(1).py
 ### 시나리오 폴더 입력
 
 ```bash
-python3 "check_ego_lane_change(1).py" \
+python3 "read_ego_lane_change.py" \
   "/home/kmw/Summer_Intership/Carla/Scenario/시나리오_폴더"
 ```
 
 ### `anno` 폴더 직접 입력
 
 ```bash
-python3 "check_ego_lane_change(1).py" \
+python3 "read_ego_lane_change.py" \
   "/home/kmw/Summer_Intership/Carla/Scenario/시나리오_폴더/anno"
 ```
 
 ### 출력 폴더와 안정 프레임 수 지정
 
 ```bash
-python3 "check_ego_lane_change(1).py" \
+python3 "read_ego_lane_change.py" \
   "/path/to/scenario" \
   --min-stable-frames 5 \
   --output-dir "/path/to/lane_analysis"
@@ -563,7 +564,7 @@ road_id, section_id, lane_id
 ## 5.1 파일
 
 ```text
-read_json_gz.py
+read_near_cmd.py
 ```
 
 외부 패키지는 필요하지 않습니다. 파일명은 단순히 JSON.GZ를 읽는 코드처럼 보이지만, 실제 목적은 Bench2Drive annotation의 `command_near` 분포와 선택 명령이 포함된 시나리오를 찾는 것입니다.
@@ -598,7 +599,7 @@ read_json_gz.py
 ### 데이터셋 또는 시나리오 폴더 전체 분석
 
 ```bash
-python3 read_json_gz.py \
+python3 read_near_cmd.py \
   --input "/home/kmw/Summer_Intership/Carla/Scenario" \
   --output-dir "/home/kmw/Summer_Intership/Carla/command_near_result"
 ```
@@ -608,7 +609,7 @@ python3 read_json_gz.py \
 ### 단일 annotation 분석
 
 ```bash
-python3 read_json_gz.py \
+python3 read_near_cmd.py \
   --input "/path/to/scenario/anno/00304.json.gz" \
   --output-dir "/path/to/command_near_result"
 ```
@@ -616,7 +617,7 @@ python3 read_json_gz.py \
 ### 경로 목록 파일 사용
 
 ```bash
-python3 read_json_gz.py \
+python3 read_near_cmd.py \
   --input "/path/to/scenario_paths.txt" \
   --output-dir "/path/to/command_near_result"
 ```
@@ -626,7 +627,7 @@ python3 read_json_gz.py \
 ### 좌·우 차선 변경 시나리오 찾기
 
 ```bash
-python3 read_json_gz.py \
+python3 read_near_cmd.py \
   --input "/path/to/Scenario" \
   --output-dir "/path/to/command_near_result" \
   --selected-command CHANGELANELEFT \
@@ -643,7 +644,7 @@ python3 read_json_gz.py \
 ### 중첩된 다른 필드 분석
 
 ```bash
-python3 read_json_gz.py \
+python3 read_near_cmd.py \
   --input "/path/to/Scenario" \
   --field "planner.command_near"
 ```
