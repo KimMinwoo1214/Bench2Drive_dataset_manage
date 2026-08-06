@@ -11,7 +11,7 @@
     "download_dir": "downloads/experiment_001"
   },
   "evaluation": {
-    "expected_routes": 220,
+    "expected_routes": 10,
     "success_policy": "strict_score",
     "score_epsilon": 1e-06,
     "allow_duplicate_route_ids": false,

@@ -59,13 +59,16 @@ def find_annotation_files(input_path: Path):
     if anno_dir.is_dir():
         input_path = anno_dir
 
-    json_files = list(input_path.glob("*.json"))
-    json_gz_files = list(input_path.glob("*.json.gz"))
+    # 같은 프레임의 .json과 .json.gz가 모두 있을 경우 중복 집계하지
+    # 않도록 압축본(.json.gz)을 우선합니다.
+    selected = {}
+    for path in list(input_path.glob("*.json")) + list(input_path.glob("*.json.gz")):
+        frame = get_frame_name(path)
+        current = selected.get(frame)
+        if current is None or path.name.endswith(".json.gz"):
+            selected[frame] = path
 
-    files = sorted(
-        set(json_files + json_gz_files),
-        key=lambda path: get_frame_name(path),
-    )
+    files = sorted(selected.values(), key=lambda path: get_frame_name(path))
 
     if not files:
         raise FileNotFoundError(
@@ -75,7 +78,12 @@ def find_annotation_files(input_path: Path):
     return files
 
 
-def find_ego_traffic_lights(input_path, output_path):
+def find_ego_traffic_lights(
+    input_path,
+    output_path,
+    verbose=True,
+    print_summary=True,
+):
     input_path = Path(input_path)
     output_path = Path(output_path)
 
@@ -146,17 +154,20 @@ def find_ego_traffic_lights(input_path, output_path):
 
                 detected_count += 1
 
-                print(
-                    f"[Frame {frame}] "
-                    f"ID={light.get('id')}, "
-                    f"State={STATE_NAMES.get(state, state)}, "
-                    f"Distance={distance}"
-                )
+                if verbose:
+                    print(
+                        f"[Frame {frame}] "
+                        f"ID={light.get('id')}, "
+                        f"State={STATE_NAMES.get(state, state)}, "
+                        f"Distance={distance}"
+                    )
 
-    print()
-    print(f"처리한 annotation 수: {len(annotation_files)}")
-    print(f"Ego 적용 신호등 검출 수: {detected_count}")
-    print(f"CSV 저장 위치: {output_path}")
+    if print_summary:
+        print()
+        print(f"처리한 annotation 수: {len(annotation_files)}")
+        print(f"Ego 적용 신호등 검출 수: {detected_count}")
+        print(f"CSV 저장 위치: {output_path}")
+    return detected_count
 
 
 if __name__ == "__main__":
@@ -178,10 +189,16 @@ if __name__ == "__main__":
         default="traffic_lights.csv",
         help="출력 CSV 파일 경로",
     )
+    parser.add_argument(
+        "--quiet",
+        action="store_true",
+        help="프레임별 메시지는 숨기고 요약만 출력",
+    )
 
     args = parser.parse_args()
 
     find_ego_traffic_lights(
         input_path=args.input,
         output_path=args.output,
+        verbose=not args.quiet,
     )

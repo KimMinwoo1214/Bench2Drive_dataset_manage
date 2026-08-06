@@ -1,0 +1,21 @@
+# macOS / editor metadata
+.DS_Store
+
+# Python caches and local virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Bench2Drive clips, maps, visualizations, and external leaderboard checkout
+# belong next to this repository in the b2d workspace, not in Git.
+/data/
+/outputs/
+/maps/
+/leaderboard/
+
+# Weak-scenario runs are reproducible from the tracked config and sample input.
+/Weak_Scenario_Mining/outputs/
+/Weak_Scenario_Mining/downloads/
+/Weak_Scenario_Mining/results/*
+!/Weak_Scenario_Mining/results/result.json

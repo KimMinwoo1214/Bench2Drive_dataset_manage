@@ -1094,6 +1094,250 @@ def build_analysis_report(
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def md_cell(value: Any) -> str:
+    if value in (None, ""):
+        return "-"
+    if isinstance(value, (list, tuple, set)):
+        text = ", ".join(str(x) for x in value) or "-"
+    else:
+        text = str(value)
+    return text.replace("|", "\\|").replace("\n", " ")
+
+
+def fmt_ratio(value: Any) -> str:
+    if value is None:
+        return "-"
+    try:
+        return f"{float(value) * 100:.1f}%"
+    except (TypeError, ValueError):
+        return "-"
+
+
+def scenario_focus_recommendation(row: dict[str, Any]) -> str:
+    reason_values = row.get("weakness_reasons", row.get("reasons", []))
+    reasons = " ".join(str(x) for x in reason_values)
+    parts = []
+
+    if "collision" in reasons:
+        parts.append("충돌이 직접 원인이므로 동일 scenario를 최우선으로 보강")
+    if "blocked" in reasons:
+        parts.append("정체/교착 대응 샘플을 같은 Town 조건 중심으로 추가")
+    if "timeout" in reasons or "mean_RC" in reasons:
+        parts.append("route completion이 낮은 조건의 완주 샘플을 우선 추가")
+    if "yield_violation" in reasons:
+        parts.append("양보 판단이 필요한 교차/합류 상황을 더 넣기")
+    if "red_light" in reasons or "stop_infraction" in reasons:
+        parts.append("신호/정지선 준수 상황을 같은 Weather 조건으로 보강")
+    if "mean_DS" in reasons:
+        parts.append("전체 driving quality가 낮아 같은 scenario의 다양성 확보")
+    if "success_rate" in reasons:
+        parts.append("실패 route와 유사한 Town/Weather를 일정 비율 포함")
+
+    if not parts:
+        parts.append("성능 변동성이 있으므로 동일 scenario를 소량 보강")
+
+    return "; ".join(parts)
+
+
+def fallback_recommendation(row: dict[str, Any]) -> str:
+    abilities = set(row.get("table2_abilities", [])) | set(
+        row.get("target_abilities", [])
+    )
+    reason_values = row.get("weakness_reasons", row.get("reasons", []))
+    reasons = " ".join(str(x) for x in reason_values)
+    hints = []
+
+    if "Merging" in abilities:
+        hints.append("Merging 계열의 인접 합류/차선 변경 scenario")
+    if "Overtaking" in abilities:
+        hints.append("Overtaking 계열의 추월/차선 변경 scenario")
+    if "Emergency Brake" in abilities:
+        hints.append("Emergency Brake 계열의 급정거/돌발 객체 scenario")
+    if "Give Way" in abilities or "yield_violation" in reasons:
+        hints.append("Give Way 계열의 양보/교차로 scenario")
+    if "Traffic Sign" in abilities or "red_light" in reasons or "stop_infraction" in reasons:
+        hints.append("Traffic Sign 계열의 신호등/정지선 scenario")
+    if not hints:
+        hints.append("같은 Ability에 매핑된 유사 scenario")
+
+    return ", ".join(dict.fromkeys(hints))
+
+
+def recommended_replay_ratio(
+    *,
+    weak_scenarios: list[dict[str, Any]],
+    selected_count: int,
+    base_count: int,
+) -> tuple[float, str]:
+    severe = [
+        x
+        for x in weak_scenarios
+        if float(x.get("priority_score", 0.0)) >= 3.0
+        or x.get("collision_total", 0) > 0
+        or x.get("blocked_total", 0) > 0
+    ]
+
+    if selected_count <= 0:
+        return 1.0, "추가 데이터가 선택되지 않았으므로 먼저 manifest/config를 확인"
+    if len(severe) >= 3:
+        return 0.3, "충돌/교착 등 고위험 취약 시나리오가 여러 개라 targeted new 비중을 높임"
+    if base_count and selected_count < max(10, round(base_count * 0.2)):
+        return 0.5, "추가 데이터 수가 적어 과적합을 막기 위해 base replay를 더 유지"
+    return 0.4, "기본 flywheel 설정처럼 base 안정성과 취약 시나리오 보강을 균형화"
+
+
+def build_training_recommendation_report(
+    *,
+    scenario_summaries: list[dict[str, Any]],
+    selection_summary: list[dict[str, Any]],
+    selected: list[dict[str, Any]],
+    base_files: dict[str, dict[str, Any]],
+    training_summary: dict[str, Any],
+    replay_cfg: dict[str, Any],
+    path: Path,
+) -> None:
+    weak = [x for x in scenario_summaries if x.get("is_weak")]
+    needs_rerun = [x for x in scenario_summaries if x.get("needs_rerun")]
+    selected_by_scenario = Counter(x.get("scenario") for x in selected)
+    summary_by_scenario = {x["scenario"]: x for x in selection_summary}
+    total_selected = len(selected)
+    base_count = len(base_files)
+    recommended_base_ratio, ratio_reason = recommended_replay_ratio(
+        weak_scenarios=weak,
+        selected_count=total_selected,
+        base_count=base_count,
+    )
+    recommended_new_ratio = 1.0 - recommended_base_ratio
+    configured_base_ratio = float(replay_cfg.get("base_replay_ratio", 0.4))
+
+    lines = [
+        "# Bench2Drive 취약 시나리오 학습 데이터 추천",
+        "",
+        "## 결론",
+        "",
+        f"- 취약 시나리오 수: {len(weak)}개",
+        f"- 추가 추천 데이터: {total_selected}개",
+        f"- Base replay 후보: {base_count}개",
+        f"- 현재 설정 비율: Base {configured_base_ratio * 100:.1f}% / New {(1.0 - configured_base_ratio) * 100:.1f}%",
+        f"- 추천 비율: Base {recommended_base_ratio * 100:.1f}% / New {recommended_new_ratio * 100:.1f}%",
+        f"- 추천 이유: {ratio_reason}",
+        "",
+        "## 가장 먼저 넣을 시나리오",
+        "",
+        "| Rank | Scenario | 추가 권장 개수 | 후보 수 | 우선순위 | 주요 문제 | 추천 방향 | 부족하면 대체 |",
+        "|---:|---|---:|---:|---:|---|---|---|",
+    ]
+
+    for row in selection_summary:
+        selected_count = int(row.get("selected_count", 0))
+        available = int(row.get("available_after_base_exclusion", 0))
+        scenario = row["scenario"]
+        lines.append(
+            f'| {row.get("priority_rank", "-")} | '
+            f"{md_cell(scenario)} | "
+            f"{selected_count} | "
+            f"{available} | "
+            f'{float(row.get("priority_score", 0.0)):.3f} | '
+            f'{md_cell(row.get("weakness_reasons", []))} | '
+            f"{md_cell(scenario_focus_recommendation(row))} | "
+            f"{md_cell(fallback_recommendation(row))} |"
+        )
+
+    if not selection_summary:
+        lines.append("| - | - | 0 | 0 | - | - | 추가 후보 없음 | config/manifest 확인 |")
+
+    lines += [
+        "",
+        "## 시나리오별 세부 추천",
+        "",
+    ]
+
+    for rank, scenario in enumerate(weak, 1):
+        name = scenario["scenario"]
+        select_row = summary_by_scenario.get(name, {})
+        selected_count = selected_by_scenario.get(name, 0)
+        requested = select_row.get("requested_quota", 0)
+        available = select_row.get("available_after_base_exclusion", 0)
+        shortfall = max(0, int(requested or 0) - selected_count)
+        failed_towns = scenario.get("failed_towns", [])
+        failed_weathers = scenario.get("failed_weathers", [])
+
+        lines += [
+            f"### {rank}. {name}",
+            "",
+            f"- 추가 권장 개수: {selected_count}개",
+            f"- 요청 quota: {requested}개",
+            f"- Base 제외 후 후보 수: {available}개",
+            f"- 평균 DS/RC/성공률: {scenario.get('mean_driving_score', '-')}/{scenario.get('mean_route_completion', '-')}/{fmt_ratio(scenario.get('success_rate'))}",
+            f"- 문제 근거: {md_cell(scenario.get('reasons', []))}",
+            f"- 우선 Town: {md_cell(failed_towns)}",
+            f"- 우선 Weather: {md_cell(failed_weathers)}",
+            f"- 추천: {scenario_focus_recommendation(select_row or {'weakness_reasons': scenario.get('reasons', [])})}",
+        ]
+        if shortfall > 0:
+            lines.append(
+                f"- 후보가 부족하면: 같은 scenario를 우선 추가 확보하고, 어렵다면 {fallback_recommendation(select_row or scenario)}를 보강"
+            )
+        lines.append("")
+
+    abnormal = []
+    for scenario in weak:
+        if scenario.get("episodes_valid", 0) <= 1:
+            abnormal.append(
+                f"{scenario['scenario']}: valid route가 {scenario.get('episodes_valid', 0)}개라 표본이 적음"
+            )
+        if scenario.get("needs_rerun"):
+            abnormal.append(
+                f"{scenario['scenario']}: runtime failure route가 있어 재평가 후 판단 권장"
+            )
+    for row in selection_summary:
+        if int(row.get("selected_count", 0)) < int(row.get("requested_quota", 0)):
+            abnormal.append(
+                f"{row['scenario']}: 요청 {row.get('requested_quota')}개 중 {row.get('selected_count')}개만 선택 가능"
+            )
+
+    lines += [
+        "## 이상 징후와 보수적 해석",
+        "",
+    ]
+    if needs_rerun:
+        lines.append(
+            f"- Runtime 재실행이 필요한 시나리오가 {len(needs_rerun)}개 있습니다. `runtime_rerun_routes.csv` route를 재실행한 뒤 최종 result.json으로 다시 `run-all` 하는 것을 권장합니다."
+        )
+    if abnormal:
+        for item in abnormal:
+            lines.append(f"- {item}")
+    if not abnormal and not needs_rerun:
+        lines.append("- 현재 결과에서 별도 이상 징후는 크지 않습니다.")
+
+    lines += [
+        "",
+        "## 학습 비율 추천",
+        "",
+        f"- 1차 fine-tuning은 Base {recommended_base_ratio * 100:.1f}% / Targeted new {recommended_new_ratio * 100:.1f}%를 권장합니다.",
+        "- 충돌, blocked, timeout이 많은 시나리오가 개선되지 않으면 Targeted new를 70%까지 올려 한 번 더 실험합니다.",
+        "- 전체 DS가 개선되지만 기존 강점 scenario가 흔들리면 Base replay를 50%로 올립니다.",
+        "- `train_files_mixed.txt`에는 oversampling 때문에 같은 파일이 여러 번 나올 수 있으며 정상입니다.",
+        "",
+        "## 생성된 파일",
+        "",
+        "- `analysis_report.md`: 평가 결과 요약",
+        "- `weak_scenarios.json`: 취약 시나리오 원본 목록",
+        "- `selected_additional_files.txt`: 실제 추가 학습 파일 목록",
+        "- `train_files_mixed.txt`: Base replay와 targeted new가 섞인 최종 학습 목록",
+        "- `training_plan_summary.json`: 혼합 비율 요약",
+        "",
+        "## 현재 혼합 결과",
+        "",
+        f"- Combined unique: {training_summary.get('combined_unique_count')}",
+        f"- Mixed list length: {training_summary.get('mixed_file_list_length')}",
+        f"- 실제 Base fraction: {fmt_ratio(training_summary.get('actual_base_fraction_in_mixed_list'))}",
+    ]
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def load_manifest(path: Path) -> dict[str, dict[str, Any]]:
     raw = load_json(path)
     if not isinstance(raw, dict):
@@ -1682,6 +1926,15 @@ def build_stage(
         encoding="utf-8",
     )
     dump_json(output_dir / "training_plan_summary.json", summary)
+    build_training_recommendation_report(
+        scenario_summaries=selected_state["scenario_summaries"],
+        selection_summary=selected_state["selection_summary"],
+        selected=selected_state["selected"],
+        base_files=selected_state["base_files"],
+        training_summary=summary,
+        replay_cfg=replay_cfg,
+        path=output_dir / "training_recommendation.md",
+    )
 
     print(
         f"[build] combined_unique={len(combined)}, "

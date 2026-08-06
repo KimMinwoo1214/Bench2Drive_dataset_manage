@@ -1,0 +1,5 @@
+numpy
+opencv-python
+laspy[lazrs]
+matplotlib
+tqdm

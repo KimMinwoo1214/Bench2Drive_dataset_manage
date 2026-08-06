@@ -84,6 +84,8 @@ def draw_dashed_line(img, start_point, end_point, color, thickness=1, dash_lengt
     """
     # Calculate total length
     d = np.sqrt((end_point[0] - start_point[0])**2 + (end_point[1] - start_point[1])**2)
+    if d == 0 or not np.isfinite(d):
+        return
     dx = (end_point[0] - start_point[0]) / d
     dy = (end_point[1] - start_point[1]) / d
 
