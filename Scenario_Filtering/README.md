@@ -1,5 +1,9 @@
 # Bench2Drive 관련 제작 코드 사용 및 계산 방법
 
+> 모든 traffic light의 기존 `affects_ego`를 다시 검증하고 보수적으로
+> `KEEP/AUTO_FIX/REVIEW` 처리하는 현재 실행법은
+> [README_TRAFFIC_LIGHT_RELABEL.md](README_TRAFFIC_LIGHT_RELABEL.md)를 참고하십시오.
+
 > clip 하나 또는 `data` 폴더 전체를 입력해 신호등 보정과 카메라/LiDAR 영상까지 만드는 현재 표준 실행법은 [PIPELINE.md](PIPELINE.md)를 참고하십시오. 아래 문서는 각 알고리즘의 상세 설명입니다.
 
 ## 1. 문서 범위

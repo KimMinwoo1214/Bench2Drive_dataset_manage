@@ -2,6 +2,7 @@ import json
 import gzip
 import os
 import pathlib
+import csv
 
 os.environ.setdefault(
     "MPLCONFIGDIR",
@@ -16,6 +17,19 @@ import laspy
 import matplotlib.cm as cm
 from tqdm import trange
 from utils import get_image_point, point_in_canvas_wh, edges, world_to_ego, get_forward_vector, calculate_cube_vertices, draw_dashed_line, vector_angle
+from traffic_light_visual_overrides import (
+    load_traffic_light_visual_map,
+    remap_traffic_light_camera_geometry,
+)
+
+
+TRAFFIC_LIGHT_STATE_NAMES = {
+    0: 'RED',
+    1: 'YELLOW',
+    2: 'GREEN',
+    3: 'OFF',
+    4: 'UNKNOWN',
+}
 
 
 def get_stable_object_color(npc):
@@ -49,7 +63,46 @@ def get_stable_object_color(npc):
     return (int(blue * 255), int(green * 255), int(red * 255))
 
 
-def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=None, max_frames=None, vis_bbox=True,  vis_top_down=True, vis_road=True, vis_lidar_bev=True, vis_lidar_to_back_image=True, vis_lidar_to_front_image=True, vis_lidar_to_front_left_image=True):
+def load_event_frame_ranges(events_path, scenario_name, context=20):
+    """Load and merge numeric frame ranges for one scenario from an event CSV."""
+    events_path = pathlib.Path(events_path).expanduser().resolve()
+    if not events_path.is_file():
+        raise FileNotFoundError(f'event CSV를 찾을 수 없습니다: {events_path}')
+    ranges = []
+    with events_path.open('r', newline='', encoding='utf-8-sig') as csv_file:
+        for row in csv.DictReader(csv_file):
+            row_scenario = str(row.get('scenario', ''))
+            if row_scenario != scenario_name and pathlib.PurePosixPath(row_scenario).name != scenario_name:
+                continue
+            start = str(row.get('start_frame', ''))
+            end = str(row.get('end_frame', ''))
+            if not start.isdigit() or not end.isdigit():
+                continue
+            ranges.append((max(0, int(start) - context), int(end) + context))
+    if not ranges:
+        raise ValueError(
+            f'{events_path}에 scenario={scenario_name}인 숫자 frame event가 없습니다.'
+        )
+    ranges.sort()
+    merged = [ranges[0]]
+    for start, end in ranges[1:]:
+        previous_start, previous_end = merged[-1]
+        if start <= previous_end + 1:
+            merged[-1] = previous_start, max(previous_end, end)
+        else:
+            merged.append((start, end))
+    return merged
+
+
+def frame_in_ranges(path, ranges):
+    name = path.name.removesuffix('.json.gz')
+    if not name.isdigit():
+        return False
+    number = int(name)
+    return any(start <= number <= end for start, end in ranges)
+
+
+def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=None, max_frames=None, review_events=None, review_context=20, vis_bbox=True,  vis_top_down=True, vis_road=True, vis_lidar_bev=True, vis_lidar_to_back_image=True, vis_lidar_to_front_image=True, vis_lidar_to_front_left_image=True, traffic_light_visual_map=None):
     file_path = pathlib.Path(file_path).expanduser().resolve()
     map_path = pathlib.Path(map_path).expanduser().resolve()
     save_path = pathlib.Path(output_dir).expanduser().resolve()
@@ -94,6 +147,16 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
     }
 
     annotation_files = sorted(annotation_dir.glob('*.json.gz'))
+    if review_events is not None:
+        event_ranges = load_event_frame_ranges(
+            review_events,
+            file_path.name,
+            context=review_context,
+        )
+        annotation_files = [
+            path for path in annotation_files if frame_in_ranges(path, event_ranges)
+        ]
+        print(f'review_event_ranges={event_ranges}')
     if start_frame is not None:
         annotation_files = [
             path
@@ -120,6 +183,10 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
         with gzip.open(annotation_path, 'rt', encoding='utf-8') as gz_file:
             anno = json.load(gz_file)
         bounding_boxes = anno['bounding_boxes']
+        camera_bounding_boxes = remap_traffic_light_camera_geometry(
+            bounding_boxes,
+            traffic_light_visual_map,
+        )
         sensors_anno = anno['sensors']
         # ========================== bbox ==========================
         if vis_bbox:            
@@ -127,7 +194,7 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
                 K = sensors_anno[key]['intrinsic']
                 world2cam = sensors_anno[key]['world2cam']
                 visulize_img = cv2.imread(os.path.join(file_path, f'camera/{cam_map[key]}/{frame}.jpg'))
-                for npc in bounding_boxes:
+                for npc in camera_bounding_boxes:
                     if npc['class'] == 'ego_vehicle': continue
                     if npc['distance'] > 75: continue
                     if abs(npc['location'][2] - anno['bounding_boxes'][0]['location'][2]) > 10: continue # car in sky and underground
@@ -168,10 +235,17 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
                                 p1, p1_depth = get_image_point(verts[edge[0]], K, world2cam)
                                 p2, p2_depth = get_image_point(verts[edge[1]],  K, world2cam)
                                 draw_dashed_line(visulize_img, (int(p1[0]),int(p1[1])), (int(p2[0]),int(p2[1])), color, 2)
-                            if 'affects_ego' in npc.keys():
-                                cv2.putText(visulize_img, npc['class'], (int(p1[0])+2,int(p1[1])+2), cv2.FONT_HERSHEY_COMPLEX, 0.5, color, 1)
-                            else:
-                                cv2.putText(visulize_img, npc['class'], (int(p1[0])+2,int(p1[1])+2), cv2.FONT_HERSHEY_COMPLEX, 0.5, color, 1)
+                            label = npc['class']
+                            geometry_id = npc.get('_camera_geometry_id')
+                            if npc['class'] == 'traffic_light' and geometry_id is not None:
+                                state = TRAFFIC_LIGHT_STATE_NAMES.get(
+                                    npc.get('state'),
+                                    str(npc.get('state')),
+                                )
+                                affect = 'AFFECTS' if npc.get('affects_ego') is True else 'UNAFFECTED'
+                                label = f"TL {npc.get('id')} {state} {affect}"
+                                label += f' [box {geometry_id}]'
+                            cv2.putText(visulize_img, label, (int(p1[0])+2,int(p1[1])+2), cv2.FONT_HERSHEY_COMPLEX, 0.5, color, 1)
                 cv2.imwrite(os.path.join(save_path, f'camera/{cam_map[key]}_3d_bbox/{frame}.jpg'), visulize_img)
         
         if vis_top_down:        
@@ -481,6 +555,13 @@ if __name__ == '__main__':
     parser.add_argument('--output-dir', required=True, type=pathlib.Path, help='시각화 결과 폴더')
     parser.add_argument('--start-frame', type=int, help='이 프레임 번호부터 처리')
     parser.add_argument('--max-frames', type=int, help='앞에서부터 처리할 최대 프레임 수 (테스트용)')
+    parser.add_argument('--review-events', type=pathlib.Path, help='review_events.csv 또는 auto_fix_events.csv에서 현재 scenario event 범위만 처리')
+    parser.add_argument('--review-context', type=int, default=20, help='event 시작 전/종료 후 추가 frame 수 (기본값: 20)')
+    parser.add_argument(
+        '--traffic-light-visual-overrides',
+        type=pathlib.Path,
+        help='scenario별 traffic-light camera geometry ID override JSON',
+    )
     parser.add_argument(
         '--profile',
         choices=('bbox', 'full'),
@@ -492,12 +573,21 @@ if __name__ == '__main__':
     )
 
     args = parser.parse_args()
+    if args.review_context < 0:
+        parser.error('--review-context 값은 0 이상이어야 합니다.')
     if args.map_file is not None:
         map_path = args.map_file
     elif args.map_id is not None:
         map_path = args.map_root / f'Town{args.map_id}_HD_map.npz'
     else:
         parser.error('--map-file 또는 --map-id/-m 중 하나가 필요합니다.')
+    try:
+        traffic_light_visual_map = load_traffic_light_visual_map(
+            args.traffic_light_visual_overrides,
+            args.file_path.expanduser().resolve().name,
+        )
+    except (FileNotFoundError, ValueError, json.JSONDecodeError) as error:
+        parser.error(str(error))
 
     full_profile = args.profile == 'full'
     visualize_data(
@@ -507,6 +597,8 @@ if __name__ == '__main__':
         anno_dir=args.anno_dir,
         start_frame=args.start_frame,
         max_frames=args.max_frames,
+        review_events=args.review_events,
+        review_context=args.review_context,
         vis_bbox=True,
         vis_top_down=full_profile,
         vis_road=full_profile,
@@ -514,4 +606,5 @@ if __name__ == '__main__':
         vis_lidar_to_back_image=full_profile,
         vis_lidar_to_front_image=full_profile,
         vis_lidar_to_front_left_image=full_profile,
+        traffic_light_visual_map=traffic_light_visual_map,
     )
