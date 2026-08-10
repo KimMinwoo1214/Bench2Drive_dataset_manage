@@ -18,6 +18,10 @@ import laspy
 import numpy as np
 
 from utils import calculate_cube_vertices, draw_dashed_line, edges, get_image_point
+from traffic_light_visual_overrides import (
+    load_traffic_light_visual_map,
+    remap_traffic_light_camera_geometry,
+)
 
 
 IMAGE_WIDTH = 1600
@@ -259,6 +263,7 @@ def render_camera_image(
     corrected_annotation: dict[str, Any],
     camera_name: str,
     output_path: Path,
+    traffic_light_visual_map: dict[str, str] | None = None,
 ) -> None:
     sensor_key, image_dir, camera_label = CAMERA_SPECS[camera_name]
     image_path = scenario_dir / "camera" / image_dir / f"{frame}.jpg"
@@ -272,12 +277,16 @@ def render_camera_image(
         intrinsic = np.asarray(camera["intrinsic"], dtype=np.float64)
         world_to_camera = np.asarray(camera["world2cam"], dtype=np.float64)
         boxes = corrected_annotation.get("bounding_boxes", [])
+        camera_boxes = remap_traffic_light_camera_geometry(
+            boxes,
+            traffic_light_visual_map,
+        )
         ego = next(
             (box for box in boxes if box.get("class") == "ego_vehicle"),
             boxes[0] if boxes else None,
         )
         ego_z = float(ego.get("location", [0, 0, 0])[2]) if ego else 0.0
-        for obj in boxes:
+        for obj in camera_boxes:
             if obj.get("class") == "ego_vehicle":
                 continue
             object_class = str(obj.get("class", ""))
@@ -296,6 +305,9 @@ def render_camera_image(
             if object_class == "traffic_light":
                 state = STATE_NAMES.get(obj.get("state"), str(obj.get("state")))
                 label = f"TL {obj.get('id')} {state} {affect_label}"
+                geometry_id = obj.get("_camera_geometry_id")
+                if geometry_id is not None:
+                    label += f" [box {geometry_id}]"
             elif "vehicle" in object_class:
                 label = f"{object_class} {obj.get('id', '')}".strip()
             else:
@@ -445,6 +457,7 @@ def render_frame(
         str,
         tuple[tuple[str, str], ...],
         str,
+        dict[str, str],
     ]
 ) -> str:
     (
@@ -452,6 +465,7 @@ def render_frame(
         corrected_path_text,
         camera_jobs,
         lidar_dir_text,
+        traffic_light_visual_map,
     ) = job
     scenario_dir = Path(scenario_dir_text)
     corrected_path = Path(corrected_path_text)
@@ -465,6 +479,7 @@ def render_frame(
             corrected_annotation,
             camera_name,
             Path(camera_dir_text) / f"{frame}.jpg",
+            traffic_light_visual_map,
         )
     if lidar_dir_text:
         render_lidar_bev(
@@ -486,11 +501,13 @@ def render_clip(
     start_frame: int | None = None,
     max_frames: int | None = None,
     workers: int | None = None,
+    traffic_light_visual_map: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     scenario_dir = scenario_dir.expanduser().resolve()
     anno_dir = anno_dir.expanduser().resolve()
     output_dir = output_dir.expanduser().resolve()
     selected_cameras = tuple(camera_names)
+    traffic_light_visual_map = dict(traffic_light_visual_map or {})
     if not selected_cameras and not render_lidar:
         raise ValueError("카메라와 LiDAR를 모두 제외하면 렌더링할 항목이 없습니다.")
 
@@ -520,6 +537,7 @@ def render_clip(
                 str(path),
                 camera_jobs,
                 str(lidar_dir) if lidar_dir is not None else "",
+                traffic_light_visual_map,
             )
         )
 
@@ -541,6 +559,11 @@ def render_clip(
         f"frames={len(completed)}, workers={worker_count}, "
         f"elapsed={elapsed:.2f}s, fps={len(completed) / elapsed:.2f}"
     )
+    if traffic_light_visual_map:
+        print(
+            "camera traffic-light visualization override 적용: "
+            f"{traffic_light_visual_map}"
+        )
     return {
         "frames": len(completed),
         "workers": worker_count,
@@ -575,6 +598,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--start-frame", type=int)
     parser.add_argument("--max-frames", type=int)
     parser.add_argument("--workers", type=int)
+    parser.add_argument(
+        "--traffic-light-visual-overrides",
+        type=Path,
+        help=(
+            "scenario별 source traffic-light ID를 실제 camera geometry ID에 "
+            "연결하는 JSON (camera bbox에만 적용)"
+        ),
+    )
     return parser
 
 
@@ -585,6 +616,13 @@ def main(argv: Sequence[str] | None = None) -> int:
         camera_names = parse_camera_selection(args.cameras)
     except ValueError as error:
         parser.error(str(error))
+    try:
+        traffic_light_visual_map = load_traffic_light_visual_map(
+            args.traffic_light_visual_overrides,
+            args.scenario.expanduser().resolve().name,
+        )
+    except (FileNotFoundError, ValueError, json.JSONDecodeError) as error:
+        parser.error(str(error))
     render_clip(
         args.scenario,
         args.anno_dir,
@@ -594,6 +632,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         start_frame=args.start_frame,
         max_frames=args.max_frames,
         workers=args.workers,
+        traffic_light_visual_map=traffic_light_visual_map,
     )
     return 0
 
