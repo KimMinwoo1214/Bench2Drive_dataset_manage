@@ -1,18 +1,19 @@
 # Bench2Drive Traffic Light Annotation Pipeline
 
-Bench2Drive 시나리오의 traffic light annotation을 보정하고, 전방 카메라와
-TOP_DOWN BEV 시각화, MP4 영상, 판정 CSV를 한 번에 생성하는 파이프라인이다.
+Bench2Drive 시나리오의 traffic light annotation을 보정하고, 전방 카메라,
+TOP_DOWN BEV bbox, HD vector map 시각화, MP4 영상, 판정 CSV를 한 번에 생성하는
+파이프라인이다.
 
-최종 파이프라인은 다음 두 작업을 순서대로 수행한다.
+최종 annotation은 다음 두 작업을 순서대로 적용해 만든다.
 
 1. 선택된 전체 데이터에서 잘못 순환 배정된 traffic light bbox permutation 복구
 2. 복구된 bbox의 실제 trigger volume을 Ego 궤적이 통과하는지 검사해
    `traffic_light.affects_ego` 판정
 
-두 번째 단계는 HD map이나 차량 반응 휴리스틱을 사용하지 않는다. 실제 trigger
-volume 교차, 통과 방향, bbox 신뢰성, 시간 연속성을 모두 만족하는 경우에만
-자동 수정하고, 근거가 부족하거나 충돌하는 경우에는 원본 값을 유지한 채
-`REVIEW`로 기록한다.
+`affects_ego` 판정에는 HD map이나 차량 반응 휴리스틱을 사용하지 않는다. 실제
+trigger volume 교차, 통과 방향, bbox 신뢰성, 시간 연속성을 모두 만족하는 경우에만
+자동 수정하고, 근거가 부족하거나 충돌하면 원본 값을 유지한 채 `REVIEW`로
+기록한다. HD vector map은 선택적인 시각화와 BEV lane overlay에만 사용한다.
 
 ## 주요 파일
 
@@ -21,8 +22,8 @@ volume 교차, 통과 방향, bbox 신뢰성, 시간 연속성을 모두 만족�
 | `run_scenario_pipeline.py` | bbox 복구, relevance 판정, 시각화, 영상, CSV를 실행하는 메인 진입점 |
 | `fix_tl_bbox_permutation.py` | traffic light bbox permutation 복구. 메인 파이프라인은 항상 `--bbox-only`로 실행 |
 | `traffic_light_relevance.py` | trigger-volume 교차 기반 `affects_ego` KEEP/AUTO_FIX/REVIEW 판정 |
-| `test_traffic_light_relevance.py` | 교차 판정, 방향 불일치, 다중 실제 교차를 검증하는 단위 테스트 |
-| `visualize.py` | 전방 카메라와 TOP_DOWN 카메라 BEV에 3D bbox 렌더링 |
+| `test_traffic_light_relevance.py` | 교차 판정, 방향 불일치, 다중 실제 교차 단위 테스트 |
+| `visualize.py` | 전방 카메라, TOP_DOWN BEV 및 HD vector map 렌더링 |
 | `apply_visualize_compare_from_summary.py` | BEFORE/AFTER 비교 영상 생성 공통 함수 |
 | `requirements.txt` | Python 의존성 목록 |
 
@@ -69,6 +70,19 @@ python3 -c "import numpy, scipy; print(numpy.__version__, scipy.__version__)"
 annotation만 보정하려면 센서 이미지 없이 `--no-visualization --no-video`로
 실행할 수 있다.
 
+vector map 생성을 활성화하면 `--map-root` 아래에 시나리오 Town과 맞는 파일이
+있어야 한다.
+
+```text
+maps/
+├── Town03_HD_map.npz
+├── Town04_HD_map.npz
+└── ...
+```
+
+map이 다른 위치에 있으면 `--map-root /path/to/maps`를 지정한다. vector map 결과가
+필요하지 않으면 `--no-vector-map`을 사용한다.
+
 ## 기본 실행
 
 시나리오 하나를 전체 처리한다.
@@ -76,7 +90,8 @@ annotation만 보정하려면 센서 이미지 없이 `--no-visualization --no-v
 ```bash
 python3 run_scenario_pipeline.py \
   --input /path/to/scenario \
-  --output /path/to/pipeline_output
+  --output /path/to/pipeline_output \
+  --map-root /path/to/maps
 ```
 
 여러 시나리오가 있는 상위 폴더도 같은 방식으로 처리한다.
@@ -84,7 +99,8 @@ python3 run_scenario_pipeline.py \
 ```bash
 python3 run_scenario_pipeline.py \
   --input /path/to/Carla \
-  --output /path/to/pipeline_output
+  --output /path/to/pipeline_output \
+  --map-root /path/to/maps
 ```
 
 `--output`은 `--input` 내부가 아닌 별도 경로여야 한다. 같은 시나리오를
@@ -109,7 +125,17 @@ python3 run_scenario_pipeline.py \
 python3 run_scenario_pipeline.py \
   --input /path/to/scenario \
   --output ./pipeline_test \
+  --map-root /path/to/maps \
   --max-frames 30
+```
+
+카메라와 BEV bbox만 만들고 HD vector map은 제외한다.
+
+```bash
+python3 run_scenario_pipeline.py \
+  --input /path/to/scenario \
+  --output ./visualization_result \
+  --no-vector-map
 ```
 
 `--max-frames`와 `--start-frame`은 시각화 범위만 제한한다. bbox 및
@@ -124,7 +150,8 @@ python3 run_scenario_pipeline.py \
 5. 궤적 진행 방향, bbox 신뢰성, 최소 연속 프레임, 실제 다중 교차 여부 검사
 6. `KEEP`, `AUTO_FIX`, `REVIEW` 중 하나로 프레임별 판정
 7. `AUTO_FIX` 프레임에만 `affects_ego` 변경 후 최종 annotation 저장
-8. 시각화, 영상, 상세 CSV 및 전체 `results.csv` 생성
+8. 전방 카메라, TOP_DOWN BEV, 선택적 vector map 시각화와 영상 생성
+9. 상세 CSV 및 전체 `results.csv` 생성
 
 기본 trigger margin은 `0.0 m`이다. 즉 Ego의 프레임 간 선분이 annotation에
 기록된 실제 trigger rectangle과 교차해야 한다. margin을 크게 주면 서로 가까운
@@ -151,6 +178,8 @@ python3 run_scenario_pipeline.py \
 | `--output PATH` | 모든 결과가 생성될 폴더 | 필수 |
 | `--visualization`, `--no-visualization` | 카메라/BEV bbox 이미지 생성 여부 | 생성 |
 | `--video`, `--no-video` | 수정 결과 및 조건부 비교 MP4 생성 여부 | 생성 |
+| `--vector-map`, `--no-vector-map` | HD vector map 및 BEV lane overlay 생성 여부 | 생성 |
+| `--map-root PATH` | `Town*_HD_map.npz` 파일이 있는 폴더 | `Scenario_Filtering/maps` |
 | `--fps NUMBER` | MP4 초당 프레임 수 | `10.0` |
 | `--scale NUMBER` | BEFORE/AFTER 비교 영상 크기 배율 | `0.75` |
 | `--start-frame NUMBER` | 시각화를 시작할 프레임 번호 | 전체 시작 |
@@ -172,7 +201,8 @@ python3 run_scenario_pipeline.py \
 - `before_after_front.mp4`: 전방 카메라 BEFORE/AFTER
 - `before_after_bev.mp4`: TOP_DOWN 카메라 BEV BEFORE/AFTER
 
-변경이 없으면 수정 결과 영상인 `after_front.mp4`, `after_bev.mp4`만 생성한다.
+변경이 없으면 수정 결과 영상만 생성한다. vector map이 활성화된 AFTER BEV에는
+HD vector lane overlay가 포함된다.
 
 ## 출력 구조
 
@@ -195,16 +225,18 @@ python3 run_scenario_pipeline.py \
     │   ├── after/
     │   │   └── camera/
     │   │       ├── rgb_front_3d_bbox/
-    │   │       └── rgb_top_down_3d_bbox/
-    │   └── before/                    # bbox 또는 affects_ego 변경 시
+    │   │       ├── rgb_top_down_3d_bbox/   # vector map 활성화 시 lane overlay
+    │   │       └── rgb_front_landmark/     # vector map 활성화 시
+    │   └── before/                         # annotation 변경 시
     │       └── camera/
     │           ├── rgb_front_3d_bbox/
     │           └── rgb_top_down_3d_bbox/
     └── videos/
         ├── after_front.mp4
         ├── after_bev.mp4
-        ├── before_after_front.mp4     # annotation 변경 시
-        └── before_after_bev.mp4       # annotation 변경 시
+        ├── vector_map.mp4                  # vector map 활성화 시
+        ├── before_after_front.mp4          # annotation 변경 시
+        └── before_after_bev.mp4            # annotation 변경 시
 ```
 
 ## CSV 결과
@@ -219,6 +251,8 @@ python3 run_scenario_pipeline.py \
 | `crossing_events` | 실제 trigger 교차 이벤트 수 |
 | `keep_frames`, `auto_fix_frames`, `review_frames` | relevance 판정별 프레임 수 |
 | `affects_ego_changed_frames`, `affects_ego_changed_entries` | 실제 `affects_ego` 변경량 |
+| `visualized_frames`, `vector_map_frames` | 카메라/BEV 및 vector map 프레임 수 |
+| `after_front_video`, `after_bev_video`, `vector_map_video` | 수정 결과 영상 경로 |
 | `comparison_created` | BEFORE/AFTER 비교 영상 생성 여부 |
 | `detail_csv`, `summary_csv` | 전체 bbox 진단 CSV 경로 |
 | `status` | `completed`, `review`, 또는 `failed` |
@@ -263,6 +297,11 @@ python3 -m compileall -q .
 ```
 
 ## 문제 해결
+
+### HD vector map을 찾지 못함
+
+시나리오 이름의 Town과 같은 `Town*_HD_map.npz`가 `--map-root` 아래에 있는지
+확인한다. map 시각화가 필요하지 않으면 `--no-vector-map`을 사용한다.
 
 ### 시각화에서 이미지 파일을 찾지 못함
 
