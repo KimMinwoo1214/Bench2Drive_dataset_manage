@@ -1,5 +1,6 @@
-numpy
+numpy>=1.23.5,<2.5
 opencv-python
 laspy[lazrs]
 matplotlib
 tqdm
+scipy

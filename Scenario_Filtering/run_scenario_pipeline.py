@@ -1,247 +1,239 @@
 #!/usr/bin/env python3
-"""One-command traffic-light QA, correction, rendering, and video pipeline."""
+"""Run traffic-light correction, visualization, videos, and CSV reporting."""
 
 from __future__ import annotations
 
 import argparse
 import csv
+import re
 import shutil
+import subprocess
 import sys
 import time
 from pathlib import Path
 from typing import Any, Sequence
 
-from b2d_traffic_light_relabeler import (
-    EVENT_FIELDS,
-    FRAME_FIELDS,
-    STATE_NAMES,
-    Config,
-    annotation_files,
-    assign_event_ids,
-    build_candidates,
-    event_rows,
-    frame_rows,
-    load_frames,
-    make_frame_labels,
-    open_annotation,
-    resolve_candidates,
-    write_annotation,
+import cv2
+
+from apply_visualize_compare_from_summary import (
+    bbox_view_dirs,
+    frame_sort_key,
+    image_map,
+    make_comparison_video,
 )
-from make_video import make_video
-from render_corrected_clip import parse_camera_selection, render_clip
-from traffic_light_affect import find_ego_traffic_lights
 
 
-CHANGE_FIELDS = [
-    "frame",
-    "traffic_light_id",
-    "state",
-    "state_name",
-    "before_affects_ego",
-    "after_affects_ego",
-    "event_id",
-    "confidence",
-    "reason",
-]
+SCRIPT_DIR = Path(__file__).resolve().parent
+FIX_SCRIPT = SCRIPT_DIR / "fix_tl_bbox_permutation.py"
+VISUALIZE_SCRIPT = SCRIPT_DIR / "visualize.py"
+ROUTE_RE = re.compile(r"_Route(\d+)_")
 
-SUMMARY_FIELDS = [
+RESULT_FIELDS = [
     "scenario",
-    "frames",
-    "detected_trigger_events",
-    "selected_traffic_light_events",
-    "changed_frames",
-    "review_events",
-    "camera_views",
-    "lidar_rendered",
-    "rendered_frames",
-    "video_encoder",
+    "input_anno",
+    "output_anno",
+    "annotation_frames",
+    "bbox_changed_frames",
+    "bbox_reassigned_entries",
+    "affects_ego_changed_frames",
+    "affects_ego_changed_entries",
+    "visualized_frames",
+    "after_front_video",
+    "after_bev_video",
+    "comparison_created",
+    "comparison_front_video",
+    "comparison_bev_video",
+    "detail_csv",
+    "summary_csv",
     "elapsed_seconds",
     "status",
     "error",
 ]
 
 
+def is_annotation_file(path: Path) -> bool:
+    return path.is_file() and (
+        path.name.endswith(".json") or path.name.endswith(".json.gz")
+    )
+
+
+def annotation_files(anno_dir: Path) -> list[Path]:
+    return sorted(path for path in anno_dir.iterdir() if is_annotation_file(path))
+
+
 def discover_scenarios(input_path: Path) -> list[tuple[str, Path, Path]]:
-    """Return (scenario name, scenario directory, anno directory)."""
-    if input_path.name == "anno" and input_path.is_dir():
-        if annotation_files(input_path):
-            return [(input_path.parent.name, input_path.parent, input_path)]
+    """Return (scenario name, scenario directory, annotation directory)."""
+    if input_path.name == "anno" and annotation_files(input_path):
+        return [(input_path.parent.name, input_path.parent, input_path)]
+
     direct_anno = input_path / "anno"
     if direct_anno.is_dir() and annotation_files(direct_anno):
         return [(input_path.name, input_path, direct_anno)]
 
-    discovered: list[tuple[str, Path, Path]] = []
-    names: set[str] = set()
+    discovered = []
+    names = set()
     for anno_dir in sorted(input_path.rglob("anno")):
         if not anno_dir.is_dir() or not annotation_files(anno_dir):
             continue
         scenario_dir = anno_dir.parent
-        name = scenario_dir.name
-        if name in names:
-            raise ValueError(f"중복 클립 이름이 있습니다: {name}")
-        names.add(name)
-        discovered.append((name, scenario_dir, anno_dir))
+        scenario = scenario_dir.name
+        if scenario in names:
+            raise ValueError(f"중복 시나리오 이름이 있습니다: {scenario}")
+        names.add(scenario)
+        discovered.append((scenario, scenario_dir, anno_dir))
     return discovered
 
 
-def infer_workspace_root(input_path: Path) -> Path:
-    candidates = [input_path, *input_path.parents]
-    data_dir = next((path for path in candidates if path.name == "data"), None)
-    return data_dir.parent if data_dir is not None else input_path.parent
-
-
-def write_csv(path: Path, fieldnames: Sequence[str], rows: Sequence[dict[str, Any]]) -> None:
+def write_csv(path: Path, rows: Sequence[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8-sig") as file:
-        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer = csv.DictWriter(file, fieldnames=RESULT_FIELDS)
         writer.writeheader()
         writer.writerows(rows)
 
 
-def correct_annotations(
-    frames: Sequence[Any],
-    labels: Sequence[Any],
-    corrected_dir: Path,
-) -> list[dict[str, Any]]:
-    corrected_dir.mkdir(parents=True, exist_ok=True)
-    changes: list[dict[str, Any]] = []
-    for frame, label in zip(frames, labels):
-        output_path = corrected_dir / frame.path.name
-        if label.source != "recovered" or label.light_id is None:
-            shutil.copy2(frame.path, output_path)
-            continue
-
-        data = open_annotation(frame.path)
-        changed = False
-        for box in data.get("bounding_boxes", []):
-            if (
-                box.get("class") == "traffic_light"
-                and str(box.get("id")) == label.light_id
-                and box.get("affects_ego") is False
-            ):
-                before = box["affects_ego"]
-                box["affects_ego"] = True
-                changes.append(
-                    {
-                        "frame": frame.name,
-                        "traffic_light_id": label.light_id,
-                        "state": box.get("state"),
-                        "state_name": STATE_NAMES.get(box.get("state"), "Unknown"),
-                        "before_affects_ego": str(before).lower(),
-                        "after_affects_ego": "true",
-                        "event_id": label.event_id,
-                        "confidence": label.confidence,
-                        "reason": label.reason,
-                    }
-                )
-                changed = True
-        if changed:
-            write_annotation(output_path, data)
-        else:
-            shutil.copy2(frame.path, output_path)
-    return changes
+def run_command(command: list[str], label: str) -> None:
+    print(f"    [{label}] {' '.join(command)}", flush=True)
+    result = subprocess.run(command, cwd=SCRIPT_DIR)
+    if result.returncode != 0:
+        raise RuntimeError(f"{label} 실패 (exit={result.returncode})")
 
 
-def relabel_clip(
-    scenario: str,
-    anno_dir: Path,
-    traffic_dir: Path,
-) -> dict[str, Any]:
-    config = Config()
-    files = annotation_files(anno_dir)
-    frames = load_frames(files, config)
-    events = build_candidates(frames, config)
-    resolve_candidates(events, config)
-    assign_event_ids(events)
-    labels = make_frame_labels(frames, events)
+def read_fix_summary(path: Path) -> dict[str, int]:
+    with path.open("r", newline="", encoding="utf-8-sig") as file:
+        rows = list(csv.DictReader(file))
+    if not rows:
+        raise ValueError(f"수정 summary가 비어 있습니다: {path}")
 
-    frame_data = list(frame_rows(scenario, frames, labels))
-    event_data = list(event_rows(scenario, frames, events))
-    write_csv(traffic_dir / "frame_labels.csv", FRAME_FIELDS, frame_data)
-    write_csv(traffic_dir / "events.csv", EVENT_FIELDS, event_data)
-    write_csv(
-        traffic_dir / "review_queue.csv",
-        EVENT_FIELDS,
-        [row for row in event_data if row["needs_review"] == "true"],
-    )
-    changes = correct_annotations(
-        frames,
-        labels,
-        traffic_dir / "corrected_anno",
-    )
-    write_csv(traffic_dir / "changes.csv", CHANGE_FIELDS, changes)
-    original_true_count = find_ego_traffic_lights(
-        anno_dir,
-        traffic_dir / "original_affects_ego.csv",
-        verbose=False,
-        print_summary=False,
-    )
-    corrected_true_count = find_ego_traffic_lights(
-        traffic_dir / "corrected_anno",
-        traffic_dir / "corrected_affects_ego.csv",
-        verbose=False,
-        print_summary=False,
-    )
+    def total(column: str) -> int:
+        try:
+            return sum(int(float(row.get(column) or 0)) for row in rows)
+        except ValueError as error:
+            raise ValueError(f"summary 숫자 컬럼 오류: {column}") from error
 
     return {
-        "frames": len(frames),
-        "detected_events": len(event_data),
-        "selected_events": sum(
-            row["status"] in {"matched", "missing_label"} for row in event_data
-        ),
-        "changed_frames": len(changes),
-        "review_events": sum(row["needs_review"] == "true" for row in event_data),
-        "event_data": event_data,
-        "changes": changes,
-        "original_true_count": original_true_count,
-        "corrected_true_count": corrected_true_count,
-        "corrected_dir": traffic_dir / "corrected_anno",
+        "bbox_changed_frames": total("bbox_changed_frames"),
+        "bbox_reassigned_entries": total("action_reassigned"),
+        "affects_ego_changed_frames": total("affects_ego_changed_frames"),
+        "affects_ego_changed_entries": total("affects_ego_changed_entries"),
     }
 
 
-def print_event_report(relabel: dict[str, Any]) -> None:
-    changes_per_event: dict[str, int] = {}
-    for change in relabel["changes"]:
-        event_id = str(change["event_id"] or "")
-        changes_per_event[event_id] = changes_per_event.get(event_id, 0) + 1
+def run_annotation_fix(
+    anno_dir: Path,
+    clip_output: Path,
+) -> tuple[Path, Path, dict[str, int]]:
+    output_anno = clip_output / "anno"
+    report_dir = clip_output / "reports"
+    detail_csv = report_dir / "traffic_light.csv"
+    summary_csv = report_dir / "traffic_light_summary.csv"
 
-    print(f"    원본 annotation: {relabel['frames']}프레임")
-    print(f"    검출된 trigger 이벤트: {len(relabel['event_data'])}개")
-    if not relabel["event_data"]:
-        print("    - 신호등 trigger 이벤트 없음")
-    for event in relabel["event_data"]:
-        crossing = event["crossing_frame"] or "-"
-        changed = changes_per_event.get(str(event["event_id"]), 0)
-        print(
-            f"    - {event['event_id']} / light_id={event['light_id']}: "
-            f"status={event['status']}, "
-            f"frames={event['start_frame']}..{event['end_frame']}, "
-            f"crossing={crossing}, changed={changed}, "
-            f"confidence={event['confidence']}, "
-            f"review={event['needs_review']}"
-        )
-        print(f"      reason={event['reason']}")
-    print(
-        f"    affects_ego=true 행: 원본={relabel['original_true_count']}, "
-        f"보정={relabel['corrected_true_count']}"
+    command = [
+        sys.executable,
+        str(FIX_SCRIPT),
+        "--root",
+        str(anno_dir),
+        "--out",
+        str(output_anno),
+        "--csv",
+        str(detail_csv),
+    ]
+    run_command(command, "ANNO")
+    if not output_anno.is_dir():
+        raise FileNotFoundError(f"수정 annotation이 생성되지 않았습니다: {output_anno}")
+    return output_anno, detail_csv, read_fix_summary(summary_csv)
+
+
+def run_visualization(
+    scenario_dir: Path,
+    anno_dir: Path,
+    output_dir: Path,
+    start_frame: int | None,
+    max_frames: int | None,
+) -> None:
+    command = [
+        sys.executable,
+        str(VISUALIZE_SCRIPT),
+        "--input",
+        str(scenario_dir),
+        "--anno-dir",
+        str(anno_dir),
+        "--output-dir",
+        str(output_dir),
+        "--profile",
+        "camera-bev",
+    ]
+    if start_frame is not None:
+        command.extend(["--start-frame", str(start_frame)])
+    if max_frames is not None:
+        command.extend(["--max-frames", str(max_frames)])
+    run_command(command, "VIS")
+
+
+def make_video(frame_dir: Path, output_path: Path, fps: float) -> int:
+    frames = image_map(frame_dir)
+    ordered = sorted(frames, key=frame_sort_key)
+    first = None
+    for stem in ordered:
+        first = cv2.imread(str(frames[stem]))
+        if first is not None:
+            break
+    if first is None:
+        raise FileNotFoundError(f"영상으로 만들 이미지가 없습니다: {frame_dir}")
+
+    height, width = first.shape[:2]
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    writer = cv2.VideoWriter(
+        str(output_path),
+        cv2.VideoWriter_fourcc(*"mp4v"),
+        fps,
+        (width, height),
     )
-    print(
-        f"    실제 JSON 변경: {relabel['changed_frames']}프레임, "
-        f"검토 필요: {relabel['review_events']}이벤트"
-    )
+    if not writer.isOpened():
+        raise RuntimeError(f"VideoWriter 열기 실패: {output_path}")
+
+    written = 0
+    try:
+        for stem in ordered:
+            image = cv2.imread(str(frames[stem]))
+            if image is None:
+                continue
+            if image.shape[1] != width or image.shape[0] != height:
+                image = cv2.resize(image, (width, height), interpolation=cv2.INTER_AREA)
+            writer.write(image)
+            written += 1
+    finally:
+        writer.release()
+    if written == 0:
+        raise RuntimeError(f"영상에 기록된 프레임이 없습니다: {output_path}")
+    return written
 
 
-def prepare_clip_output(output_root: Path, scenario: str) -> Path:
-    clip_output = (output_root / scenario).resolve()
-    if output_root.resolve() not in clip_output.parents:
-        raise ValueError(f"안전하지 않은 출력 경로입니다: {clip_output}")
-    if clip_output.exists():
-        shutil.rmtree(clip_output)
-    clip_output.mkdir(parents=True)
-    return clip_output
+def empty_result(scenario: str, anno_dir: Path, clip_output: Path) -> dict[str, Any]:
+    return {
+        "scenario": scenario,
+        "input_anno": str(anno_dir),
+        "output_anno": str(clip_output / "anno"),
+        "annotation_frames": len(annotation_files(anno_dir)),
+        "bbox_changed_frames": 0,
+        "bbox_reassigned_entries": 0,
+        "affects_ego_changed_frames": 0,
+        "affects_ego_changed_entries": 0,
+        "visualized_frames": 0,
+        "after_front_video": "",
+        "after_bev_video": "",
+        "comparison_created": "false",
+        "comparison_front_video": "",
+        "comparison_bev_video": "",
+        "detail_csv": str(clip_output / "reports" / "traffic_light.csv"),
+        "summary_csv": str(clip_output / "reports" / "traffic_light_summary.csv"),
+        "elapsed_seconds": "",
+        "status": "failed",
+        "error": "",
+    }
 
 
-def process_clip(
+def process_scenario(
     scenario: str,
     scenario_dir: Path,
     anno_dir: Path,
@@ -249,133 +241,118 @@ def process_clip(
     args: argparse.Namespace,
 ) -> dict[str, Any]:
     started = time.perf_counter()
-    clip_output = prepare_clip_output(output_root, scenario)
-    traffic_dir = clip_output / "traffic_light"
+    clip_output = output_root / scenario
+    if clip_output.exists():
+        shutil.rmtree(clip_output)
+    clip_output.mkdir(parents=True)
+    result = empty_result(scenario, anno_dir, clip_output)
 
-    print("  1/3 신호등 이벤트 분석 및 annotation 보정")
-    relabel = relabel_clip(scenario, anno_dir, traffic_dir)
-    print_event_report(relabel)
-    rendered_frames = 0
-    video_encoder = ""
+    print("  1/4 annotation 통합 수정", flush=True)
+    output_anno, detail_csv, metrics = run_annotation_fix(anno_dir, clip_output)
+    result.update(metrics)
+    result["output_anno"] = str(output_anno)
+    result["detail_csv"] = str(detail_csv)
 
-    if args.render:
-        selected = ",".join(args.camera_names) or "none"
-        print(
-            "  2/3 corrected annotation 시각화 "
-            f"(cameras={selected}, lidar={args.lidar})"
-        )
-        render_result = render_clip(
+    if args.visualization:
+        after_visualization = clip_output / "visualization" / "after"
+        print("  2/4 수정 annotation 시각화", flush=True)
+        run_visualization(
             scenario_dir,
-            relabel["corrected_dir"],
-            clip_output / "visualization",
-            camera_names=args.camera_names,
-            render_lidar=args.lidar,
-            start_frame=args.start_frame,
-            max_frames=args.max_frames,
-            workers=args.workers,
+            output_anno,
+            after_visualization,
+            args.start_frame,
+            args.max_frames,
         )
-        rendered_frames = int(render_result["frames"])
+        after_views = bbox_view_dirs(after_visualization)
+        result["visualized_frames"] = len(image_map(after_views["camera"]))
 
         if args.video:
-            print("  3/3 MP4 생성")
-            encoder_results: list[str] = []
-            for camera_name, camera_dir in render_result["camera_dirs"].items():
-                camera_video = make_video(
-                    camera_dir,
-                    clip_output / "videos" / "camera" / f"{camera_dir.name}.mp4",
-                    args.fps,
-                    encoder=args.encoder,
-                )
-                encoder_results.append(
-                    f"{camera_name}={camera_video['encoder']}"
-                )
-            if render_result["lidar_dir"] is not None:
-                lidar_video = make_video(
-                    render_result["lidar_dir"],
-                    clip_output / "videos" / "lidar_bev_bbox.mp4",
-                    args.fps,
-                    encoder=args.encoder,
-                )
-                encoder_results.append(f"lidar={lidar_video['encoder']}")
-            video_encoder = ";".join(encoder_results)
+            print("  3/4 수정 결과 영상 생성", flush=True)
+            after_front = clip_output / "videos" / "after_front.mp4"
+            after_bev = clip_output / "videos" / "after_bev.mp4"
+            make_video(after_views["camera"], after_front, args.fps)
+            make_video(after_views["bev"], after_bev, args.fps)
+            result["after_front_video"] = str(after_front)
+            result["after_bev_video"] = str(after_bev)
         else:
-            print("  3/3 영상 생성 안 함 (--no-video)")
-    else:
-        print("  2/3 시각화 안 함 (--no-render)")
-        print("  3/3 영상 생성 안 함")
+            print("  3/4 영상 생성 생략 (--no-video)")
 
-    elapsed = time.perf_counter() - started
-    return {
-        "scenario": scenario,
-        "frames": relabel["frames"],
-        "detected_trigger_events": relabel["detected_events"],
-        "selected_traffic_light_events": relabel["selected_events"],
-        "changed_frames": relabel["changed_frames"],
-        "review_events": relabel["review_events"],
-        "camera_views": ",".join(args.camera_names),
-        "lidar_rendered": str(bool(args.lidar)).lower(),
-        "rendered_frames": rendered_frames,
-        "video_encoder": video_encoder,
-        "elapsed_seconds": f"{elapsed:.2f}",
-        "status": "completed",
-        "error": "",
-    }
+        if args.video and metrics["affects_ego_changed_frames"] > 0:
+            print("  4/4 affects_ego 변경 감지: BEFORE/AFTER 비교 영상 생성",
+                  flush=True)
+            before_visualization = clip_output / "visualization" / "before"
+            run_visualization(
+                scenario_dir,
+                anno_dir,
+                before_visualization,
+                args.start_frame,
+                args.max_frames,
+            )
+            before_views = bbox_view_dirs(before_visualization)
+            route_match = ROUTE_RE.search(scenario)
+            route = route_match.group(1) if route_match else scenario
+            compare_front = clip_output / "videos" / "before_after_front.mp4"
+            compare_bev = clip_output / "videos" / "before_after_bev.mp4"
+            make_comparison_video(
+                before_views["camera"], after_views["camera"], compare_front,
+                route, "FRONT CAMERA", args.fps, args.scale)
+            make_comparison_video(
+                before_views["bev"], after_views["bev"], compare_bev,
+                route, "CAMERA BEV", args.fps, args.scale)
+            result["comparison_created"] = "true"
+            result["comparison_front_video"] = str(compare_front)
+            result["comparison_bev_video"] = str(compare_bev)
+        else:
+            reason = "affects_ego 변경 없음"
+            if not args.video:
+                reason = "--no-video"
+            print(f"  4/4 BEFORE/AFTER 비교 영상 생략 ({reason})")
+    else:
+        print("  2/4 시각화 생략 (--no-visualization)")
+        print("  3/4 영상 생성 생략")
+        print("  4/4 비교 영상 생성 생략")
+
+    result["elapsed_seconds"] = f"{time.perf_counter() - started:.2f}"
+    result["status"] = "completed"
+    return result
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "클립 하나 또는 data 폴더 전체를 신호등 분석→보정→"
-            "변경 CSV→카메라/LiDAR 시각화→MP4로 처리합니다."
+            "--input의 시나리오를 traffic-light annotation 수정, 카메라/BEV "
+            "시각화, 영상, 결과 CSV까지 한 번에 처리합니다."
         )
     )
     parser.add_argument(
-        "input",
+        "--input",
+        required=True,
         type=Path,
-        help="클립 폴더 하나 또는 여러 클립이 있는 data 폴더",
+        help="시나리오 폴더, anno 폴더 또는 여러 시나리오가 있는 상위 폴더",
     )
     parser.add_argument(
         "--output",
+        required=True,
         type=Path,
-        help="출력 폴더 (기본값: input의 data 폴더 옆 outputs)",
+        help="anno, visualization, videos, results.csv를 저장할 경로",
     )
     parser.add_argument(
-        "--render",
+        "--visualization",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="corrected 카메라/LiDAR 프레임 생성 (기본값: true)",
+        help="전방 카메라와 카메라 BEV bbox 시각화 생성 (기본값: true)",
     )
     parser.add_argument(
         "--video",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="카메라/LiDAR MP4 생성 (기본값: true)",
+        help="시각화 MP4 생성 (기본값: true)",
     )
     parser.add_argument("--fps", type=float, default=10.0)
-    parser.add_argument("--workers", type=int, help="렌더링 worker 수 (기본값: 최대 4)")
-    parser.add_argument(
-        "--cameras",
-        default="all",
-        help=(
-            "all, none 또는 쉼표 목록: "
-            "front,front_left,front_right,back,back_left,back_right"
-        ),
-    )
-    parser.add_argument(
-        "--no-lidar",
-        dest="lidar",
-        action="store_false",
-        help="LiDAR 이미지와 영상을 생성하지 않음",
-    )
-    parser.set_defaults(lidar=True)
-    parser.add_argument("--start-frame", type=int, help="시각화를 시작할 프레임")
-    parser.add_argument("--max-frames", type=int, help="시각화할 최대 프레임 수")
-    parser.add_argument(
-        "--encoder",
-        choices=("auto", "videotoolbox", "libx264", "opencv"),
-        default="auto",
-        help="MP4 encoder (기본값: auto)",
-    )
+    parser.add_argument("--scale", type=float, default=0.75,
+                        help="BEFORE/AFTER 비교 영상 배율")
+    parser.add_argument("--start-frame", type=int)
+    parser.add_argument("--max-frames", type=int)
     return parser
 
 
@@ -383,85 +360,70 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     input_path = args.input.expanduser().resolve()
+    output_root = args.output.expanduser().resolve()
+
     if not input_path.is_dir():
         parser.error(f"입력 폴더가 없습니다: {input_path}")
-    if args.fps <= 0:
-        parser.error("--fps는 0보다 커야 합니다.")
-    if args.workers is not None and args.workers < 1:
-        parser.error("--workers는 1 이상이어야 합니다.")
-    if args.start_frame is not None and args.start_frame < 0:
-        parser.error("--start-frame은 0 이상이어야 합니다.")
-    if args.max_frames is not None and args.max_frames < 1:
-        parser.error("--max-frames는 1 이상이어야 합니다.")
-    if args.video and not args.render:
-        parser.error("--video는 --render와 함께만 사용할 수 있습니다.")
-    try:
-        args.camera_names = parse_camera_selection(args.cameras)
-    except ValueError as error:
-        parser.error(str(error))
-    if args.render and not args.camera_names and not args.lidar:
-        parser.error("카메라와 LiDAR를 모두 제외하면 렌더링할 항목이 없습니다.")
-
-    scenarios = discover_scenarios(input_path)
-    if not scenarios:
-        parser.error(f"anno/*.json.gz가 있는 클립을 찾지 못했습니다: {input_path}")
-    workspace_root = infer_workspace_root(input_path)
-    output_root = (
-        args.output.expanduser().resolve()
-        if args.output is not None
-        else workspace_root / "outputs"
-    )
     if (
         output_root == input_path
         or output_root in input_path.parents
         or input_path in output_root.parents
     ):
-        parser.error(f"출력을 입력 폴더 안에 지정할 수 없습니다: {output_root}")
-    output_root.mkdir(parents=True, exist_ok=True)
+        parser.error(f"출력은 입력 폴더 바깥에 지정해야 합니다: {output_root}")
+    if args.video and not args.visualization:
+        parser.error("--video는 --visualization과 함께만 사용할 수 있습니다")
+    if args.fps <= 0:
+        parser.error("--fps는 0보다 커야 합니다")
+    if args.scale <= 0:
+        parser.error("--scale은 0보다 커야 합니다")
+    if args.start_frame is not None and args.start_frame < 0:
+        parser.error("--start-frame은 0 이상이어야 합니다")
+    if args.max_frames is not None and args.max_frames < 1:
+        parser.error("--max-frames는 1 이상이어야 합니다")
 
+    try:
+        scenarios = discover_scenarios(input_path)
+    except (OSError, ValueError) as error:
+        parser.error(str(error))
+    if not scenarios:
+        parser.error(f"annotation이 있는 시나리오를 찾지 못했습니다: {input_path}")
+
+    output_root.mkdir(parents=True, exist_ok=True)
     print(f"입력: {input_path}")
     print(f"출력: {output_root}")
-    print(f"클립: {len(scenarios)}개")
-    print("기존에 같은 클립 결과가 있으면 해당 클립 폴더만 새로 만듭니다.\n")
+    print(f"시나리오: {len(scenarios)}개\n", flush=True)
 
-    summaries: list[dict[str, Any]] = []
+    results = []
     failures = 0
     for index, (scenario, scenario_dir, anno_dir) in enumerate(scenarios, start=1):
-        print(f"[{index}/{len(scenarios)}] {scenario}")
+        print(f"[{index}/{len(scenarios)}] {scenario}", flush=True)
+        clip_output = output_root / scenario
         try:
-            summary = process_clip(
-                scenario,
-                scenario_dir,
-                anno_dir,
-                output_root,
-                args,
-            )
+            result = process_scenario(
+                scenario, scenario_dir, anno_dir, output_root, args)
             print(
-                f"  완료: changed={summary['changed_frames']}, "
-                f"review={summary['review_events']}, elapsed={summary['elapsed_seconds']}s\n"
+                "  완료: bbox_frames={bbox}, affects_frames={affects}, "
+                "comparison={comparison}\n".format(
+                    bbox=result["bbox_changed_frames"],
+                    affects=result["affects_ego_changed_frames"],
+                    comparison=result["comparison_created"],
+                )
             )
-        except Exception as error:  # keep remaining clips running in multi-clip mode
+        except Exception as error:
             failures += 1
-            summary = {
-                "scenario": scenario,
-                "frames": "",
-                "detected_trigger_events": "",
-                "selected_traffic_light_events": "",
-                "changed_frames": "",
-                "review_events": "",
-                "camera_views": "",
-                "lidar_rendered": "",
-                "rendered_frames": "",
-                "video_encoder": "",
-                "elapsed_seconds": "",
-                "status": "failed",
-                "error": f"{type(error).__name__}: {error}",
-            }
-            print(f"  실패: {summary['error']}\n", file=sys.stderr)
-        summaries.append(summary)
+            result = empty_result(scenario, anno_dir, clip_output)
+            summary_csv = Path(result["summary_csv"])
+            if summary_csv.is_file():
+                try:
+                    result.update(read_fix_summary(summary_csv))
+                except (OSError, ValueError):
+                    pass
+            result["error"] = f"{type(error).__name__}: {error}"
+            print(f"  실패: {result['error']}\n", file=sys.stderr)
+        results.append(result)
+        write_csv(output_root / "results.csv", results)
 
-    write_csv(output_root / "summary.csv", SUMMARY_FIELDS, summaries)
-    print(f"요약: {output_root / 'summary.csv'}")
+    print(f"최종 결과 CSV: {output_root / 'results.csv'}")
     return 1 if failures else 0
 
 

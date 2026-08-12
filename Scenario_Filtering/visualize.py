@@ -16,7 +16,7 @@ import colorsys
 import laspy
 import matplotlib.cm as cm
 from tqdm import trange
-from utils import get_image_point, point_in_canvas_wh, edges, world_to_ego, get_forward_vector, calculate_cube_vertices, draw_dashed_line, vector_angle
+from utils import get_image_point, point_in_canvas_wh, edges, world_to_ego, get_forward_vector, calculate_cube_vertices, draw_dashed_line, vector_angle, get_matrix
 from traffic_light_visual_overrides import (
     load_traffic_light_visual_map,
     remap_traffic_light_camera_geometry,
@@ -63,6 +63,120 @@ def get_stable_object_color(npc):
     return (int(blue * 255), int(green * 255), int(red * 255))
 
 
+def get_box_vertices(npc):
+    """Return one annotation object's world-space box vertices."""
+    world_cord = npc.get('world_cord')
+    if world_cord is not None:
+        vertices = np.asarray(world_cord, dtype=float)
+        if vertices.shape == (8, 3):
+            return vertices
+
+    center = npc.get('center', npc.get('location'))
+    extent = npc.get('extent')
+    if center is None or extent is None:
+        return None
+    rotation = npc.get('rotation')
+    if rotation is not None:
+        local_vertices = calculate_cube_vertices([0.0, 0.0, 0.0], extent)
+        transform = np.asarray(get_matrix(center, rotation), dtype=float)
+        return np.asarray(
+            [
+                (transform @ np.asarray([*vertex, 1.0], dtype=float))[:3]
+                for vertex in local_vertices
+            ],
+            dtype=float,
+        )
+    return np.asarray(calculate_cube_vertices(center, extent), dtype=float)
+
+
+def draw_top_down_bbox(image, boxes, sensor):
+    """Draw annotation 3D boxes on the RGB top-down camera image."""
+    intrinsic = sensor['intrinsic']
+    world2cam = sensor['world2cam']
+
+    for npc in boxes:
+        vertices = get_box_vertices(npc)
+        if vertices is None:
+            continue
+
+        projected = []
+        visible = True
+        for vertex in vertices:
+            point, depth = get_image_point(vertex, intrinsic, world2cam)
+            if depth <= 0 or not np.all(np.isfinite(point)):
+                visible = False
+                break
+            projected.append(np.round(point).astype(np.int32))
+        if not visible:
+            continue
+
+        projected_array = np.asarray(projected)
+        if (
+            projected_array[:, 0].max() < 0
+            or projected_array[:, 1].max() < 0
+            or projected_array[:, 0].min() >= image.shape[1]
+            or projected_array[:, 1].min() >= image.shape[0]
+        ):
+            continue
+
+        class_name = str(npc.get('class', 'object'))
+        if class_name == 'ego_vehicle':
+            color = (255, 255, 255)
+            thickness = 3
+        elif class_name == 'traffic_light':
+            color = (0, 0, 255) if npc.get('affects_ego') is True else (255, 255, 255)
+            thickness = 3
+        else:
+            color = get_stable_object_color(npc)
+            thickness = 2
+
+        for start, end in edges:
+            cv2.line(
+                image,
+                tuple(projected[start]),
+                tuple(projected[end]),
+                color,
+                thickness,
+                cv2.LINE_AA,
+            )
+
+        footprint = np.asarray(
+            [projected[0], projected[2], projected[6], projected[4]],
+            dtype=np.int32,
+        )
+        overlay = image.copy()
+        cv2.fillConvexPoly(overlay, footprint, color, lineType=cv2.LINE_AA)
+        image[:] = cv2.addWeighted(overlay, 0.18, image, 0.82, 0)
+
+        center = np.mean(np.asarray(projected), axis=0).astype(int)
+        object_id = npc.get('id', npc.get('actor_id', ''))
+        if class_name == 'traffic_light':
+            state = TRAFFIC_LIGHT_STATE_NAMES.get(
+                npc.get('state'),
+                str(npc.get('state', '')),
+            )
+            affect = 'AFFECTS' if npc.get('affects_ego') is True else 'UNAFFECTED'
+            label = f'TL {object_id} {state} {affect}'
+            cv2.circle(image, tuple(center), 6, color, 2, cv2.LINE_AA)
+        else:
+            label = f'{class_name} {object_id}'.strip()
+
+        label_x = max(4, min(int(center[0]) + 8, image.shape[1] - 260))
+        label_y = max(18, min(int(center[1]) - 8, image.shape[0] - 8))
+        cv2.putText(
+            image,
+            label,
+            (label_x, label_y),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.45,
+            color,
+            1,
+            cv2.LINE_AA,
+        )
+
+    return image
+
+
 def load_event_frame_ranges(events_path, scenario_name, context=20):
     """Load and merge numeric frame ranges for one scenario from an event CSV."""
     events_path = pathlib.Path(events_path).expanduser().resolve()
@@ -104,7 +218,11 @@ def frame_in_ranges(path, ranges):
 
 def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=None, max_frames=None, review_events=None, review_context=20, vis_bbox=True,  vis_top_down=True, vis_road=True, vis_lidar_bev=True, vis_lidar_to_back_image=True, vis_lidar_to_front_image=True, vis_lidar_to_front_left_image=True, traffic_light_visual_map=None):
     file_path = pathlib.Path(file_path).expanduser().resolve()
-    map_path = pathlib.Path(map_path).expanduser().resolve()
+    map_path = (
+        pathlib.Path(map_path).expanduser().resolve()
+        if map_path is not None
+        else None
+    )
     save_path = pathlib.Path(output_dir).expanduser().resolve()
     annotation_dir = (
         pathlib.Path(anno_dir).expanduser().resolve()
@@ -168,12 +286,12 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
         annotation_files = annotation_files[:max_frames]
     if not annotation_files:
         raise FileNotFoundError(f'annotation 파일을 찾을 수 없습니다: {annotation_dir}')
-    if (vis_top_down or vis_road) and not map_path.is_file():
+    if vis_road and (map_path is None or not map_path.is_file()):
         raise FileNotFoundError(f'HD map 파일을 찾을 수 없습니다: {map_path}')
 
     map_info = (
         dict(np.load(map_path, allow_pickle=True)['arr'])
-        if vis_top_down or vis_road
+        if vis_road
         else None
     )
 
@@ -230,108 +348,79 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
                                 else:
                                     verts = np.array(npc['world_cord'])
                             else:
-                                verts = calculate_cube_vertices(npc['center'], npc['extent'])
+                                verts = get_box_vertices(npc)
+                                if verts is None:
+                                    continue
                             for edge in edges:
                                 p1, p1_depth = get_image_point(verts[edge[0]], K, world2cam)
                                 p2, p2_depth = get_image_point(verts[edge[1]],  K, world2cam)
                                 draw_dashed_line(visulize_img, (int(p1[0]),int(p1[1])), (int(p2[0]),int(p2[1])), color, 2)
                             label = npc['class']
                             geometry_id = npc.get('_camera_geometry_id')
-                            if npc['class'] == 'traffic_light' and geometry_id is not None:
+                            if npc['class'] == 'traffic_light':
                                 state = TRAFFIC_LIGHT_STATE_NAMES.get(
                                     npc.get('state'),
                                     str(npc.get('state')),
                                 )
                                 affect = 'AFFECTS' if npc.get('affects_ego') is True else 'UNAFFECTED'
                                 label = f"TL {npc.get('id')} {state} {affect}"
-                                label += f' [box {geometry_id}]'
+                                if geometry_id is not None:
+                                    label += f' [box {geometry_id}]'
                             cv2.putText(visulize_img, label, (int(p1[0])+2,int(p1[1])+2), cv2.FONT_HERSHEY_COMPLEX, 0.5, color, 1)
                 cv2.imwrite(os.path.join(save_path, f'camera/{cam_map[key]}_3d_bbox/{frame}.jpg'), visulize_img)
         
-        if vis_top_down:        
-            for key in ['TOP_DOWN']:
-                K = sensors_anno[key]['intrinsic']
-                world2cam = sensors_anno[key]['world2cam']
-                visulize_img = cv2.imread(os.path.join(file_path, f'camera/{cam_map[key]}/{frame}.jpg'))
-                road_points = map_info[anno['bounding_boxes'][0]['road_id']]
-                # draw lane
-                for r_p in road_points[anno['bounding_boxes'][0]['lane_id']]:
-                    road_point = r_p['Points']
-                    road_type = r_p['Type']
-                    road_color = r_p['Color']
-                    road_topology = r_p['Topology']
-                    for point in road_point:
-                        point = np.array([point[0][0], point[0][1], point[0][2], 1])
-                        point_camera = np.dot(world2cam, point)
+        if vis_top_down:
+            key = 'TOP_DOWN'
+            image_path = file_path / 'camera' / cam_map[key] / f'{frame}.jpg'
+            visulize_img = cv2.imread(str(image_path))
+            if visulize_img is None:
+                raise FileNotFoundError(f'TOP_DOWN 카메라 이미지를 읽을 수 없습니다: {image_path}')
+
+            # The full profile retains the original HD-map lane overlay.  The
+            # camera-bev profile only needs the captured RGB view and boxes.
+            if map_info is not None:
+                ego = next(
+                    (box for box in bounding_boxes if box.get('class') == 'ego_vehicle'),
+                    bounding_boxes[0],
+                )
+                road_points = map_info[ego['road_id']]
+                for road_segment in road_points[ego['lane_id']]:
+                    road_type = road_segment['Type']
+                    road_color = road_segment['Color']
+                    for raw_point in road_segment['Points']:
+                        point = np.array(
+                            [raw_point[0][0], raw_point[0][1], raw_point[0][2], 1]
+                        )
+                        point_camera = np.dot(sensors_anno[key]['world2cam'], point)
                         point_camera = [point_camera[1], -point_camera[2], point_camera[0]]
                         depth = point_camera[2]
-                        point_img = np.dot(K, point_camera)
-                        if depth >0:
-                            point_img[0] /= point_img[2]
-                            point_img[1] /= point_img[2]
-                            point_img = point_img[0:2]
-                            if point_in_canvas_wh(point_img):
-                                if road_color == 'White':
-                                    cv2.circle(visulize_img, (int(point_img[0]), int(point_img[1])), radius=1, color=(255, 255, 255), thickness=-1)
-                                    if road_type == 'Center':
-                                        cv2.circle(visulize_img, (int(point_img[0]), int(point_img[1])), radius=1, color=(0, 255, 0), thickness=-1)
-                                else:
-                                    cv2.circle(visulize_img, (int(point_img[0]), int(point_img[1])), radius=1, color=(0, 255, 255), thickness=-1)                      
-                # draw vehicle
-                for npc in bounding_boxes:
-                    if 'vehicle' in npc['class']:
-                        if abs(npc['location'][2] - anno['bounding_boxes'][0]['location'][2]) > 10: continue # car in sky and underground
-                        if npc['class'] == 'ego_vehicle':
-                            color = (255, 255, 255, 255)
-                        else:
-                            color = (255, 0, 0, 255)
-                        verts = np.array(npc['world_cord'])
-                        p1, p1_depth = get_image_point(verts[0], K, world2cam)
-                        p2, p2_depth = get_image_point(verts[2],  K, world2cam)
-                        p3, p3_depth = get_image_point(verts[4],  K, world2cam)
-                        p4, p4_depth = get_image_point(verts[6],  K, world2cam)
-                        points = np.array([p1, p2, p4, p3])
-                        height, width = visulize_img.shape[:2]
-                        blk = np.zeros((height, width, 4), np.uint8)
-                        cv2.fillConvexPoly(blk, np.round(points).astype(np.int32), color)
-                        if npc['class'] == 'ego_vehicle':
-                            visulize_img = cv2.addWeighted(visulize_img, 1.0, blk[:,:,:3], 1, 1)
-                        else:
-                            visulize_img = cv2.addWeighted(visulize_img, 1.0, blk[:,:,:3], 0.25, 1)
-                        if npc['class'] == 'ego_vehicle':
-                            cv2.putText(visulize_img, npc['class'], (int(p1[0])+2,int(p1[1])+2), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0,0,0), 1)
-                        else:
-                            cv2.putText(visulize_img, npc['class'], (int(p1[0])+2,int(p1[1])+2), cv2.FONT_HERSHEY_COMPLEX, 0.5, color, 1)
-                # draw sign
-                for npc in bounding_boxes:
-                    if abs(npc['location'][2] - anno['bounding_boxes'][0]['location'][2]) > 10: continue # car in sky and underground
-                    # traffic_sign
-                    if 'traffic_sign' in npc['class']:
-                        color = (0, 0, 255, 255)
-                        if 'world_cord' in npc.keys():
-                            verts = np.array(npc['world_cord'])
-                        else:
-                            verts = calculate_cube_vertices(npc['center'], npc['extent'])
-                        p1, p1_depth = get_image_point(verts[0], K, world2cam)
-                        p2, p2_depth = get_image_point(verts[2],  K, world2cam)
-                        p3, p3_depth = get_image_point(verts[4],  K, world2cam)
-                        p4, p4_depth = get_image_point(verts[6],  K, world2cam)
-                        points = np.array([p1, p2, p4, p3])
-                        height, width = visulize_img.shape[:2]
-                        blk = np.zeros((height, width, 4), np.uint8)
-                        cv2.fillConvexPoly(blk, np.round(points).astype(np.int32), color)
-                        visulize_img = cv2.addWeighted(visulize_img, 1.0, blk[:,:,:3], 0.25, 1)
-                        cv2.putText(visulize_img, npc['class'], (int(p1[0])+2,int(p1[1])+2), cv2.FONT_HERSHEY_COMPLEX, 0.5, color, 1)
-                    # traffic_light
-                    if 'traffic_light' in npc['class']:
-                        color = (255, 0, 0)
-                        verts = calculate_cube_vertices(npc['center'], npc['extent'])
-                        for edge in edges:
-                            p1, p1_depth = get_image_point(verts[edge[0]], K, world2cam)
-                            p2, p2_depth = get_image_point(verts[edge[1]],  K, world2cam)
-                            cv2.line(visulize_img, (int(p1[0]),int(p1[1])), (int(p2[0]),int(p2[1])), color, 2)
-                        cv2.putText(visulize_img, 'traffic_light', (int(p1[0])+2,int(p1[1])+2), cv2.FONT_HERSHEY_COMPLEX, 0.5, color, 1)
-                cv2.imwrite(os.path.join(save_path, f'camera/{cam_map[key]}_3d_bbox/{frame}.jpg'), visulize_img)
+                        point_img = np.dot(sensors_anno[key]['intrinsic'], point_camera)
+                        if depth <= 0:
+                            continue
+                        point_img[0] /= point_img[2]
+                        point_img[1] /= point_img[2]
+                        point_img = point_img[:2]
+                        if not point_in_canvas_wh(point_img):
+                            continue
+                        color = (255, 255, 255) if road_color == 'White' else (0, 255, 255)
+                        if road_type == 'Center':
+                            color = (0, 255, 0)
+                        cv2.circle(
+                            visulize_img,
+                            (int(point_img[0]), int(point_img[1])),
+                            radius=1,
+                            color=color,
+                            thickness=-1,
+                        )
+
+            draw_top_down_bbox(
+                visulize_img,
+                camera_bounding_boxes,
+                sensors_anno[key],
+            )
+            output_path = save_path / 'camera' / 'rgb_top_down_3d_bbox' / f'{frame}.jpg'
+            if not cv2.imwrite(str(output_path), visulize_img):
+                raise OSError(f'BEV bbox 이미지를 저장하지 못했습니다: {output_path}')
         # ==========================================================
 
         # ========================== road ==========================
@@ -564,10 +653,11 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         '--profile',
-        choices=('bbox', 'full'),
+        choices=('bbox', 'camera-bev', 'full'),
         default='full',
         help=(
             'bbox: 카메라 3D bbox만 생성, '
+            'camera-bev: 전방 카메라 + TOP_DOWN 카메라 BEV bbox 생성, '
             'full: bbox + HD map + LiDAR 시각화 생성 (기본값: full)'
         ),
     )
@@ -575,12 +665,16 @@ if __name__ == '__main__':
     args = parser.parse_args()
     if args.review_context < 0:
         parser.error('--review-context 값은 0 이상이어야 합니다.')
+    full_profile = args.profile == 'full'
+    camera_bev_profile = args.profile in ('camera-bev', 'full')
     if args.map_file is not None:
         map_path = args.map_file
     elif args.map_id is not None:
         map_path = args.map_root / f'Town{args.map_id}_HD_map.npz'
+    elif full_profile:
+        parser.error('full profile에는 --map-file 또는 --map-id/-m 중 하나가 필요합니다.')
     else:
-        parser.error('--map-file 또는 --map-id/-m 중 하나가 필요합니다.')
+        map_path = None
     try:
         traffic_light_visual_map = load_traffic_light_visual_map(
             args.traffic_light_visual_overrides,
@@ -589,7 +683,6 @@ if __name__ == '__main__':
     except (FileNotFoundError, ValueError, json.JSONDecodeError) as error:
         parser.error(str(error))
 
-    full_profile = args.profile == 'full'
     visualize_data(
         args.file_path,
         map_path,
@@ -600,7 +693,7 @@ if __name__ == '__main__':
         review_events=args.review_events,
         review_context=args.review_context,
         vis_bbox=True,
-        vis_top_down=full_profile,
+        vis_top_down=camera_bev_profile,
         vis_road=full_profile,
         vis_lidar_bev=full_profile,
         vis_lidar_to_back_image=full_profile,
