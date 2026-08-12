@@ -14,7 +14,13 @@ from traffic_light_relevance import (
 )
 
 
-def annotation(x: float, y: float, pole_x: float, light_ids: tuple[str, ...]) -> dict:
+def annotation(
+    x: float,
+    y: float,
+    pole_x: float,
+    light_ids: tuple[str, ...],
+    trigger_x: float = 0.0,
+) -> dict:
     boxes: list[dict] = [
         {
             "class": "ego_vehicle",
@@ -30,7 +36,7 @@ def annotation(x: float, y: float, pole_x: float, light_ids: tuple[str, ...]) ->
                 "id": light_id,
                 "location": [pole_x, 0.0, 4.0],
                 "rotation": [0.0, 0.0, 90.0],
-                "trigger_volume_location": [0.0, 0.0, 0.0],
+                "trigger_volume_location": [trigger_x, 0.0, 0.0],
                 "trigger_volume_rotation": [0.0, 0.0, 0.0],
                 "trigger_volume_extent": [0.5, 1.5, 1.0],
                 "state": 0,
@@ -117,6 +123,136 @@ class RelevanceCorrectionTest(unittest.TestCase):
         self.assertEqual(result["crossing_events"], 2)
         self.assertEqual(result["auto_fix_frames"], 0)
         self.assertGreater(result["review_frames"], 0)
+
+    def test_affects_ego_stays_true_until_trigger_volume_exit(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        source = root / "source"
+        source.mkdir()
+        positions = (-2.0, -1.0, -0.4, 0.0, 0.4, 0.6, 1.0)
+        for index, x in enumerate(positions):
+            (source / f"{index:05d}.json").write_text(
+                json.dumps(annotation(x, 0.0, 4.0, ("A",))),
+                encoding="utf-8",
+            )
+        bbox = root / "reports" / "bbox.csv"
+        bbox.parent.mkdir(parents=True)
+        with bbox.open("w", newline="", encoding="utf-8-sig") as file:
+            writer = csv.DictWriter(
+                file, fieldnames=["clip", "frame", "tl_id", "ok_after"]
+            )
+            writer.writeheader()
+            for index in range(len(positions)):
+                writer.writerow(
+                    {
+                        "clip": ".",
+                        "frame": f"{index:05d}.json",
+                        "tl_id": "A",
+                        "ok_after": 1,
+                    }
+                )
+        result = correct_affects_ego(
+            "Synthetic_Town04_Route1_Weather0",
+            source,
+            root / "corrected",
+            root / "reports",
+            bbox_detail_csv=bbox,
+        )
+        self.assertEqual(result["auto_fix_frames"], 5)
+        values = []
+        for index in range(len(positions)):
+            data = json.loads(
+                (root / "corrected" / f"{index:05d}.json").read_text()
+            )
+            light = next(
+                box
+                for box in data["bounding_boxes"]
+                if box["class"] == "traffic_light"
+            )
+            values.append(light["affects_ego"])
+        self.assertEqual(values, [True, True, True, True, True, False, False])
+
+        with (root / "reports" / "relevance_events.csv").open(
+            newline="", encoding="utf-8-sig"
+        ) as file:
+            event = next(csv.DictReader(file))
+        self.assertEqual(event["trigger_entry_frame"], "00002")
+        self.assertEqual(event["trigger_center_frame"], "00003")
+        self.assertEqual(event["trigger_exit_frame"], "00005")
+        self.assertEqual(event["end_frame"], "00004")
+
+    def test_later_event_starts_at_previous_trigger_exit(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        source = root / "source"
+        source.mkdir()
+        positions = (
+            -2.0,
+            -1.0,
+            -0.4,
+            0.0,
+            0.4,
+            0.6,
+            1.0,
+            2.0,
+            3.0,
+            3.6,
+            4.0,
+            4.4,
+            4.6,
+            5.0,
+        )
+        for index, x in enumerate(positions):
+            data = annotation(x, 0.0, 4.0, ("A", "B"))
+            light_b = next(
+                box
+                for box in data["bounding_boxes"]
+                if box.get("class") == "traffic_light" and box.get("id") == "B"
+            )
+            light_b["location"] = [8.0, 0.0, 4.0]
+            light_b["trigger_volume_location"] = [4.0, 0.0, 0.0]
+            (source / f"{index:05d}.json").write_text(
+                json.dumps(data), encoding="utf-8"
+            )
+
+        bbox = root / "reports" / "bbox.csv"
+        bbox.parent.mkdir(parents=True)
+        with bbox.open("w", newline="", encoding="utf-8-sig") as file:
+            writer = csv.DictWriter(
+                file, fieldnames=["clip", "frame", "tl_id", "ok_after"]
+            )
+            writer.writeheader()
+            for index in range(len(positions)):
+                for light_id in ("A", "B"):
+                    writer.writerow(
+                        {
+                            "clip": ".",
+                            "frame": f"{index:05d}.json",
+                            "tl_id": light_id,
+                            "ok_after": 1,
+                        }
+                    )
+        result = correct_affects_ego(
+            "Synthetic_Town04_Route1_Weather0",
+            source,
+            root / "corrected",
+            root / "reports",
+            bbox_detail_csv=bbox,
+        )
+        self.assertEqual(result["crossing_events"], 2)
+        self.assertEqual(result["review_frames"], 0)
+        with (root / "reports" / "relevance_events.csv").open(
+            newline="", encoding="utf-8-sig"
+        ) as file:
+            events = list(csv.DictReader(file))
+        self.assertEqual(events[0]["traffic_light_id"], "A")
+        self.assertEqual(events[0]["trigger_exit_frame"], "00005")
+        self.assertEqual(events[0]["end_frame"], "00004")
+        self.assertEqual(events[1]["traffic_light_id"], "B")
+        self.assertEqual(events[1]["start_frame"], "00005")
+        self.assertEqual(events[1]["trigger_exit_frame"], "00012")
 
 
 if __name__ == "__main__":

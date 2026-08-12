@@ -146,17 +146,27 @@ python3 run_scenario_pipeline.py \
 1. 선택된 모든 annotation을 한 번에 읽어 bbox 대응 관계와 전역 consensus 계산
 2. bbox permutation 및 trigger rotation 복구. 이 단계에서는 `affects_ego` 보존
 3. 각 클립에서 연속 Ego 선분과 회전된 실제 trigger rectangle의 교차 계산
-4. 교차 이전 최대 60 m를 해당 신호등의 접근 이벤트로 구성
-5. 궤적 진행 방향, bbox 신뢰성, 최소 연속 프레임, 실제 다중 교차 여부 검사
-6. `KEEP`, `AUTO_FIX`, `REVIEW` 중 하나로 프레임별 판정
-7. `AUTO_FIX` 프레임에만 `affects_ego` 변경 후 최종 annotation 저장
-8. 전방 카메라, TOP_DOWN BEV, 선택적 vector map 시각화와 영상 생성
-9. 상세 CSV 및 전체 `results.csv` 생성
+4. trigger 진입·중심 통과·완전 이탈 프레임을 구분하고, 완전 이탈 직전까지
+   `affects_ego` 구간으로 구성
+5. 이탈 프레임 이전 최대 60 m를 접근 구간으로 잡되, 앞 신호의 이탈 시점에서
+   다음 신호로 takeover하여 이벤트 구간이 겹치지 않게 절단
+6. 궤적 진행 방향, bbox 신뢰성, 최소 연속 프레임, 실제 다중 교차 여부 검사
+7. `KEEP`, `AUTO_FIX`, `REVIEW` 중 하나로 프레임별 판정
+8. `AUTO_FIX` 프레임에만 `affects_ego` 변경 후 최종 annotation 저장
+9. 전방 카메라, TOP_DOWN BEV, 선택적 vector map 시각화와 영상 생성
+10. 상세 CSV 및 전체 `results.csv` 생성
 
 기본 trigger margin은 `0.0 m`이다. 즉 Ego의 프레임 간 선분이 annotation에
 기록된 실제 trigger rectangle과 교차해야 한다. margin을 크게 주면 서로 가까운
 다른 차로의 trigger를 실제보다 일찍 통과한 것으로 판단할 수 있으므로, 데이터셋
 검수 없이 기본값을 변경하지 않는 것을 권장한다.
+
+종료 기준은 trigger 중심이 아니라 진행 방향 쪽 far edge이다. 프레임 간 선분이
+volume에 진입한 순간에는 relevance를 끄지 않고, Ego의 샘플 위치가 rectangle을
+완전히 벗어난 첫 프레임부터 `affects_ego=false`로 전환한다. PKL의
+`ego_tl_stopline`은 기존 계약대로 `trigger_volume_location` 중심을 유지한다.
+따라서 target 좌표 스키마는 바뀌지 않고, 신호 state·UV·stop-point supervision을
+trigger 내부 주행 구간까지 유지하는 시간 의미만 명확해진다.
 
 `REVIEW`가 되는 대표적인 경우는 다음과 같다.
 
@@ -268,8 +278,9 @@ HD vector lane overlay가 포함된다.
 
 - `relevance_frames.csv`: 프레임별 원본 ID, 예측 ID, KEEP/AUTO_FIX/REVIEW,
   confidence 및 판정 이유
-- `relevance_events.csv`: trigger 교차 이벤트의 신호등 ID, 접근 시작, 실제 교차
-  프레임, 방향 오차, bbox 신뢰성, 경쟁 이벤트
+- `relevance_events.csv`: trigger 교차 이벤트의 신호등 ID, 접근 시작,
+  `trigger_entry_frame`, `trigger_center_frame`, `trigger_exit_frame`, 방향 오차,
+  bbox 신뢰성, 경쟁 이벤트. 호환용 `crossing_frame`은 exit frame과 같다.
 - `affects_ego_changes.csv`: AUTO_FIX로 실제 값이 바뀐 엔트리의 전후 값
 
 ## bbox 복구만 직접 실행

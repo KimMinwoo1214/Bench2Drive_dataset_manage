@@ -5,8 +5,10 @@ The input annotations must already have their traffic-light bbox permutation
 repaired.  This module keeps HD maps and vehicle-response heuristics out of the
 decision path: a high-confidence correction requires a continuous ego segment
 to intersect the light's trigger rectangle, compatible travel direction, a
-reliable repaired bbox, and a stable event interval.  Uncertain frames are
-reported as REVIEW and are copied without changing ``affects_ego``.
+reliable repaired bbox, and a stable event interval.  Relevance remains active
+until the first sampled Ego pose fully beyond the rectangle's far edge.
+Uncertain frames are reported as REVIEW and are copied without changing
+``affects_ego``.
 """
 
 from __future__ import annotations
@@ -41,6 +43,9 @@ EVENT_FIELDS = [
     "event_id",
     "traffic_light_id",
     "start_frame",
+    "trigger_entry_frame",
+    "trigger_center_frame",
+    "trigger_exit_frame",
     "crossing_frame",
     "end_frame",
     "heading_error_degrees",
@@ -101,6 +106,8 @@ class CrossingEvent:
     start_index: int
     end_index: int
     crossing_index: int
+    entry_index: int
+    center_index: int
     heading_error_degrees: float
     bbox_reliable: bool
     competing_event_ids: tuple[str, ...] = ()
@@ -317,6 +324,26 @@ def _trigger_travel_yaw(light: Light) -> float:
     return light.trigger_yaw_degrees + 90.0
 
 
+def _first_center_crossing(
+    frames: Sequence[Frame],
+    first_index: int,
+    last_index: int,
+    light: Light,
+    route_yaw_degrees: float,
+) -> int:
+    """Return the first sampled frame at/past the trigger centre plane."""
+    yaw = math.radians(route_yaw_degrees)
+    ux, uy = math.cos(yaw), math.sin(yaw)
+    for index in range(first_index, last_index + 1):
+        projection = (
+            (frames[index].ego_x - light.trigger_x) * ux
+            + (frames[index].ego_y - light.trigger_y) * uy
+        )
+        if projection >= 0.0:
+            return index
+    return last_index
+
+
 def _group_consecutive(indices: Iterable[int]) -> list[list[int]]:
     groups: list[list[int]] = []
     for index in sorted(set(indices)):
@@ -393,8 +420,21 @@ def build_crossing_events(
             heading_error = _directed_angle_error(
                 route_yaw, _trigger_travel_yaw(light)
             )
-            crossing_index = segment_index + 1
-            end_index = segment_index
+            entry_index = segment_index + 1
+            # Each group contains every consecutive trajectory segment that
+            # touches the rectangle.  The endpoint after the last such segment
+            # is the first sampled Ego pose fully beyond the far edge.  Keep the
+            # light relevant through the preceding frame instead of clearing it
+            # as soon as Ego enters the volume.
+            crossing_index = group[-1] + 1
+            center_index = _first_center_crossing(
+                frames,
+                entry_index,
+                crossing_index,
+                light,
+                route_yaw,
+            )
+            end_index = crossing_index - 1
             start_index = _approach_start(frames, end_index, config)
             reliability_values = [
                 bbox_reliability.get((frames[index].name, light_id))
@@ -402,7 +442,10 @@ def build_crossing_events(
             ]
             known_values = [value for value in reliability_values if value is not None]
             bbox_reliable = bool(known_values) and all(known_values)
-            reasons = ["trajectory_segment_crosses_trigger_volume"]
+            reasons = [
+                "trajectory_segment_crosses_trigger_volume",
+                "affects_ego_until_trigger_volume_exit",
+            ]
             if heading_error <= config.maximum_heading_error_degrees:
                 reasons.append("trajectory_heading_matches_control_direction")
             else:
@@ -421,6 +464,8 @@ def build_crossing_events(
                     start_index=start_index,
                     end_index=end_index,
                     crossing_index=crossing_index,
+                    entry_index=entry_index,
+                    center_index=center_index,
                     heading_error_degrees=heading_error,
                     bbox_reliable=bbox_reliable,
                     confidence=confidence,
@@ -428,7 +473,7 @@ def build_crossing_events(
                 )
             )
 
-    events.sort(key=lambda event: (event.crossing_index, event.light_id))
+    events.sort(key=lambda event: (event.center_index, event.light_id))
     for index, event in enumerate(events):
         previous_crossings = [
             previous.crossing_index
@@ -644,6 +689,9 @@ def correct_affects_ego(
             "event_id": event.event_id,
             "traffic_light_id": event.light_id,
             "start_frame": frames[event.start_index].name,
+            "trigger_entry_frame": frames[event.entry_index].name,
+            "trigger_center_frame": frames[event.center_index].name,
+            "trigger_exit_frame": frames[event.crossing_index].name,
             "crossing_frame": frames[event.crossing_index].name,
             "end_frame": frames[event.end_index].name,
             "heading_error_degrees": f"{event.heading_error_degrees:.3f}",
