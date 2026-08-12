@@ -9,6 +9,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 from typing import Any, Sequence
@@ -21,6 +22,7 @@ from apply_visualize_compare_from_summary import (
     image_map,
     make_comparison_video,
 )
+from traffic_light_relevance import RelevanceConfig, correct_affects_ego
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -35,6 +37,10 @@ RESULT_FIELDS = [
     "annotation_frames",
     "bbox_changed_frames",
     "bbox_reassigned_entries",
+    "crossing_events",
+    "keep_frames",
+    "auto_fix_frames",
+    "review_frames",
     "affects_ego_changed_frames",
     "affects_ego_changed_entries",
     "visualized_frames",
@@ -99,9 +105,11 @@ def run_command(command: list[str], label: str) -> None:
         raise RuntimeError(f"{label} 실패 (exit={result.returncode})")
 
 
-def read_fix_summary(path: Path) -> dict[str, int]:
+def read_fix_summary(path: Path, clip_key: str | None = None) -> dict[str, int]:
     with path.open("r", newline="", encoding="utf-8-sig") as file:
         rows = list(csv.DictReader(file))
+    if clip_key is not None:
+        rows = [row for row in rows if row.get("clip") == clip_key]
     if not rows:
         raise ValueError(f"수정 summary가 비어 있습니다: {path}")
 
@@ -119,29 +127,28 @@ def read_fix_summary(path: Path) -> dict[str, int]:
     }
 
 
-def run_annotation_fix(
-    anno_dir: Path,
-    clip_output: Path,
-) -> tuple[Path, Path, dict[str, int]]:
-    output_anno = clip_output / "anno"
-    report_dir = clip_output / "reports"
-    detail_csv = report_dir / "traffic_light.csv"
-    summary_csv = report_dir / "traffic_light_summary.csv"
-
+def run_bbox_fix(
+    input_root: Path,
+    bbox_output_root: Path,
+    detail_csv: Path,
+) -> Path:
+    """Repair all selected clips in one pass so consensus is dataset-wide."""
     command = [
         sys.executable,
         str(FIX_SCRIPT),
         "--root",
-        str(anno_dir),
+        str(input_root),
         "--out",
-        str(output_anno),
+        str(bbox_output_root),
         "--csv",
         str(detail_csv),
+        "--bbox-only",
     ]
-    run_command(command, "ANNO")
-    if not output_anno.is_dir():
-        raise FileNotFoundError(f"수정 annotation이 생성되지 않았습니다: {output_anno}")
-    return output_anno, detail_csv, read_fix_summary(summary_csv)
+    run_command(command, "BBOX")
+    summary_csv = detail_csv.with_name(f"{detail_csv.stem}_summary.csv")
+    if not summary_csv.is_file():
+        raise FileNotFoundError(f"bbox summary가 생성되지 않았습니다: {summary_csv}")
+    return summary_csv
 
 
 def run_visualization(
@@ -209,14 +216,24 @@ def make_video(frame_dir: Path, output_path: Path, fps: float) -> int:
     return written
 
 
-def empty_result(scenario: str, anno_dir: Path, clip_output: Path) -> dict[str, Any]:
+def empty_result(
+    scenario: str,
+    anno_dir: Path,
+    clip_output: Path,
+    bbox_detail_csv: Path | None = None,
+    bbox_summary_csv: Path | None = None,
+) -> dict[str, Any]:
     return {
         "scenario": scenario,
         "input_anno": str(anno_dir),
-        "output_anno": str(clip_output / "anno"),
+        "output_anno": str(clip_output / "traffic_light" / "corrected_anno"),
         "annotation_frames": len(annotation_files(anno_dir)),
         "bbox_changed_frames": 0,
         "bbox_reassigned_entries": 0,
+        "crossing_events": 0,
+        "keep_frames": 0,
+        "auto_fix_frames": 0,
+        "review_frames": 0,
         "affects_ego_changed_frames": 0,
         "affects_ego_changed_entries": 0,
         "visualized_frames": 0,
@@ -225,8 +242,8 @@ def empty_result(scenario: str, anno_dir: Path, clip_output: Path) -> dict[str, 
         "comparison_created": "false",
         "comparison_front_video": "",
         "comparison_bev_video": "",
-        "detail_csv": str(clip_output / "reports" / "traffic_light.csv"),
-        "summary_csv": str(clip_output / "reports" / "traffic_light_summary.csv"),
+        "detail_csv": str(bbox_detail_csv or ""),
+        "summary_csv": str(bbox_summary_csv or ""),
         "elapsed_seconds": "",
         "status": "failed",
         "error": "",
@@ -237,6 +254,10 @@ def process_scenario(
     scenario: str,
     scenario_dir: Path,
     anno_dir: Path,
+    bbox_anno_dir: Path,
+    bbox_clip_key: str,
+    bbox_detail_csv: Path,
+    bbox_summary_csv: Path,
     output_root: Path,
     args: argparse.Namespace,
 ) -> dict[str, Any]:
@@ -245,17 +266,45 @@ def process_scenario(
     if clip_output.exists():
         shutil.rmtree(clip_output)
     clip_output.mkdir(parents=True)
-    result = empty_result(scenario, anno_dir, clip_output)
+    result = empty_result(
+        scenario,
+        anno_dir,
+        clip_output,
+        bbox_detail_csv,
+        bbox_summary_csv,
+    )
 
-    print("  1/4 annotation 통합 수정", flush=True)
-    output_anno, detail_csv, metrics = run_annotation_fix(anno_dir, clip_output)
+    print("  2/5 trigger-volume relevance 판정", flush=True)
+    relevance_config = RelevanceConfig(
+        approach_distance_metres=args.approach_distance,
+        maximum_step_metres=args.max_step,
+        trigger_margin_metres=args.trigger_margin,
+        maximum_heading_error_degrees=args.maximum_heading_error,
+        simultaneous_crossing_frames=args.simultaneous_crossing_frames,
+        minimum_temporal_run_frames=args.minimum_temporal_run_frames,
+    )
+    traffic_output = clip_output / "traffic_light"
+    output_anno = traffic_output / "corrected_anno"
+    report_dir = traffic_output / "reports"
+    bbox_metrics = read_fix_summary(bbox_summary_csv, bbox_clip_key)
+    relevance_metrics = correct_affects_ego(
+        scenario,
+        bbox_anno_dir,
+        output_anno,
+        report_dir,
+        bbox_detail_csv=bbox_detail_csv,
+        bbox_clip_key=bbox_clip_key,
+        config=relevance_config,
+    )
+    metrics = {**bbox_metrics, **relevance_metrics}
+    if not output_anno.is_dir():
+        raise FileNotFoundError(f"수정 annotation이 생성되지 않았습니다: {output_anno}")
     result.update(metrics)
     result["output_anno"] = str(output_anno)
-    result["detail_csv"] = str(detail_csv)
 
     if args.visualization:
         after_visualization = clip_output / "visualization" / "after"
-        print("  2/4 수정 annotation 시각화", flush=True)
+        print("  3/5 수정 annotation 시각화", flush=True)
         run_visualization(
             scenario_dir,
             output_anno,
@@ -267,7 +316,7 @@ def process_scenario(
         result["visualized_frames"] = len(image_map(after_views["camera"]))
 
         if args.video:
-            print("  3/4 수정 결과 영상 생성", flush=True)
+            print("  4/5 수정 결과 영상 생성", flush=True)
             after_front = clip_output / "videos" / "after_front.mp4"
             after_bev = clip_output / "videos" / "after_bev.mp4"
             make_video(after_views["camera"], after_front, args.fps)
@@ -275,10 +324,14 @@ def process_scenario(
             result["after_front_video"] = str(after_front)
             result["after_bev_video"] = str(after_bev)
         else:
-            print("  3/4 영상 생성 생략 (--no-video)")
+            print("  4/5 영상 생성 생략 (--no-video)")
 
-        if args.video and metrics["affects_ego_changed_frames"] > 0:
-            print("  4/4 affects_ego 변경 감지: BEFORE/AFTER 비교 영상 생성",
+        has_annotation_changes = (
+            metrics["bbox_changed_frames"] > 0
+            or metrics["affects_ego_changed_frames"] > 0
+        )
+        if args.video and has_annotation_changes:
+            print("  5/5 annotation 변경 감지: BEFORE/AFTER 비교 영상 생성",
                   flush=True)
             before_visualization = clip_output / "visualization" / "before"
             run_visualization(
@@ -303,17 +356,17 @@ def process_scenario(
             result["comparison_front_video"] = str(compare_front)
             result["comparison_bev_video"] = str(compare_bev)
         else:
-            reason = "affects_ego 변경 없음"
+            reason = "bbox/affects_ego 변경 없음"
             if not args.video:
                 reason = "--no-video"
-            print(f"  4/4 BEFORE/AFTER 비교 영상 생략 ({reason})")
+            print(f"  5/5 BEFORE/AFTER 비교 영상 생략 ({reason})")
     else:
-        print("  2/4 시각화 생략 (--no-visualization)")
-        print("  3/4 영상 생성 생략")
-        print("  4/4 비교 영상 생성 생략")
+        print("  3/5 시각화 생략 (--no-visualization)")
+        print("  4/5 영상 생성 생략")
+        print("  5/5 비교 영상 생성 생략")
 
     result["elapsed_seconds"] = f"{time.perf_counter() - started:.2f}"
-    result["status"] = "completed"
+    result["status"] = "review" if result["review_frames"] else "completed"
     return result
 
 
@@ -353,6 +406,42 @@ def build_parser() -> argparse.ArgumentParser:
                         help="BEFORE/AFTER 비교 영상 배율")
     parser.add_argument("--start-frame", type=int)
     parser.add_argument("--max-frames", type=int)
+    parser.add_argument(
+        "--approach-distance",
+        type=float,
+        default=60.0,
+        help="trigger 통과 전 affects_ego 구간 거리 m (기본값: 60)",
+    )
+    parser.add_argument(
+        "--max-step",
+        type=float,
+        default=5.0,
+        help="연속 궤적으로 인정할 최대 프레임 이동 거리 m (기본값: 5)",
+    )
+    parser.add_argument(
+        "--trigger-margin",
+        type=float,
+        default=0.0,
+        help="선분-trigger 교차 판정 여유 거리 m (기본값: 0.0, 실제 volume)",
+    )
+    parser.add_argument(
+        "--maximum-heading-error",
+        type=float,
+        default=35.0,
+        help="AUTO_FIX에 허용할 최대 궤적 방향 오차 degree (기본값: 35)",
+    )
+    parser.add_argument(
+        "--simultaneous-crossing-frames",
+        type=int,
+        default=3,
+        help="서로 다른 trigger 통과를 동시 후보로 볼 프레임 차이 (기본값: 3)",
+    )
+    parser.add_argument(
+        "--minimum-temporal-run-frames",
+        type=int,
+        default=3,
+        help="AUTO_FIX 동일 ID 최소 연속 프레임 수 (기본값: 3)",
+    )
     return parser
 
 
@@ -380,6 +469,18 @@ def main(argv: Sequence[str] | None = None) -> int:
         parser.error("--start-frame은 0 이상이어야 합니다")
     if args.max_frames is not None and args.max_frames < 1:
         parser.error("--max-frames는 1 이상이어야 합니다")
+    if args.approach_distance <= 0:
+        parser.error("--approach-distance는 0보다 커야 합니다")
+    if args.max_step <= 0:
+        parser.error("--max-step은 0보다 커야 합니다")
+    if args.trigger_margin < 0:
+        parser.error("--trigger-margin은 0 이상이어야 합니다")
+    if not 0 <= args.maximum_heading_error <= 180:
+        parser.error("--maximum-heading-error는 0~180 범위여야 합니다")
+    if args.simultaneous_crossing_frames < 0:
+        parser.error("--simultaneous-crossing-frames는 0 이상이어야 합니다")
+    if args.minimum_temporal_run_frames < 1:
+        parser.error("--minimum-temporal-run-frames는 1 이상이어야 합니다")
 
     try:
         scenarios = discover_scenarios(input_path)
@@ -395,33 +496,59 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     results = []
     failures = 0
-    for index, (scenario, scenario_dir, anno_dir) in enumerate(scenarios, start=1):
-        print(f"[{index}/{len(scenarios)}] {scenario}", flush=True)
-        clip_output = output_root / scenario
-        try:
-            result = process_scenario(
-                scenario, scenario_dir, anno_dir, output_root, args)
-            print(
-                "  완료: bbox_frames={bbox}, affects_frames={affects}, "
-                "comparison={comparison}\n".format(
-                    bbox=result["bbox_changed_frames"],
-                    affects=result["affects_ego_changed_frames"],
-                    comparison=result["comparison_created"],
+    bbox_report_dir = output_root / "bbox_reports"
+    bbox_detail_csv = bbox_report_dir / "bbox_details.csv"
+    with tempfile.TemporaryDirectory(prefix="b2d_bbox_") as directory:
+        bbox_output_root = Path(directory)
+        print("1/5 선택 clip 전체 bbox permutation 복구", flush=True)
+        bbox_summary_csv = run_bbox_fix(
+            input_path,
+            bbox_output_root,
+            bbox_detail_csv,
+        )
+        for index, (scenario, scenario_dir, anno_dir) in enumerate(scenarios, start=1):
+            print(f"[{index}/{len(scenarios)}] {scenario}", flush=True)
+            clip_output = output_root / scenario
+            relative_anno = anno_dir.relative_to(input_path)
+            bbox_clip_key = relative_anno.as_posix() or "."
+            bbox_anno_dir = bbox_output_root / relative_anno
+            try:
+                result = process_scenario(
+                    scenario,
+                    scenario_dir,
+                    anno_dir,
+                    bbox_anno_dir,
+                    bbox_clip_key,
+                    bbox_detail_csv,
+                    bbox_summary_csv,
+                    output_root,
+                    args,
                 )
-            )
-        except Exception as error:
-            failures += 1
-            result = empty_result(scenario, anno_dir, clip_output)
-            summary_csv = Path(result["summary_csv"])
-            if summary_csv.is_file():
+                print(
+                    "  완료: bbox_frames={bbox}, affects_frames={affects}, "
+                    "comparison={comparison}\n".format(
+                        bbox=result["bbox_changed_frames"],
+                        affects=result["affects_ego_changed_frames"],
+                        comparison=result["comparison_created"],
+                    )
+                )
+            except Exception as error:
+                failures += 1
+                result = empty_result(
+                    scenario,
+                    anno_dir,
+                    clip_output,
+                    bbox_detail_csv,
+                    bbox_summary_csv,
+                )
                 try:
-                    result.update(read_fix_summary(summary_csv))
+                    result.update(read_fix_summary(bbox_summary_csv, bbox_clip_key))
                 except (OSError, ValueError):
                     pass
-            result["error"] = f"{type(error).__name__}: {error}"
-            print(f"  실패: {result['error']}\n", file=sys.stderr)
-        results.append(result)
-        write_csv(output_root / "results.csv", results)
+                result["error"] = f"{type(error).__name__}: {error}"
+                print(f"  실패: {result['error']}\n", file=sys.stderr)
+            results.append(result)
+            write_csv(output_root / "results.csv", results)
 
     print(f"최종 결과 CSV: {output_root / 'results.csv'}")
     return 1 if failures else 0

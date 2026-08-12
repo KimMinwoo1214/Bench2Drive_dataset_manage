@@ -1,0 +1,123 @@
+from __future__ import annotations
+
+import csv
+import json
+import tempfile
+import unittest
+from pathlib import Path
+
+from traffic_light_relevance import (
+    RelevanceConfig,
+    correct_affects_ego,
+    segment_intersects_trigger,
+    Light,
+)
+
+
+def annotation(x: float, y: float, pole_x: float, light_ids: tuple[str, ...]) -> dict:
+    boxes: list[dict] = [
+        {
+            "class": "ego_vehicle",
+            "id": "ego",
+            "location": [x, y, 0.0],
+            "rotation": [0.0, 0.0, 0.0],
+        }
+    ]
+    for light_id in light_ids:
+        boxes.append(
+            {
+                "class": "traffic_light",
+                "id": light_id,
+                "location": [pole_x, 0.0, 4.0],
+                "rotation": [0.0, 0.0, 90.0],
+                "trigger_volume_location": [0.0, 0.0, 0.0],
+                "trigger_volume_rotation": [0.0, 0.0, 0.0],
+                "trigger_volume_extent": [0.5, 1.5, 1.0],
+                "state": 0,
+                "affects_ego": False,
+            }
+        )
+    return {"bounding_boxes": boxes, "preserved": {"value": 7}}
+
+
+def write_frames(directory: Path, pole_x: float, light_ids: tuple[str, ...]) -> None:
+    directory.mkdir(parents=True)
+    for index, x in enumerate((-4.0, -3.0, -2.0, -1.0, 1.0, 2.0)):
+        (directory / f"{index:05d}.json").write_text(
+            json.dumps(annotation(x, 0.0, pole_x, light_ids)),
+            encoding="utf-8",
+        )
+
+
+def write_bbox_report(path: Path, light_ids: tuple[str, ...]) -> None:
+    path.parent.mkdir(parents=True)
+    with path.open("w", newline="", encoding="utf-8-sig") as file:
+        writer = csv.DictWriter(file, fieldnames=["clip", "frame", "tl_id", "ok_after"])
+        writer.writeheader()
+        for frame in range(6):
+            for light_id in light_ids:
+                writer.writerow(
+                    {
+                        "clip": ".",
+                        "frame": f"{frame:05d}.json",
+                        "tl_id": light_id,
+                        "ok_after": 1,
+                    }
+                )
+
+
+class TriggerIntersectionTest(unittest.TestCase):
+    def test_segment_crosses_rotated_trigger_rectangle(self) -> None:
+        light = Light("A", 0.0, 0.0, 0.5, 1.5, 45.0, 0.0, False)
+        self.assertTrue(segment_intersects_trigger((-2.0, 0.0), (2.0, 0.0), light, 0.0))
+        self.assertFalse(segment_intersects_trigger((-2.0, 3.0), (2.0, 3.0), light, 0.0))
+
+
+class RelevanceCorrectionTest(unittest.TestCase):
+    def run_correction(self, pole_x: float, light_ids: tuple[str, ...]) -> tuple[dict, Path]:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        source = root / "source"
+        report = root / "reports" / "bbox.csv"
+        write_frames(source, pole_x, light_ids)
+        write_bbox_report(report, light_ids)
+        result = correct_affects_ego(
+            "Synthetic_Town04_Route1_Weather0",
+            source,
+            root / "corrected",
+            root / "reports",
+            bbox_detail_csv=report,
+            config=RelevanceConfig(minimum_temporal_run_frames=3),
+        )
+        return result, root
+
+    def test_high_confidence_crossing_is_auto_fixed(self) -> None:
+        result, root = self.run_correction(4.0, ("A",))
+        self.assertEqual(result["crossing_events"], 1)
+        self.assertEqual(result["auto_fix_frames"], 4)
+        self.assertEqual(result["review_frames"], 0)
+        for frame in range(4):
+            data = json.loads((root / "corrected" / f"{frame:05d}.json").read_text())
+            light = next(box for box in data["bounding_boxes"] if box["class"] == "traffic_light")
+            self.assertTrue(light["affects_ego"])
+            self.assertEqual(data["preserved"], {"value": 7})
+
+    def test_heading_mismatch_is_reviewed_without_mutation(self) -> None:
+        result, root = self.run_correction(-4.0, ("A",))
+        self.assertEqual(result["auto_fix_frames"], 0)
+        self.assertGreater(result["review_frames"], 0)
+        for frame in range(6):
+            data = json.loads((root / "corrected" / f"{frame:05d}.json").read_text())
+            light = next(box for box in data["bounding_boxes"] if box["class"] == "traffic_light")
+            self.assertFalse(light["affects_ego"])
+
+    def test_simultaneous_distinct_trigger_candidates_are_reviewed(self) -> None:
+        result, _ = self.run_correction(4.0, ("A", "B"))
+        self.assertEqual(result["crossing_events"], 2)
+        self.assertEqual(result["auto_fix_frames"], 0)
+        self.assertGreater(result["review_frames"], 0)
+
+
+if __name__ == "__main__":
+    unittest.main()
