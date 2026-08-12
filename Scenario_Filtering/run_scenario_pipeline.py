@@ -27,6 +27,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 FIX_SCRIPT = SCRIPT_DIR / "fix_tl_bbox_permutation.py"
 VISUALIZE_SCRIPT = SCRIPT_DIR / "visualize.py"
 ROUTE_RE = re.compile(r"_Route(\d+)_")
+TOWN_RE = re.compile(r"_Town([^_]+?)_Route")
 
 RESULT_FIELDS = [
     "scenario",
@@ -38,8 +39,10 @@ RESULT_FIELDS = [
     "affects_ego_changed_frames",
     "affects_ego_changed_entries",
     "visualized_frames",
+    "vector_map_frames",
     "after_front_video",
     "after_bev_video",
+    "vector_map_video",
     "comparison_created",
     "comparison_front_video",
     "comparison_bev_video",
@@ -150,6 +153,7 @@ def run_visualization(
     output_dir: Path,
     start_frame: int | None,
     max_frames: int | None,
+    map_path: Path | None = None,
 ) -> None:
     command = [
         sys.executable,
@@ -161,8 +165,10 @@ def run_visualization(
         "--output-dir",
         str(output_dir),
         "--profile",
-        "camera-bev",
+        "camera-bev-map" if map_path is not None else "camera-bev",
     ]
+    if map_path is not None:
+        command.extend(["--map-file", str(map_path)])
     if start_frame is not None:
         command.extend(["--start-frame", str(start_frame)])
     if max_frames is not None:
@@ -220,8 +226,10 @@ def empty_result(scenario: str, anno_dir: Path, clip_output: Path) -> dict[str, 
         "affects_ego_changed_frames": 0,
         "affects_ego_changed_entries": 0,
         "visualized_frames": 0,
+        "vector_map_frames": 0,
         "after_front_video": "",
         "after_bev_video": "",
+        "vector_map_video": "",
         "comparison_created": "false",
         "comparison_front_video": "",
         "comparison_bev_video": "",
@@ -254,6 +262,14 @@ def process_scenario(
     result["detail_csv"] = str(detail_csv)
 
     if args.visualization:
+        map_path = None
+        if args.vector_map:
+            town_match = TOWN_RE.search(scenario)
+            if town_match is None:
+                raise ValueError(f"시나리오 이름에서 Town을 찾지 못했습니다: {scenario}")
+            map_path = args.map_root / f"Town{town_match.group(1)}_HD_map.npz"
+            if not map_path.is_file():
+                raise FileNotFoundError(f"HD vector map을 찾지 못했습니다: {map_path}")
         after_visualization = clip_output / "visualization" / "after"
         print("  2/4 수정 annotation 시각화", flush=True)
         run_visualization(
@@ -262,9 +278,12 @@ def process_scenario(
             after_visualization,
             args.start_frame,
             args.max_frames,
+            map_path,
         )
         after_views = bbox_view_dirs(after_visualization)
+        vector_map_dir = after_visualization / "camera" / "rgb_front_landmark"
         result["visualized_frames"] = len(image_map(after_views["camera"]))
+        result["vector_map_frames"] = len(image_map(vector_map_dir))
 
         if args.video:
             print("  3/4 수정 결과 영상 생성", flush=True)
@@ -274,6 +293,10 @@ def process_scenario(
             make_video(after_views["bev"], after_bev, args.fps)
             result["after_front_video"] = str(after_front)
             result["after_bev_video"] = str(after_bev)
+            if args.vector_map:
+                vector_map_video = clip_output / "videos" / "vector_map.mp4"
+                make_video(vector_map_dir, vector_map_video, args.fps)
+                result["vector_map_video"] = str(vector_map_video)
         else:
             print("  3/4 영상 생성 생략 (--no-video)")
 
@@ -287,6 +310,7 @@ def process_scenario(
                 before_visualization,
                 args.start_frame,
                 args.max_frames,
+                None,
             )
             before_views = bbox_view_dirs(before_visualization)
             route_match = ROUTE_RE.search(scenario)
@@ -348,6 +372,18 @@ def build_parser() -> argparse.ArgumentParser:
         default=True,
         help="시각화 MP4 생성 (기본값: true)",
     )
+    parser.add_argument(
+        "--vector-map",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Town HD vector map 이미지와 MP4 생성 (기본값: true)",
+    )
+    parser.add_argument(
+        "--map-root",
+        type=Path,
+        default=SCRIPT_DIR / "maps",
+        help="Town*_HD_map.npz가 있는 폴더 (기본값: ./maps)",
+    )
     parser.add_argument("--fps", type=float, default=10.0)
     parser.add_argument("--scale", type=float, default=0.75,
                         help="BEFORE/AFTER 비교 영상 배율")
@@ -361,6 +397,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     input_path = args.input.expanduser().resolve()
     output_root = args.output.expanduser().resolve()
+    args.map_root = args.map_root.expanduser().resolve()
 
     if not input_path.is_dir():
         parser.error(f"입력 폴더가 없습니다: {input_path}")

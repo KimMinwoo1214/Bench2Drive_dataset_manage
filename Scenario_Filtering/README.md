@@ -1,8 +1,8 @@
 # Bench2Drive Traffic Light Annotation Pipeline
 
-Bench2Drive 시나리오의 traffic light annotation을 수정하고, 전방 카메라와
-TOP_DOWN BEV bbox 시각화, MP4 영상, 최종 결과 CSV까지 한 번에 생성하는
-파이프라인이다.
+Bench2Drive 시나리오의 traffic light annotation을 수정하고, 전방 카메라,
+TOP_DOWN BEV bbox, HD vector map 시각화, MP4 영상, 최종 결과 CSV까지 한 번에
+생성하는 파이프라인이다.
 
 현재 annotation 수정은 다음 두 작업을 하나의 파일에서 연속으로 수행한다.
 
@@ -74,6 +74,19 @@ python3 -c "import numpy, scipy; print(numpy.__version__, scipy.__version__)"
 annotation만 수정하려면 센서 이미지 없이 `--no-visualization --no-video`로
 실행할 수 있다.
 
+기본 vector map 생성을 위해 프로젝트의 `maps` 폴더에는 시나리오 Town과 맞는
+파일이 있어야 한다.
+
+```text
+maps/
+├── Town03_HD_map.npz
+├── Town12_HD_map.npz
+└── ...
+```
+
+다른 위치의 map을 사용할 때는 `--map-root /path/to/maps`를 지정한다. HD map
+결과가 필요하지 않다면 `--no-vector-map`으로 끌 수 있다.
+
 ## 기본 실행
 
 시나리오 하나를 전체 처리한다.
@@ -129,6 +142,15 @@ python3 run_scenario_pipeline.py \
   --no-video
 ```
 
+카메라와 BEV bbox만 만들고 HD vector map은 제외한다.
+
+```bash
+python3 run_scenario_pipeline.py \
+  --input /path/to/scenario \
+  --output ./visualization_result \
+  --no-vector-map
+```
+
 ## 실행 옵션
 
 | 옵션 | 설명 | 기본값 |
@@ -137,6 +159,8 @@ python3 run_scenario_pipeline.py \
 | `--output PATH` | 모든 결과가 생성될 폴더 | 필수 |
 | `--visualization`, `--no-visualization` | 카메라/BEV bbox 이미지 생성 여부 | 생성 |
 | `--video`, `--no-video` | 수정 결과 및 조건부 비교 MP4 생성 여부 | 생성 |
+| `--vector-map`, `--no-vector-map` | HD vector map 이미지/영상 및 BEV 차선 overlay 생성 여부 | 생성 |
+| `--map-root PATH` | `Town*_HD_map.npz` 파일이 있는 폴더 | `./maps` |
 | `--fps NUMBER` | MP4 초당 프레임 수 | `10.0` |
 | `--scale NUMBER` | BEFORE/AFTER 비교 영상 크기 배율 | `0.75` |
 | `--start-frame NUMBER` | 시각화를 시작할 프레임 번호 | 전체 시작 |
@@ -158,9 +182,10 @@ python3 run_scenario_pipeline.py --help
 4. 수정된 bbox를 사용해 `affects_ego` 재계산 및 클립 구간 투표
 5. 최종 annotation을 `<output>/<scenario>/anno`에 한 번 저장
 6. 수정 annotation으로 전방 카메라와 TOP_DOWN BEV 이미지 생성
-7. 수정 결과의 front/BEV MP4 생성
-8. `affects_ego` 변경 여부에 따라 BEFORE/AFTER 비교 영상 생성
-9. 시나리오별 상세 CSV와 전체 `results.csv` 기록
+7. Town HD map으로 전방 vector map과 BEV 차선 overlay 생성
+8. 수정 결과의 front/BEV/vector map MP4 생성
+9. `affects_ego` 변경 여부에 따라 BEFORE/AFTER 비교 영상 생성
+10. 시나리오별 상세 CSV와 전체 `results.csv` 기록
 
 원본 annotation은 덮어쓰지 않는다. 모든 수정본은 `--output` 아래에 생성된다.
 
@@ -196,7 +221,8 @@ BEFORE/AFTER 비교 영상과 BEFORE 시각화 이미지는 생성하지 않는�
     │   ├── after/
     │   │   └── camera/
     │   │       ├── rgb_front_3d_bbox/
-    │   │       └── rgb_top_down_3d_bbox/
+    │   │       ├── rgb_top_down_3d_bbox/   # bbox + vector lane overlay
+    │   │       └── rgb_front_landmark/     # 전방 HD vector map
     │   └── before/                         # affects_ego 변경 시에만
     │       └── camera/
     │           ├── rgb_front_3d_bbox/
@@ -204,6 +230,7 @@ BEFORE/AFTER 비교 영상과 BEFORE 시각화 이미지는 생성하지 않는�
     └── videos/
         ├── after_front.mp4
         ├── after_bev.mp4
+        ├── vector_map.mp4
         ├── before_after_front.mp4          # affects_ego 변경 시에만
         └── before_after_bev.mp4            # affects_ego 변경 시에만
 ```
@@ -228,7 +255,9 @@ BEFORE/AFTER 비교 영상과 BEFORE 시각화 이미지는 생성하지 않는�
 | `affects_ego_changed_frames` | `affects_ego`가 바뀐 프레임 수 |
 | `affects_ego_changed_entries` | 값이 바뀐 traffic light 엔트리 수 |
 | `visualized_frames` | 생성된 전방 시각화 프레임 수 |
+| `vector_map_frames` | 생성된 HD vector map 프레임 수 |
 | `after_front_video`, `after_bev_video` | 수정 결과 영상 경로 |
+| `vector_map_video` | HD vector map 영상 경로 |
 | `comparison_created` | 비교 영상 생성 여부 |
 | `comparison_front_video`, `comparison_bev_video` | 비교 영상 경로 |
 | `status` | `completed` 또는 `failed` |
