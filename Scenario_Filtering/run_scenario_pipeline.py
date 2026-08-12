@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run traffic-light correction, visualization, videos, and CSV reporting."""
+"""Run traffic-light correction, VAD vector GT, visualization, and reporting."""
 
 from __future__ import annotations
 
@@ -26,8 +26,9 @@ from apply_visualize_compare_from_summary import (
 SCRIPT_DIR = Path(__file__).resolve().parent
 FIX_SCRIPT = SCRIPT_DIR / "fix_tl_bbox_permutation.py"
 VISUALIZE_SCRIPT = SCRIPT_DIR / "visualize.py"
+VAD_VISUALIZE_SCRIPT = SCRIPT_DIR / "visualize_vad_gt.py"
 ROUTE_RE = re.compile(r"_Route(\d+)_")
-TOWN_RE = re.compile(r"_Town([^_]+?)_Route")
+TOWN_RE = re.compile(r"_(Town\d+)(?:HD)?_Route", re.IGNORECASE)
 
 RESULT_FIELDS = [
     "scenario",
@@ -39,15 +40,18 @@ RESULT_FIELDS = [
     "affects_ego_changed_frames",
     "affects_ego_changed_entries",
     "visualized_frames",
-    "vector_map_frames",
     "after_front_video",
     "after_bev_video",
-    "vector_map_video",
     "comparison_created",
     "comparison_front_video",
     "comparison_bev_video",
     "detail_csv",
     "summary_csv",
+    "vad_vector_gt_status",
+    "vad_vector_gt_frames",
+    "vad_vector_gt_dir",
+    "vad_vector_gt_visualization_dir",
+    "vad_vector_gt_video",
     "elapsed_seconds",
     "status",
     "error",
@@ -153,7 +157,6 @@ def run_visualization(
     output_dir: Path,
     start_frame: int | None,
     max_frames: int | None,
-    map_path: Path | None = None,
 ) -> None:
     command = [
         sys.executable,
@@ -165,10 +168,8 @@ def run_visualization(
         "--output-dir",
         str(output_dir),
         "--profile",
-        "camera-bev-map" if map_path is not None else "camera-bev",
+        "camera-bev",
     ]
-    if map_path is not None:
-        command.extend(["--map-file", str(map_path)])
     if start_frame is not None:
         command.extend(["--start-frame", str(start_frame)])
     if max_frames is not None:
@@ -226,18 +227,83 @@ def empty_result(scenario: str, anno_dir: Path, clip_output: Path) -> dict[str, 
         "affects_ego_changed_frames": 0,
         "affects_ego_changed_entries": 0,
         "visualized_frames": 0,
-        "vector_map_frames": 0,
         "after_front_video": "",
         "after_bev_video": "",
-        "vector_map_video": "",
         "comparison_created": "false",
         "comparison_front_video": "",
         "comparison_bev_video": "",
         "detail_csv": str(clip_output / "reports" / "traffic_light.csv"),
         "summary_csv": str(clip_output / "reports" / "traffic_light_summary.csv"),
+        "vad_vector_gt_status": "pending",
+        "vad_vector_gt_frames": 0,
+        "vad_vector_gt_dir": "",
+        "vad_vector_gt_visualization_dir": "",
+        "vad_vector_gt_video": "",
         "elapsed_seconds": "",
         "status": "failed",
         "error": "",
+    }
+
+
+def generate_vad_vector_gt(
+    scenario: str,
+    anno_dir: Path,
+    clip_output: Path,
+    args: argparse.Namespace,
+) -> dict[str, Any]:
+    match = TOWN_RE.search(scenario)
+    if match is None:
+        raise ValueError(f"시나리오 이름에서 Town을 찾을 수 없습니다: {scenario}")
+    town = "Town" + re.search(r"\d+", match.group(1)).group(0)
+    map_file = args.maps_root / f"{town}_HD_map.npz"
+    if not map_file.is_file():
+        raise FileNotFoundError(f"Town HD map이 없습니다: {map_file}")
+
+    gt_root = clip_output / "vad_vector_gt"
+    vectors_dir = gt_root / "vectors"
+    visualization_dir = gt_root / "visualization"
+    command = [
+        sys.executable,
+        str(VAD_VISUALIZE_SCRIPT),
+        "--anno-dir",
+        str(anno_dir),
+        "--map-file",
+        str(map_file),
+        "--scenario-name",
+        scenario,
+        "--vectors-dir",
+        str(vectors_dir),
+        "--output-dir",
+        str(visualization_dir),
+        "--all-frames",
+        "--stride",
+        str(args.vad_vector_stride),
+        "--show-training-points",
+    ]
+    run_command(command, "VAD-VECTOR-GT")
+
+    vector_frames = len(list(vectors_dir.glob("*.npz")))
+    visualized_frames = len(image_map(visualization_dir))
+    if vector_frames == 0:
+        raise RuntimeError("생성된 VAD vector GT가 없습니다")
+    if vector_frames != visualized_frames:
+        raise RuntimeError(
+            "VAD vector GT와 BEV 이미지 수가 다릅니다: "
+            f"{vector_frames} != {visualized_frames}"
+        )
+
+    video_path = ""
+    if args.video:
+        output_video = clip_output / "videos" / "vad_vector_gt.mp4"
+        make_video(visualization_dir, output_video, args.fps)
+        video_path = str(output_video)
+
+    return {
+        "vad_vector_gt_status": "completed",
+        "vad_vector_gt_frames": vector_frames,
+        "vad_vector_gt_dir": str(vectors_dir),
+        "vad_vector_gt_visualization_dir": str(visualization_dir),
+        "vad_vector_gt_video": video_path,
     }
 
 
@@ -255,53 +321,47 @@ def process_scenario(
     clip_output.mkdir(parents=True)
     result = empty_result(scenario, anno_dir, clip_output)
 
-    print("  1/4 annotation 통합 수정", flush=True)
+    print("  1/5 annotation 통합 수정", flush=True)
     output_anno, detail_csv, metrics = run_annotation_fix(anno_dir, clip_output)
     result.update(metrics)
     result["output_anno"] = str(output_anno)
     result["detail_csv"] = str(detail_csv)
 
+    if args.vad_vector_gt:
+        print("  2/5 VAD 학습용 vector-map GT/BEV 생성", flush=True)
+        result.update(
+            generate_vad_vector_gt(scenario, output_anno, clip_output, args)
+        )
+    else:
+        result["vad_vector_gt_status"] = "skipped"
+        print("  2/5 VAD vector-map GT 생성 생략 (--no-vad-vector-gt)")
+
     if args.visualization:
-        map_path = None
-        if args.vector_map:
-            town_match = TOWN_RE.search(scenario)
-            if town_match is None:
-                raise ValueError(f"시나리오 이름에서 Town을 찾지 못했습니다: {scenario}")
-            map_path = args.map_root / f"Town{town_match.group(1)}_HD_map.npz"
-            if not map_path.is_file():
-                raise FileNotFoundError(f"HD vector map을 찾지 못했습니다: {map_path}")
         after_visualization = clip_output / "visualization" / "after"
-        print("  2/4 수정 annotation 시각화", flush=True)
+        print("  3/5 수정 annotation 카메라/BEV 시각화", flush=True)
         run_visualization(
             scenario_dir,
             output_anno,
             after_visualization,
             args.start_frame,
             args.max_frames,
-            map_path,
         )
         after_views = bbox_view_dirs(after_visualization)
-        vector_map_dir = after_visualization / "camera" / "rgb_front_landmark"
         result["visualized_frames"] = len(image_map(after_views["camera"]))
-        result["vector_map_frames"] = len(image_map(vector_map_dir))
 
         if args.video:
-            print("  3/4 수정 결과 영상 생성", flush=True)
+            print("  4/5 수정 결과 영상 생성", flush=True)
             after_front = clip_output / "videos" / "after_front.mp4"
             after_bev = clip_output / "videos" / "after_bev.mp4"
             make_video(after_views["camera"], after_front, args.fps)
             make_video(after_views["bev"], after_bev, args.fps)
             result["after_front_video"] = str(after_front)
             result["after_bev_video"] = str(after_bev)
-            if args.vector_map:
-                vector_map_video = clip_output / "videos" / "vector_map.mp4"
-                make_video(vector_map_dir, vector_map_video, args.fps)
-                result["vector_map_video"] = str(vector_map_video)
         else:
-            print("  3/4 영상 생성 생략 (--no-video)")
+            print("  4/5 영상 생성 생략 (--no-video)")
 
         if args.video and metrics["affects_ego_changed_frames"] > 0:
-            print("  4/4 affects_ego 변경 감지: BEFORE/AFTER 비교 영상 생성",
+            print("  5/5 affects_ego 변경 감지: BEFORE/AFTER 비교 영상 생성",
                   flush=True)
             before_visualization = clip_output / "visualization" / "before"
             run_visualization(
@@ -310,7 +370,6 @@ def process_scenario(
                 before_visualization,
                 args.start_frame,
                 args.max_frames,
-                None,
             )
             before_views = bbox_view_dirs(before_visualization)
             route_match = ROUTE_RE.search(scenario)
@@ -330,11 +389,11 @@ def process_scenario(
             reason = "affects_ego 변경 없음"
             if not args.video:
                 reason = "--no-video"
-            print(f"  4/4 BEFORE/AFTER 비교 영상 생략 ({reason})")
+            print(f"  5/5 BEFORE/AFTER 비교 영상 생략 ({reason})")
     else:
-        print("  2/4 시각화 생략 (--no-visualization)")
-        print("  3/4 영상 생성 생략")
-        print("  4/4 비교 영상 생성 생략")
+        print("  3/5 카메라/BEV 시각화 생략 (--no-visualization)")
+        print("  4/5 카메라 영상 생성 생략")
+        print("  5/5 비교 영상 생성 생략")
 
     result["elapsed_seconds"] = f"{time.perf_counter() - started:.2f}"
     result["status"] = "completed"
@@ -345,7 +404,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "--input의 시나리오를 traffic-light annotation 수정, 카메라/BEV "
-            "시각화, 영상, 결과 CSV까지 한 번에 처리합니다."
+            "시각화, 영상, VAD 학습 GT, 결과 CSV까지 한 번에 처리합니다."
         )
     )
     parser.add_argument(
@@ -358,7 +417,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--output",
         required=True,
         type=Path,
-        help="anno, visualization, videos, results.csv를 저장할 경로",
+        help="anno, visualization, videos, vector GT, results.csv 저장 경로",
     )
     parser.add_argument(
         "--visualization",
@@ -373,13 +432,21 @@ def build_parser() -> argparse.ArgumentParser:
         help="시각화 MP4 생성 (기본값: true)",
     )
     parser.add_argument(
-        "--vector-map",
+        "--vad-vector-gt",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Town HD vector map 이미지와 MP4 생성 (기본값: true)",
+        help="수정 annotation 기반 프레임별 VAD vector-map GT 생성 (기본값: true)",
     )
     parser.add_argument(
+        "--vad-vector-stride",
+        type=int,
+        default=1,
+        help="vector GT를 생성할 annotation 프레임 간격 (기본값: 1)",
+    )
+    parser.add_argument(
+        "--maps-root",
         "--map-root",
+        dest="maps_root",
         type=Path,
         default=SCRIPT_DIR / "maps",
         help="Town*_HD_map.npz가 있는 폴더 (기본값: ./maps)",
@@ -397,7 +464,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     input_path = args.input.expanduser().resolve()
     output_root = args.output.expanduser().resolve()
-    args.map_root = args.map_root.expanduser().resolve()
+    args.maps_root = args.maps_root.expanduser().resolve()
 
     if not input_path.is_dir():
         parser.error(f"입력 폴더가 없습니다: {input_path}")
@@ -407,8 +474,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         or input_path in output_root.parents
     ):
         parser.error(f"출력은 입력 폴더 바깥에 지정해야 합니다: {output_root}")
-    if args.video and not args.visualization:
-        parser.error("--video는 --visualization과 함께만 사용할 수 있습니다")
+    if args.video and not args.visualization and not args.vad_vector_gt:
+        parser.error(
+            "--video에는 --visualization 또는 --vad-vector-gt가 필요합니다"
+        )
     if args.fps <= 0:
         parser.error("--fps는 0보다 커야 합니다")
     if args.scale <= 0:
@@ -417,6 +486,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         parser.error("--start-frame은 0 이상이어야 합니다")
     if args.max_frames is not None and args.max_frames < 1:
         parser.error("--max-frames는 1 이상이어야 합니다")
+    if args.vad_vector_stride < 1:
+        parser.error("--vad-vector-stride는 1 이상이어야 합니다")
+    if args.vad_vector_gt and not args.maps_root.is_dir():
+        parser.error(f"maps 폴더가 없습니다: {args.maps_root}")
 
     try:
         scenarios = discover_scenarios(input_path)
@@ -440,15 +513,19 @@ def main(argv: Sequence[str] | None = None) -> int:
                 scenario, scenario_dir, anno_dir, output_root, args)
             print(
                 "  완료: bbox_frames={bbox}, affects_frames={affects}, "
-                "comparison={comparison}\n".format(
+                "vector_gt_frames={vector_gt}, comparison={comparison}\n".format(
                     bbox=result["bbox_changed_frames"],
                     affects=result["affects_ego_changed_frames"],
+                    vector_gt=result["vad_vector_gt_frames"],
                     comparison=result["comparison_created"],
                 )
             )
         except Exception as error:
             failures += 1
             result = empty_result(scenario, anno_dir, clip_output)
+            result["vad_vector_gt_status"] = (
+                "failed" if args.vad_vector_gt else "skipped"
+            )
             summary_csv = Path(result["summary_csv"])
             if summary_csv.is_file():
                 try:
