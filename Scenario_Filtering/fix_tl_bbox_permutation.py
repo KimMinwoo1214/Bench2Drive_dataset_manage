@@ -39,6 +39,7 @@ bbox 복구가 끝난 동일한 annotation 객체에서 ego 진행 방향과 tri
 ------
     python fix_tl_bbox_permutation.py --root /path/to/clips            # 감사만
     python fix_tl_bbox_permutation.py --root /path/to/clips --out ./fixed
+    python fix_tl_bbox_permutation.py --root /path/to/clips --out ./fixed --bbox-only
     python fix_tl_bbox_permutation.py --root /path/to/clips --apply    # .bak 백업 후 덮어쓰기
 """
 
@@ -657,6 +658,14 @@ def main():
                     help="클립 단위로만 합의")
     ap.add_argument("--csv", default=None,
                     help="엔트리별 진단 CSV 경로 (요약본은 _summary.csv 로 함께 저장)")
+    ap.add_argument(
+        "--bbox-only",
+        action="store_true",
+        help=(
+            "bbox permutation과 trigger_volume_rotation만 복구하고 "
+            "affects_ego는 원본 값을 유지"
+        ),
+    )
     args = ap.parse_args()
     if args.apply and args.out:
         ap.error("--apply와 --out은 동시에 사용할 수 없습니다")
@@ -763,8 +772,22 @@ def main():
                 bbox_changed_frames += 1
             bbox_changed.append(changed)
 
-        affects_stats, affects_changed, final_by_frame = recompute_affects_ego(
-            [anno for _, anno in items])
+        if args.bbox_only:
+            affects_stats = Counter()
+            affects_changed = [False] * len(items)
+            final_by_frame = []
+            for _, anno in items:
+                final = {}
+                if anno is not None:
+                    final = {
+                        box.get("id"): bool(box.get("affects_ego", False))
+                        for box in anno.get("bounding_boxes", [])
+                        if box.get("class") == "traffic_light"
+                    }
+                final_by_frame.append(final)
+        else:
+            affects_stats, affects_changed, final_by_frame = recompute_affects_ego(
+                [anno for _, anno in items])
         affects_total.update(affects_stats)
         affects_by_clip[clip_rel] = affects_stats
 
@@ -809,6 +832,8 @@ def main():
     print(f"frames with any change: {files_changed}")
     print(f"  bbox changed frames : {bbox_changed_frames}")
     print(f"  affects_ego frames  : {affects_total['changed_frames']}")
+    if args.bbox_only:
+        print("  affects_ego mode    : preserved (--bbox-only)")
     print("-" * 52)
     print(f"facing error 정상 (복구 전) : {b_ok} / {b_ok + b_bad}"
           f"  ({100.0 * b_ok / b_tot:.1f}%)")
