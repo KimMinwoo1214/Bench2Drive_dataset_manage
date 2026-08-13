@@ -191,7 +191,7 @@ class AuditTest(unittest.TestCase):
             )
             self.assertEqual(result["metrics"]["structural_fatal_count"], 1)
             self.assertEqual(result["metrics"]["nonfinite_ego_state_frames"], 0)
-            self.assertIn("ANNOTATION_NONFINITE", result["metrics"]["issue_codes"])
+            self.assertIn("EGO_BBOX_INVALID", result["metrics"]["issue_codes"])
 
     def test_nonfinite_sensor_calibration_is_still_fatal(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -201,7 +201,59 @@ class AuditTest(unittest.TestCase):
                 root, [self._annotation(0, sensors=sensors), self._annotation(1)]
             )
             self.assertEqual(result["metrics"]["structural_fatal_count"], 1)
-            self.assertIn("ANNOTATION_NONFINITE", result["metrics"]["issue_codes"])
+            self.assertIn("SENSOR_NONFINITE", result["metrics"]["issue_codes"])
+
+    def test_nonfinite_actor_telemetry_does_not_gate_the_clip(self) -> None:
+        """Bench2Drive records brake=NaN on parked actors in most clips.
+
+        No check reads it, so it must not cost the clip its collision audit.
+        """
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            actors = [
+                {"class": "ego_vehicle", "id": "ego", **box(0.0, 0.0)},
+                {
+                    "class": "vehicle", "id": "other", "brake": float("nan"),
+                    "throttle": float("nan"), **box(0.5, 0.0),
+                },
+            ]
+            result = self._audit(
+                root,
+                [self._annotation(0, bounding_boxes=actors), self._annotation(1)],
+            )
+            self.assertEqual(result["metrics"]["structural_fatal_count"], 0)
+            self.assertEqual(result["metrics"]["positive_overlap_frames"], 1)
+
+    def test_recorded_ego_dynamics_are_measured_per_event(self) -> None:
+        """Impact evidence comes from logged motion, not position derivatives."""
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            actors = [
+                {"class": "ego_vehicle", "id": "ego", **box(0.0, 0.0)},
+                {"class": "vehicle", "id": "other", "speed": 2.0, **box(0.5, 0.0)},
+            ]
+            result = self._audit(
+                root,
+                [
+                    self._annotation(
+                        0, bounding_boxes=actors, speed=10.0,
+                        acceleration=[3.0, 4.0, 9.81], angular_velocity=[0.0, 0.0, -1.5],
+                    ),
+                    self._annotation(1, speed=2.0),
+                ],
+            )
+            overlap = [e for e in result["events"] if e["code"] == "BBOX_3D_OVERLAP"]
+            self.assertEqual(len(overlap), 1)
+            # Gravity is dropped: hypot(3, 4) == 5, not hypot(3, 4, 9.81).
+            self.assertAlmostEqual(overlap[0]["ego_horizontal_accel_m_s2"], 5.0)
+            self.assertAlmostEqual(overlap[0]["ego_yaw_rate_rad_s"], 1.5)
+            self.assertAlmostEqual(overlap[0]["ego_speed_m_s"], 10.0)
+            self.assertAlmostEqual(overlap[0]["actor_speed_m_s"], 2.0)
+            metrics = result["metrics"]
+            self.assertAlmostEqual(metrics["max_horizontal_accel_m_s2"], 5.0)
+            self.assertAlmostEqual(metrics["max_yaw_rate_rad_s"], 1.5)
+            # 10 -> 2 m/s between the two frames.
+            self.assertAlmostEqual(metrics["max_speed_drop_m_s"], 8.0)
 
     def test_actor_categories_are_limited_to_three_dynamic_groups(self) -> None:
         self.assertEqual(actor_category({"class": "vehicle"}), "vehicle")

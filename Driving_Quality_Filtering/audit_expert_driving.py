@@ -60,16 +60,23 @@ CAMERA_TO_DEPTH = {
     "rgb_back_right": "depth_back_right",
 }
 VALID_ACTION_IDS = frozenset(range(39))
-# Top-level ego pose. No quality decision reads these: collisions come from the
-# oriented bboxes, and trajectory-derivative judgements were dropped from the
-# gate. A non-finite value here is therefore recorded and counted, but it never
-# marks the clip structurally fatal and never aborts the frame's bbox audit.
-# The PKL converter independently substitutes theta=NaN with pi.
+# Only the fields a decision actually reads may gate a clip, so there is no
+# blanket scan of the annotation tree. Bench2Drive records a non-finite
+# ``brake`` on parked actors in 1,041 of the 1,329 clips; treating that as
+# structural damage excluded 78% of the dataset over telemetry no check uses.
+# The finite checks that remain are targeted and each has its own reason code:
+# bbox geometry via oriented_box_metrics (EGO_BBOX_INVALID/ACTOR_BBOX_INVALID),
+# sensor calibration (SENSOR_NONFINITE), and expert action (EXPERT_INVALID).
+#
+# Top-level ego pose is recorded but never gates: a non-finite value is counted
+# as EGO_STATE_NONFINITE and the frame's bbox audit still runs. The PKL
+# converter independently substitutes theta=NaN with pi.
 EGO_POSE_KEYS = ("x", "y", "theta")
 CSV_FIELDS = (
     "clip", "component", "split", "scenario", "town", "weather",
     "frame_count", "duration_s", "structural_fatal_count",
     "structural_review_count", "nonfinite_ego_state_frames",
+    "max_horizontal_accel_m_s2", "max_yaw_rate_rad_s", "max_speed_drop_m_s",
     "map_available", "source_unchanged",
     "sensor_validation_policy", "sensor_inventory_file_count",
     "sensor_signature_sample_count",
@@ -84,7 +91,9 @@ EVENT_FIELDS = (
     "start_frame", "end_frame", "actor_id", "actor_category", "actor_class",
     "actor_base_type", "actor_type_id",
     "bev_intersection_area_m2", "bev_iou", "bev_penetration_m",
-    "z_overlap_m", "intersection_polygon", "message",
+    "z_overlap_m", "intersection_polygon",
+    "ego_speed_m_s", "ego_horizontal_accel_m_s2", "ego_yaw_rate_rad_s",
+    "actor_speed_m_s", "message",
 )
 
 
@@ -132,6 +141,40 @@ def _finite_number(value: Any) -> float:
     if not math.isfinite(number):
         raise ValueError("value is non-finite")
     return number
+
+
+def _optional_finite(value: Any) -> float | None:
+    try:
+        return _finite_number(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def ego_dynamics(annotation: Mapping[str, Any]) -> dict[str, float | None]:
+    """Return the ego motion Bench2Drive recorded for this frame.
+
+    These are logged simulator values, not position derivatives, so an impact
+    shows up without the noise amplification that differentiating x/y would add.
+    Gravity is dropped from the acceleration because only the horizontal
+    impulse distinguishes a collision from normal driving.
+    """
+    speed = _optional_finite(annotation.get("speed"))
+    acceleration = annotation.get("acceleration")
+    horizontal = None
+    if isinstance(acceleration, (list, tuple)) and len(acceleration) >= 2:
+        ax = _optional_finite(acceleration[0])
+        ay = _optional_finite(acceleration[1])
+        if ax is not None and ay is not None:
+            horizontal = math.hypot(ax, ay)
+    angular = annotation.get("angular_velocity")
+    yaw_rate = None
+    if isinstance(angular, (list, tuple)) and len(angular) >= 3:
+        yaw_rate = _optional_finite(angular[2])
+    return {
+        "speed_m_s": speed,
+        "horizontal_accel_m_s2": horizontal,
+        "yaw_rate_rad_s": abs(yaw_rate) if yaw_rate is not None else None,
+    }
 
 
 def _finite_tree(value: Any) -> bool:
@@ -225,6 +268,10 @@ def _empty_event(record: ClipRecord) -> dict[str, Any]:
         "bev_penetration_m": "",
         "z_overlap_m": "",
         "intersection_polygon": "",
+        "ego_speed_m_s": "",
+        "ego_horizontal_accel_m_s2": "",
+        "ego_yaw_rate_rad_s": "",
+        "actor_speed_m_s": "",
         "message": "",
     }
 
@@ -330,6 +377,10 @@ def audit_clip(payload: Mapping[str, Any]) -> dict[str, Any]:
     issue_counts: Counter[str] = Counter()
     issue_severity: Counter[str] = Counter()
     nonfinite_ego_state_frames = 0
+    previous_speed: float | None = None
+    accelerations: list[float] = []
+    yaw_rates: list[float] = []
+    speed_drops: list[float] = []
 
     def issue(severity: str, code: str, message: str, affected: Sequence[int] = ()) -> None:
         issue_counts[code] += 1
@@ -415,18 +466,6 @@ def audit_clip(payload: Mapping[str, Any]) -> dict[str, Any]:
             frames.append(frame_row)
             continue
 
-        decisive = {
-            key: value for key, value in annotation.items() if key not in EGO_POSE_KEYS
-        }
-        if not _finite_tree(decisive):
-            issue(
-                "fatal", "ANNOTATION_NONFINITE",
-                f"frame={number}: annotation contains a non-finite numeric value",
-                [number],
-            )
-            frames.append(frame_row)
-            continue
-
         pose: dict[str, float | None] = {}
         invalid_pose_keys = []
         for key in EGO_POSE_KEYS:
@@ -444,6 +483,16 @@ def audit_clip(payload: Mapping[str, Any]) -> dict[str, Any]:
                 [number],
             )
         x, y, theta = pose["x"], pose["y"], pose["theta"]
+        dynamics = ego_dynamics(annotation)
+        speed = dynamics["speed_m_s"]
+        if speed is not None and previous_speed is not None:
+            # Only a drop matters: an impact sheds speed, accelerating does not.
+            speed_drops.append(max(0.0, previous_speed - speed))
+        previous_speed = speed if speed is not None else previous_speed
+        if dynamics["horizontal_accel_m_s2"] is not None:
+            accelerations.append(dynamics["horizontal_accel_m_s2"])
+        if dynamics["yaw_rate_rad_s"] is not None:
+            yaw_rates.append(dynamics["yaw_rate_rad_s"])
 
         sensors = annotation.get("sensors")
         if not isinstance(sensors, dict):
@@ -528,6 +577,13 @@ def audit_clip(payload: Mapping[str, Any]) -> dict[str, Any]:
                     "bev_penetration_m": penetration,
                     "z_overlap_m": float(geometry["z_overlap_m"]),
                     "intersection_polygon": geometry["intersection_polygon"],
+                    # Recorded ego motion at the contact frame. A real impact
+                    # shows a horizontal acceleration or yaw-rate spike here;
+                    # a geometric graze usually shows none.
+                    "ego_speed_m_s": dynamics["speed_m_s"],
+                    "ego_horizontal_accel_m_s2": dynamics["horizontal_accel_m_s2"],
+                    "ego_yaw_rate_rad_s": dynamics["yaw_rate_rad_s"],
+                    "actor_speed_m_s": _optional_finite(actor.get("speed")),
                     "message": "coordinate-only candidate; visual review has not confirmed a collision",
                 }
             )
@@ -552,6 +608,9 @@ def audit_clip(payload: Mapping[str, Any]) -> dict[str, Any]:
         frame_row.update(
             {
                 "x": x, "y": y, "theta_rad": theta,
+                "speed_m_s": dynamics["speed_m_s"],
+                "horizontal_accel_m_s2": dynamics["horizontal_accel_m_s2"],
+                "yaw_rate_rad_s": dynamics["yaw_rate_rad_s"],
                 "overlap_count": frame_overlap_count,
                 "max_penetration_m": frame_max_penetration,
                 "max_bev_iou": frame_max_iou,
@@ -580,6 +639,9 @@ def audit_clip(payload: Mapping[str, Any]) -> dict[str, Any]:
         "structural_fatal_count": issue_severity["fatal"],
         "structural_review_count": issue_severity["review"],
         "nonfinite_ego_state_frames": nonfinite_ego_state_frames,
+        "max_horizontal_accel_m_s2": _max_or_none(accelerations),
+        "max_yaw_rate_rad_s": _max_or_none(yaw_rates),
+        "max_speed_drop_m_s": _max_or_none(speed_drops),
         "map_available": map_available,
         "source_unchanged": source_unchanged,
         "sensor_validation_policy": config["sensor_validation_policy"],
