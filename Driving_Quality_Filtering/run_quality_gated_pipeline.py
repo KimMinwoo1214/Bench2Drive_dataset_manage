@@ -29,6 +29,13 @@ STAGES = (
     "clip-union", "clip-union-check", "pkl-original", "pkl-corrected",
     "validate-pkls",
 )
+# Phase 3 only has to rewrite traffic-light annotations. Review evidence is
+# rendered separately in Phase 2.5-E, and the filtered PKLs are built by the
+# hardened converter in Phase 5, so every rendering and PKL path stays off.
+RELABEL_HEADLESS_FLAGS = (
+    "--no-visualization", "--no-video", "--no-vector-map",
+    "--no-vad-vector-gt", "--no-build-pkl",
+)
 
 
 def _release_contract(args: argparse.Namespace) -> dict[str, Any]:
@@ -104,12 +111,23 @@ def _scenario_command(args: argparse.Namespace, component: str, check: bool = Fa
         "--output", str(args.release_root / "relabel"),
         "--manifest", str(split), "--component", component,
         "--map-root", str(args.map_root),
+        *RELABEL_HEADLESS_FLAGS,
     ]
     if args.review_approvals is not None:
         command.extend(["--review-approvals", str(args.review_approvals)])
-    if check:
-        command.append("--check-only")
+    # --check-only writes nothing and the pipeline rejects it together with
+    # --resume, so the two selections are exclusive.
+    command.append("--check-only" if check else "--resume")
     return command
+
+
+def _relabel_label(args: argparse.Namespace, component: str, check: bool) -> str:
+    """Return a log label that separates first run, approval resume, and check."""
+    if check:
+        return f"relabel-check-{component}"
+    if args.review_approvals is not None:
+        return f"relabel-{component}-approved-resume"
+    return f"relabel-{component}"
 
 
 def _internship_module(args: argparse.Namespace, module: str, values: Sequence[str], label: str) -> None:
@@ -180,9 +198,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     elif args.stage == "quality-classify":
         if args.quality_config is None:
             parser.error("quality-classify requires --quality-config")
+        final = args.review_decisions is not None
         classification_output = (
             classification
-            if args.review_decisions is not None
+            if final
             else args.release_root / "quality_gate" / f"classification_candidates_{args.calibration_version}"
         )
         command = [
@@ -190,10 +209,16 @@ def main(argv: Sequence[str] | None = None) -> int:
             "--manifest", str(args.manifest), "--config", str(args.quality_config),
             "--output-dir", str(classification_output),
         ]
-        if args.review_decisions is not None:
+        if final:
             command.extend(["--decisions", str(args.review_decisions)])
+        # The candidate pass and the decision-bound final pass write different
+        # outputs, so they must not share a log label either.
         _run_logged(
-            args, command, f"quality-classify-{args.calibration_version}", BENCH_ROOT
+            args, command,
+            "quality-classify-{}-{}".format(
+                "final" if final else "candidates", args.calibration_version
+            ),
+            BENCH_ROOT,
         )
     elif args.stage == "quality-evidence":
         if args.clip_list is None:
@@ -212,12 +237,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
     elif args.stage in {"relabel-base", "relabel-weak"}:
         component = args.stage.split("-", 1)[1]
-        _run_logged(args, _scenario_command(args, component), args.stage, BENCH_ROOT / "Scenario_Filtering")
+        _run_logged(
+            args, _scenario_command(args, component),
+            _relabel_label(args, component, check=False),
+            BENCH_ROOT / "Scenario_Filtering",
+        )
     elif args.stage == "relabel-check":
         for component in ("base", "weak"):
             _run_logged(
                 args, _scenario_command(args, component, check=True),
-                f"relabel-check-{component}", BENCH_ROOT / "Scenario_Filtering",
+                _relabel_label(args, component, check=True),
+                BENCH_ROOT / "Scenario_Filtering",
             )
     elif args.stage in {"clip-union", "clip-union-check"}:
         split = _completed_classification(args)
@@ -261,7 +291,12 @@ def main(argv: Sequence[str] | None = None) -> int:
                 ]
                 if source == "corrected":
                     values.extend(
-                        ["--original-info-file", str(original_info / f"b2d_infos_{split}.pkl")]
+                        [
+                            "--original-info-file",
+                            str(original_info / f"b2d_infos_{split}.pkl"),
+                            "--original-map-file",
+                            str(original_info / "b2d_map_infos.pkl"),
+                        ]
                     )
                 _internship_module(
                     args, "team_code.data.validate_pkls", values,
