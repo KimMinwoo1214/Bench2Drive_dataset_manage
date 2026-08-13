@@ -666,12 +666,11 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         '--profile',
-        choices=('bbox', 'camera-bev', 'camera-bev-map', 'full'),
+        choices=('bbox', 'camera-bev', 'full'),
         default='full',
         help=(
             'bbox: 카메라 3D bbox만 생성, '
             'camera-bev: 전방 카메라 + TOP_DOWN 카메라 BEV bbox 생성, '
-            'camera-bev-map: camera-bev + HD vector map 생성, '
             'full: bbox + HD map + LiDAR 시각화 생성 (기본값: full)'
         ),
     )
@@ -680,17 +679,13 @@ if __name__ == '__main__':
     if args.review_context < 0:
         parser.error('--review-context 값은 0 이상이어야 합니다.')
     full_profile = args.profile == 'full'
-    map_profile = args.profile in ('camera-bev-map', 'full')
-    camera_bev_profile = args.profile in ('camera-bev', 'camera-bev-map', 'full')
+    camera_bev_profile = args.profile in ('camera-bev', 'full')
     if args.map_file is not None:
         map_path = args.map_file
     elif args.map_id is not None:
         map_path = args.map_root / f'Town{args.map_id}_HD_map.npz'
-    elif map_profile:
-        parser.error(
-            'camera-bev-map/full profile에는 '
-            '--map-file 또는 --map-id/-m 중 하나가 필요합니다.'
-        )
+    elif full_profile:
+        parser.error('full profile에는 --map-file 또는 --map-id/-m 중 하나가 필요합니다.')
     else:
         map_path = None
     try:
@@ -712,7 +707,7 @@ if __name__ == '__main__':
         review_context=args.review_context,
         vis_bbox=True,
         vis_top_down=camera_bev_profile,
-        vis_road=map_profile,
+        vis_road=full_profile,
         vis_lidar_bev=full_profile,
         vis_lidar_to_back_image=full_profile,
         vis_lidar_to_front_image=full_profile,

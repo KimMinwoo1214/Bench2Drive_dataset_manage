@@ -1,0 +1,288 @@
+# NOT applied for the current b2d_pkl_prep/ training-pkl generation workflow.
+# That workflow uses baseline prepare_B2D.py unpatched: no stopline_points/
+# stopline_types in b2d_map_infos.pkl, gengrate_map() untouched. Kept here
+# only for reference in case stop lines get added to map GT later.
+# See README.md "학습 시 map GT 소비 경로".
+diff --git a/mmcv/datasets/prepare_B2D.py b/mmcv/datasets/prepare_B2D.py
+--- a/mmcv/datasets/prepare_B2D.py
++++ b/mmcv/datasets/prepare_B2D.py
+@@ -8,6 +8,7 @@
+ import cv2
+ import multiprocessing
+ import argparse
++from scipy.spatial import cKDTree
+ # All data in the Bench2Drive dataset are in the left-handed coordinate system.
+ # This code converts all coordinate systems (world coordinate system, vehicle coordinate system,
+ # camera coordinate system, and lidar coordinate system) to the right-handed coordinate system
+@@ -144,6 +145,109 @@
+ 	return throttle, steer, brake
+ 
+ 
++# Trigger-volume types converted into a 2-point stop-line segment instead of
++# a closed polygon. Ported from Scenario_Filtering/visualize_vad_gt.py so
++# b2d_map_infos.pkl and the QA visualization derive stop lines identically.
++STOPLINE_SOURCE_TYPES = ('StopSign', 'TrafficLight')
++STOPLINE_EDGE_TOLERANCE = 0.15
++
++
++def _build_center_lane_index(lane_points, lane_types):
++    center_lines = [
++        np.asarray(points, dtype=float)[:, :2]
++        for points, lane_type in zip(lane_points, lane_types)
++        if lane_type == 'Center' and len(points) >= 2
++    ]
++    if not center_lines:
++        return None
++    owner_lane = np.concatenate([
++        np.full(len(points), lane_idx, dtype=np.int32)
++        for lane_idx, points in enumerate(center_lines)
++    ])
++    owner_point = np.concatenate([
++        np.arange(len(points), dtype=np.int32) for points in center_lines
++    ])
++    return (
++        cKDTree(np.concatenate(center_lines, axis=0)),
++        center_lines,
++        owner_lane,
++        owner_point,
++    )
++
++
++def _nearest_center_tangent(index, query_xy):
++    """Unit tangent of the Center-lane point closest to query_xy (world XY)."""
++    if index is None:
++        return None
++    tree, center_lines, owner_lane, owner_point = index
++    _, flat_idx = tree.query(query_xy)
++    lane_idx = int(owner_lane[flat_idx])
++    point_idx = int(owner_point[flat_idx])
++    points = center_lines[lane_idx]
++    lo = max(point_idx - 1, 0)
++    hi = min(point_idx + 1, len(points) - 1)
++    tangent = points[hi] - points[lo]
++    norm = float(np.linalg.norm(tangent))
++    return None if norm < 1e-6 else tangent / norm
++
++
++def _trigger_edge_to_stopline(points, lane_dir):
++    """Pick the trigger-volume polygon edge that best represents a stop line."""
++    points = np.asarray(points, dtype=float)
++    if len(points) >= 3 and np.allclose(points[0, :2], points[-1, :2]):
++        points = points[:-1]
++    xy = points[:, :2]
++    if len(xy) < 2:
++        return None
++    if lane_dir is None:
++        chosen = min(
++            range(len(xy)),
++            key=lambda idx: np.linalg.norm(xy[(idx + 1) % len(xy)] - xy[idx]),
++        )
++        return np.stack([points[chosen], points[(chosen + 1) % len(xy)]])
++
++    centroid = xy.mean(axis=0)
++    scored = []
++    for idx in range(len(xy)):
++        edge = xy[(idx + 1) % len(xy)] - xy[idx]
++        length = float(np.linalg.norm(edge))
++        if length >= 1e-6:
++            scored.append((abs(float(np.dot(edge / length, lane_dir))), idx))
++    if not scored:
++        return None
++    best_score = min(score for score, _ in scored)
++    candidates = [
++        idx for score, idx in scored
++        if score <= best_score + STOPLINE_EDGE_TOLERANCE
++    ]
++    chosen = min(
++        candidates,
++        key=lambda idx: float(np.dot(
++            (xy[idx] + xy[(idx + 1) % len(xy)]) / 2.0 - centroid,
++            lane_dir,
++        )),
++    )
++    return np.stack([points[chosen], points[(chosen + 1) % len(xy)]])
++
++
++def extract_stoplines(lane_points, lane_types, trigger_points, trigger_types):
++    """Convert every supported trigger-volume polygon into one open stop-line segment."""
++    center_index = _build_center_lane_index(lane_points, lane_types)
++    stopline_points = []
++    stopline_types = []
++    for points, trigger_type in zip(trigger_points, trigger_types):
++        if trigger_type not in STOPLINE_SOURCE_TYPES:
++            continue
++        points = np.asarray(points, dtype=float)
++        lane_dir = _nearest_center_tangent(center_index, points[:, :2].mean(axis=0))
++        segment = _trigger_edge_to_stopline(points, lane_dir)
++        if segment is None:
++            continue
++        stopline_points.append(segment)
++        stopline_types.append(trigger_type)
++    return stopline_points, stopline_types
++
++
+ def gengrate_map(map_root):
+     map_infos = {}
+     for file_name in os.listdir(map_root):
+@@ -180,12 +284,17 @@
+                             devide_points.append(lane_lenth-1)
+                             lane_sample_points_tmp = points[devide_points]
+                             lane_sample_points.append(lane_sample_points_tmp)
++            stopline_points, stopline_types = extract_stoplines(
++                lane_points, lane_types,
++                trigger_volumes_points, trigger_volumes_types)
+             map_infos[town_name]['lane_points'] = lane_points
+             map_infos[town_name]['lane_sample_points'] = lane_sample_points
+             map_infos[town_name]['lane_types'] = lane_types
+             map_infos[town_name]['trigger_volumes_points'] = trigger_volumes_points
+             map_infos[town_name]['trigger_volumes_sample_points'] = trigger_volumes_sample_points
+             map_infos[town_name]['trigger_volumes_types'] = trigger_volumes_types
++            map_infos[town_name]['stopline_points'] = stopline_points
++            map_infos[town_name]['stopline_types'] = stopline_types
+     with open(join(OUT_DIR,'b2d_map_infos.pkl'),'wb') as f:
+         pickle.dump(map_infos,f)
+ 
+diff --git a/mmcv/datasets/B2D_vad_dataset.py b/mmcv/datasets/B2D_vad_dataset.py
+--- a/mmcv/datasets/B2D_vad_dataset.py
++++ b/mmcv/datasets/B2D_vad_dataset.py
+@@ -35,6 +35,62 @@
+ from mmcv.datasets.map_utils.mean_ap import format_res_gt_by_classes
+ from .nuscenes_styled_eval_utils import DetectionMetrics, EvalBoxes, DetectionBox,center_distance,accumulate,DetectionMetricDataList,calc_ap, calc_tp, quaternion_yaw
+ 
++
++def _clip_segment_to_rect(a, b, xmin, xmax, ymin, ymax):
++    """Liang-Barsky clip of segment a->b against an axis-aligned rectangle."""
++    dx, dy = float(b[0] - a[0]), float(b[1] - a[1])
++    t0, t1 = 0.0, 1.0
++    for p, q in ((-dx, a[0] - xmin), (dx, xmax - a[0]),
++                 (-dy, a[1] - ymin), (dy, ymax - a[1])):
++        if abs(p) < 1e-12:
++            if q < 0:
++                return None
++            continue
++        ratio = q / p
++        if p < 0:
++            if ratio > t1:
++                return None
++            t0 = max(t0, ratio)
++        else:
++            if ratio < t0:
++                return None
++            t1 = min(t1, ratio)
++    if t0 >= t1:
++        return None
++    direction = np.array([dx, dy])
++    return a + t0 * direction, a + t1 * direction
++
++
++def _clip_polyline_to_rect(points, xmin, xmax, ymin, ymax):
++    """Clip a polyline into connected ROI pieces without bridging gaps."""
++    xy = np.asarray(points, dtype=float).reshape(-1, 2)
++    pieces = []
++    current = []
++
++    def finish_current():
++        nonlocal current
++        if len(current) >= 2:
++            piece = np.asarray(current, dtype=float)
++            if np.any(np.linalg.norm(np.diff(piece, axis=0), axis=1) > 1e-9):
++                pieces.append(piece)
++        current = []
++
++    for start, end in zip(xy[:-1], xy[1:]):
++        clipped = _clip_segment_to_rect(
++            start, end, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax)
++        if clipped is None:
++            finish_current()
++            continue
++        clipped_start, clipped_end = clipped
++        if current and np.allclose(current[-1], clipped_start, atol=1e-8):
++            if not np.allclose(current[-1], clipped_end, atol=1e-8):
++                current.append(clipped_end)
++        else:
++            finish_current()
++            current = [clipped_start, clipped_end]
++    finish_current()
++    return pieces
++
+ @DATASETS.register_module()
+ class B2D_VAD_Dataset(Custom3DDataset):
+ 
+@@ -244,7 +300,6 @@
+ 
+     def get_map_info(self, index):
+ 
+-        gt_masks = []
+         gt_labels = []
+         gt_bboxes = []
+ 
+@@ -254,12 +309,17 @@
+         lane_points = map_info['lane_points']
+         lane_sample_points = map_info['lane_sample_points']
+         lane_types = map_info['lane_types']
+-        trigger_volumes_points = map_info['trigger_volumes_points']
+-        trigger_volumes_sample_points = map_info['trigger_volumes_sample_points']
+-        trigger_volumes_types = map_info['trigger_volumes_types']
++        # Stop lines (TrafficLight/StopSign) are precomputed once by
++        # prepare_B2D.py's gengrate_map() and stored in b2d_map_infos.pkl,
++        # instead of being derived here from the raw trigger-volume polygons.
++        stopline_points = map_info['stopline_points']
++        stopline_types = map_info['stopline_types']
+         world2lidar = np.array(ann_info['sensors']['LIDAR_TOP']['world2lidar'])
+         ego_xy = np.linalg.inv(world2lidar)[0:2,3]
+-        max_distance = 50
++        max_distance = np.hypot(
++            max(abs(self.point_cloud_range[0]), abs(self.point_cloud_range[3])),
++            max(abs(self.point_cloud_range[1]), abs(self.point_cloud_range[4])),
++        )
+         chosed_idx = []
+ 
+         for idx in range(len(lane_sample_points)):
+@@ -275,24 +335,35 @@
+             points = lane_points[idx]
+             points = np.concatenate([points,np.ones((points.shape[0],1))],axis=-1)
+             points_in_lidar = (world2lidar @ points.T).T
+-            mask = (points_in_lidar[:,0]>self.point_cloud_range[0]) & (points_in_lidar[:,0]<self.point_cloud_range[3]) & (points_in_lidar[:,1]>self.point_cloud_range[1]) & (points_in_lidar[:,1]<self.point_cloud_range[4])
+-            points_in_lidar_range = points_in_lidar[mask,0:2]
+-            if len(points_in_lidar_range) > 1:
+-                polylines.append(LineString(points_in_lidar_range))
++            pieces = _clip_polyline_to_rect(
++                points_in_lidar[:, 0:2],
++                self.point_cloud_range[0], self.point_cloud_range[3],
++                self.point_cloud_range[1], self.point_cloud_range[4])
++            for piece in pieces:
++                polylines.append(LineString(piece))
+                 gt_label =  self.map_element_class[lane_types[idx]]
+                 gt_labels.append(gt_label)
+ 
+-        for idx in range(len(trigger_volumes_points)):
+-            if not trigger_volumes_types[idx] in self.map_element_class.keys():
++        for points, stopline_type in zip(stopline_points, stopline_types):
++            if stopline_type not in self.map_element_class.keys():
+                 continue
+-            points = trigger_volumes_points[idx]
++            points = np.asarray(points, dtype=float)
+             points = np.concatenate([points,np.ones((points.shape[0],1))],axis=-1)
+             points_in_lidar = (world2lidar @ points.T).T
+-            mask = (points_in_lidar[:,0]>self.point_cloud_range[0]) & (points_in_lidar[:,0]<self.point_cloud_range[3]) & (points_in_lidar[:,1]>self.point_cloud_range[1]) & (points_in_lidar[:,1]<self.point_cloud_range[4])
+-            points_in_lidar_range = points_in_lidar[mask,0:2]
+-            if mask.all():
+-                polylines.append(LineString(np.concatenate((points_in_lidar_range,points_in_lidar_range[0:1]),axis=0)))
+-                gt_label = self.map_element_class[trigger_volumes_types[idx]]
++            mask = (
++                (points_in_lidar[:,0] >= self.point_cloud_range[0])
++                & (points_in_lidar[:,0] <= self.point_cloud_range[3])
++                & (points_in_lidar[:,1] >= self.point_cloud_range[1])
++                & (points_in_lidar[:,1] <= self.point_cloud_range[4]))
++            if not mask.any():
++                continue
++            pieces = _clip_polyline_to_rect(
++                points_in_lidar[:, 0:2],
++                self.point_cloud_range[0], self.point_cloud_range[3],
++                self.point_cloud_range[1], self.point_cloud_range[4])
++            for piece in pieces:
++                polylines.append(LineString(piece))
++                gt_label = self.map_element_class[stopline_type]
+                 gt_labels.append(gt_label)
+ 
+         gt_labels = torch.tensor(gt_labels)
