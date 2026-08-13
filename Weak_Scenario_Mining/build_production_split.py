@@ -75,7 +75,8 @@ def _display_input_path(path: Path, config_path: Path) -> str:
 
 
 def _clip_name(filename: str) -> str:
-    return filename.removesuffix(".tar.gz")
+    suffix = ".tar.gz"
+    return filename[: -len(suffix)] if filename.endswith(suffix) else filename
 
 
 def _parse_clip(clip: str) -> tuple[str, str, str]:
@@ -191,7 +192,12 @@ def _weak_rows(
         scenario, town, weather = _parse_clip(clip)
         declared_scenario = str(raw.get("scenario", ""))
         declared_town = str(raw.get("town", ""))
-        declared_weather = f"Weather{str(raw.get('weather', '')).removeprefix('Weather')}"
+        declared_weather_value = str(raw.get("weather", ""))
+        declared_weather = (
+            declared_weather_value
+            if declared_weather_value.startswith("Weather")
+            else f"Weather{declared_weather_value}"
+        )
         if (scenario, town, weather) != (
             declared_scenario,
             declared_town,

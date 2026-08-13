@@ -601,7 +601,11 @@ def main() -> int:
                     clip=clip,
                     clip_path=clip_key,
                     annotation_file=str(path),
-                    frame=path.name.removesuffix(".json.gz"),
+                    frame=(
+                        path.name[:-len(".json.gz")]
+                        if path.name.endswith(".json.gz")
+                        else path.stem
+                    ),
                     frame_number=numeric_frame(path),
                     timestamp=get_timestamp(data),
                     command_id=command,
