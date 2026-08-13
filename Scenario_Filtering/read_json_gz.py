@@ -43,6 +43,27 @@ from typing import Any, Iterable
 SCRIPT_VERSION = "all-child-scenarios"
 
 
+def add_boolean_flag(
+    parser: argparse.ArgumentParser, name: str, default: bool, help: str
+) -> None:
+    """Add ``--name``/``--no-name`` with last-flag-wins semantics.
+
+    argparse.BooleanOptionalAction needs Python 3.9; the production servers run
+    Python 3.8, so the pair is registered explicitly on a shared dest.
+    """
+    destination = name.replace("-", "_")
+    parser.add_argument(
+        f"--{name}", dest=destination, action="store_true", default=default, help=help
+    )
+    parser.add_argument(
+        f"--no-{name}",
+        dest=destination,
+        action="store_false",
+        default=default,
+        help=f"--{name} 비활성화",
+    )
+
+
 COMMAND_NAMES = {
     -1: "VOID",
     0: "VOID_OR_UNKNOWN",
@@ -513,17 +534,12 @@ def parse_args() -> argparse.Namespace:
         default=3,
         help="차선 변경 전/후 lane의 최소 연속 유지 프레임 수 (기본값: 3)",
     )
-    parser.add_argument(
-        "--recursive",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="입력 폴더를 재귀적으로 탐색 (기본값: true)",
+    add_boolean_flag(
+        parser, "recursive", True, "입력 폴더를 재귀적으로 탐색 (기본값: true)"
     )
-    parser.add_argument(
-        "--recursive-field-search",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="command_near가 최상위에 없으면 JSON 내부에서 재귀 검색",
+    add_boolean_flag(
+        parser, "recursive-field-search", True,
+        "command_near가 최상위에 없으면 JSON 내부에서 재귀 검색",
     )
     return parser.parse_args()
 

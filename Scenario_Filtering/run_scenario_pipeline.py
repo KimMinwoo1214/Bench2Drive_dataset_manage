@@ -40,6 +40,27 @@ from production_contract import (
 from traffic_light_relevance import RelevanceConfig, correct_affects_ego
 
 
+def add_boolean_flag(
+    parser: argparse.ArgumentParser, name: str, default: bool, help: str
+) -> None:
+    """Add ``--name``/``--no-name`` with last-flag-wins semantics.
+
+    argparse.BooleanOptionalAction needs Python 3.9; the production servers run
+    Python 3.8, so the pair is registered explicitly on a shared dest.
+    """
+    destination = name.replace("-", "_")
+    parser.add_argument(
+        f"--{name}", dest=destination, action="store_true", default=default, help=help
+    )
+    parser.add_argument(
+        f"--no-{name}",
+        dest=destination,
+        action="store_false",
+        default=default,
+        help=f"--{name} 비활성화",
+    )
+
+
 SCRIPT_DIR = Path(__file__).resolve().parent
 FIX_SCRIPT = SCRIPT_DIR / "fix_tl_bbox_permutation.py"
 VISUALIZE_SCRIPT = SCRIPT_DIR / "visualize.py"
@@ -613,29 +634,18 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         help="completion SHA256에 묶인 사람 승인 JSON",
     )
-    parser.add_argument(
-        "--visualization",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="전방 카메라와 카메라 BEV bbox 시각화 생성 (기본값: true)",
+    add_boolean_flag(
+        parser, "visualization", True,
+        "전방 카메라와 카메라 BEV bbox 시각화 생성 (기본값: true)",
     )
-    parser.add_argument(
-        "--video",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="시각화 MP4 생성 (기본값: true)",
+    add_boolean_flag(parser, "video", True, "시각화 MP4 생성 (기본값: true)")
+    add_boolean_flag(
+        parser, "vector-map", True,
+        "Town HD vector map 이미지와 MP4 생성 (기본값: true)",
     )
-    parser.add_argument(
-        "--vector-map",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Town HD vector map 이미지와 MP4 생성 (기본값: true)",
-    )
-    parser.add_argument(
-        "--vad-vector-gt",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="수정 annotation 기반 프레임별 VAD vector-map GT 생성 (기본값: true)",
+    add_boolean_flag(
+        parser, "vad-vector-gt", True,
+        "수정 annotation 기반 프레임별 VAD vector-map GT 생성 (기본값: true)",
     )
     parser.add_argument(
         "--vad-vector-stride",
@@ -703,11 +713,9 @@ def build_parser() -> argparse.ArgumentParser:
         default=3,
         help="AUTO_FIX 동일 ID 최소 연속 프레임 수 (기본값: 3)",
     )
-    parser.add_argument(
-        "--build-pkl",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help=(
+    add_boolean_flag(
+        parser, "build-pkl", True,
+        (
             "corrected_anno로 학습용 b2d_infos_{train,val}.pkl/b2d_map_infos.pkl "
             "생성 및 검증 (기본값: true). --manifest 없으면 train/val 구분이 없어 "
             "항상 생략됨"
