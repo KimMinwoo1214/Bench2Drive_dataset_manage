@@ -6,3 +6,7 @@
 !*.md
 !requirements.txt
 !.gitignore
+!tests/
+!tests/*.py
+!patches/
+!patches/*.patch
