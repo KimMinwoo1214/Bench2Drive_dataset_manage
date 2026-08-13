@@ -13,7 +13,6 @@ import numpy as np
 import cv2
 import hashlib
 import colorsys
-import laspy
 from tqdm import trange
 from utils import get_image_point, point_in_canvas_wh, edges, world_to_ego, get_forward_vector, calculate_cube_vertices, draw_dashed_line, vector_angle, get_matrix
 from traffic_light_visual_overrides import (
@@ -229,6 +228,17 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
         or vis_lidar_to_front_left_image
     ):
         import matplotlib.cm as cm
+
+    # laspy only reads the .laz point clouds, so camera/BEV/map profiles must not
+    # need it installed. Imported here for the same reason matplotlib is above.
+    laspy = None
+    if (
+        vis_lidar_bev
+        or vis_lidar_to_back_image
+        or vis_lidar_to_front_image
+        or vis_lidar_to_front_left_image
+    ):
+        import laspy
 
     file_path = pathlib.Path(file_path).expanduser().resolve()
     map_path = (
@@ -666,11 +676,13 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         '--profile',
-        choices=('bbox', 'camera-bev', 'full'),
+        choices=('bbox', 'camera-bev', 'camera-bev-map', 'full'),
         default='full',
         help=(
             'bbox: 카메라 3D bbox만 생성, '
             'camera-bev: 전방 카메라 + TOP_DOWN 카메라 BEV bbox 생성, '
+            'camera-bev-map: camera-bev + HD map 오버레이 (LiDAR 없음). '
+            'quality-gate 충돌 증거 검토용이며 laspy를 요구하지 않는다, '
             'full: bbox + HD map + LiDAR 시각화 생성 (기본값: full)'
         ),
     )
@@ -679,13 +691,15 @@ if __name__ == '__main__':
     if args.review_context < 0:
         parser.error('--review-context 값은 0 이상이어야 합니다.')
     full_profile = args.profile == 'full'
-    camera_bev_profile = args.profile in ('camera-bev', 'full')
+    camera_bev_profile = args.profile in ('camera-bev', 'camera-bev-map', 'full')
+    # HD map 오버레이는 쓰지만 LiDAR는 쓰지 않는 조합.
+    road_profile = args.profile in ('camera-bev-map', 'full')
     if args.map_file is not None:
         map_path = args.map_file
     elif args.map_id is not None:
         map_path = args.map_root / f'Town{args.map_id}_HD_map.npz'
-    elif full_profile:
-        parser.error('full profile에는 --map-file 또는 --map-id/-m 중 하나가 필요합니다.')
+    elif road_profile:
+        parser.error(f'{args.profile} profile에는 --map-file 또는 --map-id/-m 중 하나가 필요합니다.')
     else:
         map_path = None
     try:
@@ -707,7 +721,7 @@ if __name__ == '__main__':
         review_context=args.review_context,
         vis_bbox=True,
         vis_top_down=camera_bev_profile,
-        vis_road=full_profile,
+        vis_road=road_profile,
         vis_lidar_bev=full_profile,
         vis_lidar_to_back_image=full_profile,
         vis_lidar_to_front_image=full_profile,
