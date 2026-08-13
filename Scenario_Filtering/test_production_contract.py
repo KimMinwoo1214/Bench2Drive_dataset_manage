@@ -16,6 +16,7 @@ from production_contract import (
     load_manifest,
     matching_approval,
     read_completion,
+    validate_source_inventory,
     write_completion,
 )
 
@@ -63,6 +64,34 @@ class ProductionContractTest(unittest.TestCase):
             path.write_text(json.dumps(raw))
             with self.assertRaisesRegex(ValueError, "overlap"):
                 load_manifest(path, "all")
+
+    def test_quality_filtered_manifest_allows_only_declared_source_extras(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path, base, weak = self._manifest(root)
+            excluded = "Excluded_Town04_Route3_Weather0"
+            raw = json.loads(path.read_text())
+            raw.update(
+                {
+                    "policy": "preserve_parent_membership_remove_excluded_no_backfill",
+                    "excluded": [excluded],
+                    "excluded_by_component": {"base": [excluded], "weak": []},
+                }
+            )
+            path.write_text(json.dumps(raw))
+            selection = load_manifest(path, "base")
+            self.assertEqual(selection.allowed_source_extras, frozenset({excluded}))
+            source = root / "source"
+            self._annotation(source, base)
+            self._annotation(source, excluded)
+            validate_source_inventory(
+                source, selection.clips, selection.allowed_source_extras
+            )
+            self._annotation(source, weak)
+            with self.assertRaisesRegex(ValueError, "unexpected"):
+                validate_source_inventory(
+                    source, selection.clips, selection.allowed_source_extras
+                )
 
     def test_completion_detects_input_and_output_changes(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

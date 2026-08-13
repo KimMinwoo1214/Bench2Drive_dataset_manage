@@ -104,6 +104,26 @@ class ProductionSplitTest(unittest.TestCase):
             scenario_quotas(rows, settings), {"ScenarioA": 1, "ScenarioB": 1}
         )
 
+    def test_weak500_keeps_global_five_percent_target(self) -> None:
+        settings = dataclasses.replace(
+            load_settings(DEFAULT_CONFIG_PATH), snapshot_expectations={}
+        )
+        scenarios = ("ScenarioA", "ScenarioB", "ScenarioC", "ScenarioD")
+        rows = [
+            {
+                "clip": f"{scenario}_{index}",
+                "scenario": scenario,
+                "town": f"Town{index % 8:02d}",
+                "weather": f"Weather{index % 27}",
+            }
+            for scenario in scenarios
+            for index in range(125)
+        ]
+        quotas = scenario_quotas(rows, settings)
+        self.assertEqual(weak_validation_target(len(rows), settings), 25)
+        self.assertEqual(sum(quotas.values()), 25)
+        self.assertEqual(len(rows) - sum(quotas.values()), 475)
+
 
 if __name__ == "__main__":
     unittest.main()

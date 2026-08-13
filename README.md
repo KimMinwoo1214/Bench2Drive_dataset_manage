@@ -14,6 +14,7 @@ Bench2Drive 데이터 선정과 traffic-light annotation 보정을 관리하는 
 | 위치 | 책임 |
 | --- | --- |
 | [`Weak_Scenario_Mining`](Weak_Scenario_Mining/README.md) | 평가 결과 기반 취약 시나리오 선정과 Base+Weak production split 생성 |
+| [`Driving_Quality_Filtering`](Driving_Quality_Filtering/README.md) | relabel 전 expert 주행 무결성과 회전 3D bbox 충돌 quality gate |
 | [`Scenario_Filtering`](Scenario_Filtering/README.md) | bbox permutation 복구, trigger-volume `affects_ego`, production resume/review/report |
 | `2026-Summer-Internship/team_code/data` | Base+Weak symlink union, original/corrected Unified PKL, validator와 Dataset probe |
 
@@ -22,6 +23,7 @@ Bench2Drive 데이터 선정과 traffic-light annotation 보정을 관리하는 
 ```text
 Base1000 + Weak329 split 고정
 → Base/Weak source inventory 검사
+→ expert 주행 calibration, REVIEW 확정, filtered split
 → bbox permutation 복구
 → trigger-volume affects_ego 보정
 → review 해소 및 1,329 completion 검사
@@ -98,7 +100,9 @@ python3 Scenario_Filtering/run_scenario_pipeline.py \
   --resume --no-visualization --no-video --no-vector-map
 ```
 
-각 component root는 manifest와 정확히 같은 clip inventory여야 한다. 일부 clip만
+고정 원본 manifest에서는 각 component root가 정확히 같은 clip inventory여야 한다.
+quality-filtered manifest에서는 hash로 묶인 `excluded_by_component`만 source의 추가
+clip으로 허용한다. 일부 clip만
 재처리하더라도 bbox consensus는 해당 component 전체에서 다시 계산된다.
 최종 확인은 Base와 Weak 각각 같은 실행 옵션으로 `--check-only`를 실행한다.
 

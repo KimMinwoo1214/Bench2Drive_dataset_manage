@@ -184,7 +184,7 @@ def load_event_frame_ranges(events_path, scenario_name, context=20):
     ranges = []
     with events_path.open('r', newline='', encoding='utf-8-sig') as csv_file:
         for row in csv.DictReader(csv_file):
-            row_scenario = str(row.get('scenario', ''))
+            row_scenario = str(row.get('scenario') or row.get('clip') or '')
             if row_scenario != scenario_name and pathlib.PurePosixPath(row_scenario).name != scenario_name:
                 continue
             start = str(row.get('start_frame', ''))
@@ -208,11 +208,17 @@ def load_event_frame_ranges(events_path, scenario_name, context=20):
 
 
 def frame_in_ranges(path, ranges):
-    name = path.name.removesuffix('.json.gz')
+    name = annotation_frame_name(path)
     if not name.isdigit():
         return False
     number = int(name)
     return any(start <= number <= end for start, end in ranges)
+
+
+def annotation_frame_name(path):
+    name = path.name
+    suffix = '.json.gz'
+    return name[:-len(suffix)] if name.endswith(suffix) else path.stem
 
 
 def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=None, max_frames=None, review_events=None, review_context=20, vis_bbox=True,  vis_top_down=True, vis_road=True, vis_lidar_bev=True, vis_lidar_to_back_image=True, vis_lidar_to_front_image=True, vis_lidar_to_front_left_image=True, traffic_light_visual_map=None):
@@ -286,8 +292,8 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
         annotation_files = [
             path
             for path in annotation_files
-            if path.name.removesuffix('.json.gz').isdigit()
-            and int(path.name.removesuffix('.json.gz')) >= start_frame
+            if annotation_frame_name(path).isdigit()
+            and int(annotation_frame_name(path)) >= start_frame
         ]
     if max_frames is not None:
         annotation_files = annotation_files[:max_frames]
@@ -304,7 +310,7 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
 
     for annotation_index in trange(len(annotation_files)):
         annotation_path = annotation_files[annotation_index]
-        frame = annotation_path.name.removesuffix('.json.gz')
+        frame = annotation_frame_name(annotation_path)
         with gzip.open(annotation_path, 'rt', encoding='utf-8') as gz_file:
             anno = json.load(gz_file)
         bounding_boxes = anno['bounding_boxes']

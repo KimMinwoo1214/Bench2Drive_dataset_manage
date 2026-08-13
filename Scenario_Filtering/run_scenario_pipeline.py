@@ -940,7 +940,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         approvals = load_approvals(args.review_approvals)
         if args.manifest is not None:
             selection = load_manifest(args.manifest, args.component)
-            validate_source_inventory(input_path, selection.clips)
+            validate_source_inventory(
+                input_path,
+                selection.clips,
+                selection.allowed_source_extras,
+            )
             scenarios = discover_manifest_scenarios(input_path, selection.clips)
         else:
             scenarios = discover_scenarios(input_path)

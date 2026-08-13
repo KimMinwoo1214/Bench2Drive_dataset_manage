@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "mode": "calibration_only",
+  "sample_hz": 10.0,
+  "collision_categories": [
+    "vehicle",
+    "pedestrian",
+    "bicycle"
+  ],
+  "sensor_validation_policy": "inventory_and_nonzero_size_all_signature_first_middle_last",
+  "required_sensor_keys": [
+    "CAM_FRONT",
+    "CAM_FRONT_LEFT",
+    "CAM_FRONT_RIGHT",
+    "CAM_BACK",
+    "CAM_BACK_LEFT",
+    "CAM_BACK_RIGHT",
+    "TOP_DOWN",
+    "LIDAR_TOP",
+    "RADAR_FRONT",
+    "RADAR_FRONT_LEFT",
+    "RADAR_FRONT_RIGHT",
+    "RADAR_BACK_LEFT",
+    "RADAR_BACK_RIGHT"
+  ],
+  "required_rgb_folders": [
+    "rgb_front",
+    "rgb_front_left",
+    "rgb_front_right",
+    "rgb_back",
+    "rgb_back_left",
+    "rgb_back_right",
+    "rgb_top_down"
+  ],
+  "required_depth_folders": [
+    "depth_front",
+    "depth_front_left",
+    "depth_front_right",
+    "depth_back",
+    "depth_back_left",
+    "depth_back_right"
+  ],
+  "classification": null,
+  "notes": "No PASS/REVIEW/EXCLUDE thresholds are active. Freeze an evidence-backed production config after calibration review."
+}

@@ -22,6 +22,7 @@ class ManifestSelection:
     train: tuple[str, ...]
     val: tuple[str, ...]
     all_manifest_clips: frozenset[str]
+    allowed_source_extras: frozenset[str]
 
     @property
     def clips(self) -> tuple[str, ...]:
@@ -156,8 +157,24 @@ def load_manifest(path: Path, component: str) -> ManifestSelection:
                 f"unexpected={sorted(known_union - all_clips)[:5]}"
             )
 
+    excluded_by_component = raw.get("excluded_by_component", {})
+    if excluded_by_component and (
+        not isinstance(excluded_by_component, dict)
+        or set(excluded_by_component) != {"base", "weak"}
+        or not all(isinstance(value, list) for value in excluded_by_component.values())
+    ):
+        raise ValueError(
+            "manifest.excluded_by_component must contain exactly base and weak clip-name lists"
+        )
+    allowed_extras: tuple[str, ...] = ()
     if component == "all":
         train, val = all_train, all_val
+        if isinstance(excluded_by_component, dict):
+            allowed_extras = tuple(
+                name
+                for names in excluded_by_component.values()
+                for name in _validate_clip_list("excluded_by_component", names)
+            )
     else:
         if not isinstance(components, dict) or component not in components:
             raise ValueError(
@@ -166,6 +183,27 @@ def load_manifest(path: Path, component: str) -> ManifestSelection:
             )
         selected = components[component]
         train, val = _split_lists(selected, f"manifest.components.{component}")
+        if isinstance(excluded_by_component, dict) and component in excluded_by_component:
+            allowed_extras = _validate_clip_list(
+                f"manifest.excluded_by_component.{component}",
+                excluded_by_component[component],
+            )
+    if set(allowed_extras) & all_clips:
+        raise ValueError("manifest accepted and excluded source clips overlap")
+    declared_excluded = raw.get("excluded", [])
+    if excluded_by_component:
+        if not isinstance(declared_excluded, list):
+            raise ValueError("manifest.excluded must be a clip-name list")
+        flattened_extras = [
+            name
+            for names in excluded_by_component.values()
+            for name in names
+        ]
+        all_extras = set(flattened_extras)
+        if len(flattened_extras) != len(all_extras):
+            raise ValueError("excluded_by_component lists overlap")
+        if all_extras != set(_validate_clip_list("manifest.excluded", declared_excluded)):
+            raise ValueError("excluded_by_component does not partition manifest.excluded")
 
     return ManifestSelection(
         path=path,
@@ -174,6 +212,7 @@ def load_manifest(path: Path, component: str) -> ManifestSelection:
         train=train,
         val=val,
         all_manifest_clips=frozenset(all_clips),
+        allowed_source_extras=frozenset(allowed_extras),
     )
 
 
@@ -188,15 +227,24 @@ def source_inventory(root: Path) -> set[str]:
     return clips
 
 
-def validate_source_inventory(root: Path, expected: Sequence[str]) -> None:
+def validate_source_inventory(
+    root: Path,
+    expected: Sequence[str],
+    allowed_source_extras: Sequence[str] = (),
+) -> None:
     actual = source_inventory(root)
     expected_set = set(expected)
     missing = sorted(expected_set - actual)
-    unexpected = sorted(actual - expected_set)
-    if missing or unexpected:
+    allowed_set = set(allowed_source_extras)
+    if expected_set & allowed_set:
+        raise ValueError("expected and allowed source-extra clips overlap")
+    missing_allowed = sorted(allowed_set - actual)
+    unexpected = sorted(actual - expected_set - allowed_set)
+    if missing or missing_allowed or unexpected:
         raise ValueError(
             f"source inventory mismatch for {root}: missing={missing[:5]} "
-            f"({len(missing)}), unexpected={unexpected[:5]} ({len(unexpected)})"
+            f"({len(missing)}), missing_allowed={missing_allowed[:5]} "
+            f"({len(missing_allowed)}), unexpected={unexpected[:5]} ({len(unexpected)})"
         )
 
 

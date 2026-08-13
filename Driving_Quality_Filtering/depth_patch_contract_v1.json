@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "policy": "copy_missing_only_no_overwrite_preserve_patch",
+  "streams": [
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15555_Weather10",
+      "stream": "depth_front_right",
+      "expected_frames": 608,
+      "expected_missing_before": 102,
+      "missing_names_sha256": "629de6ff4fbfd351c31bc76c1bfcb9d077fbca5052403e007563e4ac1f63dda8"
+    },
+    {
+      "clip": "YieldToEmergencyVehicle_Town12_Route20796_Weather21",
+      "stream": "depth_front",
+      "expected_frames": 774,
+      "expected_missing_before": 182,
+      "missing_names_sha256": "e18173f3198319832201acb9022c9a7a2e602c503bf46f95311aa41192762952"
+    }
+  ]
+}

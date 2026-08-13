@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "metrics_sha256": "COPY_FROM_QUALITY_GATE_COMPLETION",
+  "events_sha256": "COPY_FROM_QUALITY_GATE_COMPLETION",
+  "decisions": [
+    {
+      "clip": "REVIEW_CLIP_NAME",
+      "decision": "ACCEPT",
+      "reviewer": "HUMAN_REVIEWER",
+      "reason_code": "VISUAL_CONFIRMED_INTENTIONAL_SCENARIO",
+      "note": "Required non-empty review evidence note",
+      "clip_metrics_sha256": "COPY_FROM_CLIP_METRICS"
+    }
+  ]
+}
