@@ -5,6 +5,7 @@ from __future__ import annotations
 import gzip
 import hashlib
 import json
+import os
 import struct
 import tempfile
 import unittest
@@ -14,6 +15,7 @@ from typing import Sequence
 import numpy as np
 
 from audit_expert_driving import actor_category, audit_clip
+from build_patched_weak_root import build as build_patched_weak_root
 from classify_quality import automatic_classification, load_decisions
 from geometry import oriented_box_metrics
 from materialize_depth_patches import materialize
@@ -268,6 +270,101 @@ class DepthPatchMaterializationTest(unittest.TestCase):
                 destination = weak / row["clip"] / "camera" / row["stream"] / "00001.png"
                 source = patch / row["clip"] / "camera" / row["stream"] / "00001.png"
                 self.assertEqual(destination.read_bytes(), source.read_bytes())
+
+
+class PatchedWeakRootTest(unittest.TestCase):
+    CLIP = "Scenario_Town04_Route1_Weather0"
+    PLAIN = "Other_Town04_Route2_Weather0"
+
+    def _roots(self, directory: str) -> tuple[Path, Path, Path, Path]:
+        root = Path(directory)
+        weak, patch, out = root / "weak", root / "patch", root / "patched"
+        for clip in (self.CLIP, self.PLAIN):
+            (weak / clip / "anno").mkdir(parents=True)
+            (weak / clip / "anno" / "00000.json.gz").touch()
+            (weak / clip / "anno" / "00001.json.gz").touch()
+            for sensor in ("depth_front", "rgb_front"):
+                (weak / clip / "camera" / sensor).mkdir(parents=True)
+            # Canonical stream is short one frame; the patch holds both.
+            (weak / clip / "camera" / "depth_front" / "00000.png").touch()
+            (weak / clip / "camera" / "rgb_front" / "00000.png").touch()
+            (weak / clip / "camera" / "rgb_front" / "00001.png").touch()
+        (patch / self.CLIP / "camera" / "depth_front").mkdir(parents=True)
+        for name in ("00000.png", "00001.png"):
+            (patch / self.CLIP / "camera" / "depth_front" / name).touch()
+        contract = root / "contract.json"
+        contract.write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "policy": "copy_missing_only_no_overwrite_preserve_patch",
+                    "streams": [
+                        {"clip": self.CLIP, "stream": "depth_front", "expected_frames": 2}
+                    ],
+                }
+            ),
+            encoding="utf-8",
+        )
+        return weak, patch, contract, out
+
+    def test_only_the_contracted_stream_is_redirected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            weak, patch, contract, out = self._roots(directory)
+            result = build_patched_weak_root(weak, patch, contract, out, check=False)
+
+            self.assertEqual(result["status"], "built")
+            self.assertEqual(result["clip_count"], 2)
+            # Untouched clip is a single symlink to canonical.
+            self.assertTrue((out / self.PLAIN).is_symlink())
+            self.assertEqual(os.path.realpath(out / self.PLAIN), str(weak / self.PLAIN))
+            # Patched clip redirects the contracted stream only.
+            self.assertEqual(
+                os.path.realpath(out / self.CLIP / "camera" / "depth_front"),
+                str(patch / self.CLIP / "camera" / "depth_front"),
+            )
+            self.assertEqual(
+                os.path.realpath(out / self.CLIP / "camera" / "rgb_front"),
+                str(weak / self.CLIP / "camera" / "rgb_front"),
+            )
+            self.assertEqual(
+                os.path.realpath(out / self.CLIP / "anno"), str(weak / self.CLIP / "anno")
+            )
+            # The redirected stream is frame-complete where canonical was not.
+            self.assertEqual(
+                len(list((out / self.CLIP / "camera" / "depth_front").iterdir())), 2
+            )
+            self.assertEqual(
+                len(list((weak / self.CLIP / "camera" / "depth_front").iterdir())), 1
+            )
+
+    def test_canonical_root_is_not_modified(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            weak, patch, contract, out = self._roots(directory)
+            before = sorted(
+                (str(path.relative_to(weak)), path.is_symlink())
+                for path in weak.rglob("*")
+            )
+            build_patched_weak_root(weak, patch, contract, out, check=False)
+            after = sorted(
+                (str(path.relative_to(weak)), path.is_symlink())
+                for path in weak.rglob("*")
+            )
+            self.assertEqual(before, after)
+
+    def test_incomplete_stream_fails_verification(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            weak, patch, contract, out = self._roots(directory)
+            (patch / self.CLIP / "camera" / "depth_front" / "00001.png").unlink()
+            with self.assertRaises(ValueError):
+                build_patched_weak_root(weak, patch, contract, out, check=False)
+
+    def test_non_empty_output_root_is_refused(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            weak, patch, contract, out = self._roots(directory)
+            out.mkdir(parents=True)
+            (out / "stray").touch()
+            with self.assertRaises(FileExistsError):
+                build_patched_weak_root(weak, patch, contract, out, check=False)
 
 
 class CalibrationSummaryTest(unittest.TestCase):
