@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "algorithm": "coverage_aware_v1",
+  "seed": 42,
+  "weak_validation_ratio": 0.05,
+  "quota_rounding": "ceil",
+  "minimum_validation_per_scenario": 1,
+  "preserve_train_per_scenario": true,
+  "scenario_order": [
+    "VanillaNonSignalizedTurnEncounterStopsign",
+    "VanillaSignalizedTurnEncounterRedLight",
+    "LaneChange",
+    "YieldToEmergencyVehicle"
+  ],
+  "inputs": {
+    "base_split": "data/bench2drive_base_train_val_split_full.json",
+    "base_stats": "data/bench2drive_base_split_stats.json",
+    "weak_manifest": "outputs/experiment_001/selected_additional_manifest.json",
+    "weak_details": "outputs/experiment_001/selected_additional_details.json"
+  },
+  "snapshot_expectations": {
+    "input_sha256": {
+      "base_split": "030cfc19c9f885294de90f9921eee8e59e354fbd4c10e8ae1c98e2cd7adae451",
+      "base_stats": "97d6423a12faef01bad5ecfe0f6a3a4026d7b1718bec3de54b0cdf80d8e7406d",
+      "weak_manifest": "122832b2d827d717b055540335a9e2329b03858ccbc38529cf5c3c7cb1018c0b",
+      "weak_details": "5f27721493449e3b0459f64bd70ca6130f5df026d9253d5ae137b6a057f391f7"
+    },
+    "base_clips": 1000,
+    "weak_clips": 329,
+    "weak_validation_selection_sha256": "d40b361637d35c8758853adbd9772eaaac2eb08b5fdae13095e06088eec06a94"
+  }
+}

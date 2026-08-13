@@ -39,6 +39,7 @@ bbox 복구가 끝난 동일한 annotation 객체에서 ego 진행 방향과 tri
 ------
     python fix_tl_bbox_permutation.py --root /path/to/clips            # 감사만
     python fix_tl_bbox_permutation.py --root /path/to/clips --out ./fixed
+    python fix_tl_bbox_permutation.py --root /path/to/clips --out ./fixed --bbox-only
     python fix_tl_bbox_permutation.py --root /path/to/clips --apply    # .bak 백업 후 덮어쓰기
 """
 
@@ -98,8 +99,32 @@ def dump(path, data):
             json.dump(data, f, indent=4)
 
 
-def walk_clips(root):
-    """클립(디렉토리) 단위로 프레임 경로 목록을 반환."""
+def walk_clips(root, clip_names=None):
+    """클립(디렉토리) 단위로 프레임 경로 목록을 반환.
+
+    ``clip_names``가 주어지면 flat Bench2Drive root 바로 아래의 명시된 clip만
+    읽는다. Production pipeline이 manifest 밖 annotation을 consensus나 출력에
+    섞지 않도록 하기 위한 경로다.
+    """
+    if clip_names is not None:
+        for clip_name in clip_names:
+            anno_dir = os.path.join(root, clip_name, "anno")
+            try:
+                names = sorted(os.listdir(anno_dir))
+            except FileNotFoundError as error:
+                raise FileNotFoundError(
+                    f"manifest clip annotation directory is missing: {anno_dir}"
+                ) from error
+            frames = [
+                os.path.join(anno_dir, name)
+                for name in names
+                if name.endswith(".json") or name.endswith(".json.gz")
+            ]
+            if not frames:
+                raise ValueError(f"manifest clip has no annotation frames: {anno_dir}")
+            yield anno_dir, frames
+        return
+
     for dirpath, _, names in os.walk(root):
         frames = [os.path.join(dirpath, n) for n in sorted(names)
                   if n.endswith(".json") or n.endswith(".json.gz")]
@@ -657,6 +682,22 @@ def main():
                     help="클립 단위로만 합의")
     ap.add_argument("--csv", default=None,
                     help="엔트리별 진단 CSV 경로 (요약본은 _summary.csv 로 함께 저장)")
+    ap.add_argument(
+        "--bbox-only",
+        action="store_true",
+        help=(
+            "bbox permutation과 trigger_volume_rotation만 복구하고 "
+            "affects_ego는 원본 값을 유지"
+        ),
+    )
+    ap.add_argument(
+        "--clip-list",
+        default=None,
+        help=(
+            "newline으로 구분된 flat clip 이름 목록. 지정하면 --root 전체 대신 "
+            "목록에 있는 <root>/<clip>/anno만 처리"
+        ),
+    )
     args = ap.parse_args()
     if args.apply and args.out:
         ap.error("--apply와 --out은 동시에 사용할 수 없습니다")
@@ -666,7 +707,30 @@ def main():
     frames = files_changed = bbox_changed_frames = clips = 0
     affects_by_clip = {}
 
-    all_clips = list(walk_clips(args.root))
+    clip_names = None
+    if args.clip_list:
+        with open(args.clip_list, encoding="utf-8") as file:
+            clip_names = [line.strip() for line in file if line.strip()]
+        if not clip_names:
+            ap.error("--clip-list가 비어 있습니다")
+        if len(clip_names) != len(set(clip_names)):
+            ap.error("--clip-list에 중복 clip이 있습니다")
+        invalid = [
+            name
+            for name in clip_names
+            if name in {".", ".."}
+            or os.path.isabs(name)
+            or "/" in name
+            or "\\" in name
+        ]
+        if invalid:
+            ap.error(f"--clip-list에 안전하지 않은 이름이 있습니다: {invalid[:5]}")
+        clip_names.sort()
+
+    try:
+        all_clips = list(walk_clips(args.root, clip_names))
+    except (OSError, ValueError) as error:
+        ap.error(str(error))
     rows = [] if args.csv else None
 
     # ===== pass 0: 타운별 정상 facing error 대역 자동 산출 =====
@@ -763,8 +827,22 @@ def main():
                 bbox_changed_frames += 1
             bbox_changed.append(changed)
 
-        affects_stats, affects_changed, final_by_frame = recompute_affects_ego(
-            [anno for _, anno in items])
+        if args.bbox_only:
+            affects_stats = Counter()
+            affects_changed = [False] * len(items)
+            final_by_frame = []
+            for _, anno in items:
+                final = {}
+                if anno is not None:
+                    final = {
+                        box.get("id"): bool(box.get("affects_ego", False))
+                        for box in anno.get("bounding_boxes", [])
+                        if box.get("class") == "traffic_light"
+                    }
+                final_by_frame.append(final)
+        else:
+            affects_stats, affects_changed, final_by_frame = recompute_affects_ego(
+                [anno for _, anno in items])
         affects_total.update(affects_stats)
         affects_by_clip[clip_rel] = affects_stats
 
@@ -809,6 +887,8 @@ def main():
     print(f"frames with any change: {files_changed}")
     print(f"  bbox changed frames : {bbox_changed_frames}")
     print(f"  affects_ego frames  : {affects_total['changed_frames']}")
+    if args.bbox_only:
+        print("  affects_ego mode    : preserved (--bbox-only)")
     print("-" * 52)
     print(f"facing error 정상 (복구 전) : {b_ok} / {b_ok + b_bad}"
           f"  ({100.0 * b_ok / b_tot:.1f}%)")
