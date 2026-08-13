@@ -1,4 +1,4 @@
-"""Tests for manifest, completion, resume, and approval production contracts."""
+"""Regression tests for manifest, completion, resume, and approval contracts."""
 
 from __future__ import annotations
 

@@ -1,8 +1,8 @@
 # Bench2Drive Traffic Light Annotation Pipeline
 
 Bench2Drive 시나리오의 traffic light annotation을 보정하고, 전방 카메라,
-TOP_DOWN BEV bbox, HD vector map 시각화, MP4 영상, 판정 CSV를 한 번에 생성하는
-파이프라인이다.
+TOP_DOWN BEV bbox, HD vector map 시각화, 프레임별 VAD vector GT, MP4 영상,
+판정 CSV를 한 번에 생성하는 파이프라인이다.
 
 최종 annotation은 다음 두 작업을 순서대로 적용해 만든다.
 
@@ -22,8 +22,11 @@ trigger volume 교차, 통과 방향, bbox 신뢰성, 시간 연속성을 모두
 | `run_scenario_pipeline.py` | bbox 복구, relevance 판정, 시각화, 영상, CSV를 실행하는 메인 진입점 |
 | `fix_tl_bbox_permutation.py` | traffic light bbox permutation 복구. 메인 파이프라인은 항상 `--bbox-only`로 실행 |
 | `traffic_light_relevance.py` | trigger-volume 교차 기반 `affects_ego` KEEP/AUTO_FIX/REVIEW 판정 |
-| `test_traffic_light_relevance.py` | 교차 판정, 방향 불일치, 다중 실제 교차 단위 테스트 |
+| `production_contract.py` | manifest, completion hash, resume 및 수동 승인 검증 |
+| `tests/test_traffic_light_relevance.py` | 교차 판정, 방향 불일치, 다중 실제 교차 단위 테스트 |
+| `tests/test_production_contract.py` | manifest 분할, completion hash 및 승인 일치 단위 테스트 |
 | `visualize.py` | 전방 카메라, TOP_DOWN BEV 및 HD vector map 렌더링 |
+| `visualize_vad_gt.py` | 수정 annotation과 HD map에서 VAD vector GT와 BEV 이미지 생성 |
 | `apply_visualize_compare_from_summary.py` | BEFORE/AFTER 비교 영상 생성 공통 함수 |
 | `requirements.txt` | Python 의존성 목록 |
 
@@ -95,12 +98,12 @@ SPLIT=Weak_Scenario_Mining/data/bench2drive_base1000_weak329_train_val_split.jso
 python3 Scenario_Filtering/run_scenario_pipeline.py \
   --input "$BASE_ROOT" --manifest "$SPLIT" --component base \
   --output "$RELABEL_ROOT" --resume \
-  --no-visualization --no-video --no-vector-map
+  --no-visualization --no-video --no-vector-map --no-vad-vector-gt
 
 python3 Scenario_Filtering/run_scenario_pipeline.py \
   --input "$WEAK_ROOT" --manifest "$SPLIT" --component weak \
   --output "$RELABEL_ROOT" --resume \
-  --no-visualization --no-video --no-vector-map
+  --no-visualization --no-video --no-vector-map --no-vad-vector-gt
 ```
 
 입력 root는 해당 component 목록과 정확히 같아야 한다. 누락, 중복 이름, split 밖
@@ -142,13 +145,13 @@ python3 Scenario_Filtering/run_scenario_pipeline.py \
   --input "$BASE_ROOT" --manifest "$SPLIT" --component base \
   --output "$RELABEL_ROOT" --check-only \
   --review-approvals "$APPROVALS" \
-  --no-visualization --no-video --no-vector-map
+  --no-visualization --no-video --no-vector-map --no-vad-vector-gt
 
 python3 Scenario_Filtering/run_scenario_pipeline.py \
   --input "$WEAK_ROOT" --manifest "$SPLIT" --component weak \
   --output "$RELABEL_ROOT" --check-only \
   --review-approvals "$APPROVALS" \
-  --no-visualization --no-video --no-vector-map
+  --no-visualization --no-video --no-vector-map --no-vad-vector-gt
 ```
 
 ## 기본 실행
@@ -184,7 +187,8 @@ python3 run_scenario_pipeline.py \
   --input /path/to/scenario/anno \
   --output ./annotation_result \
   --no-visualization \
-  --no-video
+  --no-video \
+  --no-vad-vector-gt
 ```
 
 처음 30프레임만 시각화한다.
@@ -206,8 +210,9 @@ python3 run_scenario_pipeline.py \
   --no-vector-map
 ```
 
-`--max-frames`와 `--start-frame`은 시각화 범위만 제한한다. bbox 및
-`affects_ego` 판정은 클립 전체 프레임을 대상으로 수행한다.
+`--max-frames`와 `--start-frame`은 카메라 시각화 범위만 제한한다. bbox와
+`affects_ego` 판정 및 VAD vector GT는 클립 전체를 대상으로 수행한다. vector GT
+간격은 `--vad-vector-stride`로 별도 조절한다.
 
 ## 처리 순서와 판정 기준
 
@@ -221,8 +226,9 @@ python3 run_scenario_pipeline.py \
 6. 궤적 진행 방향, bbox 신뢰성, 최소 연속 프레임, 실제 다중 교차 여부 검사
 7. `KEEP`, `AUTO_FIX`, `REVIEW` 중 하나로 프레임별 판정
 8. `AUTO_FIX` 프레임에만 `affects_ego` 변경 후 최종 annotation 저장
-9. 전방 카메라, TOP_DOWN BEV, 선택적 vector map 시각화와 영상 생성
-10. 상세 CSV 및 전체 `results.csv` 생성
+9. 수정 annotation과 Town HD map에서 프레임별 VAD vector GT와 BEV 생성
+10. 전방 카메라, TOP_DOWN BEV, 선택적 vector map 시각화와 영상 생성
+11. 상세 CSV 및 전체 `results.csv` 생성
 
 기본 trigger margin은 `0.0 m`이다. 즉 Ego의 프레임 간 선분이 annotation에
 기록된 실제 trigger rectangle과 교차해야 한다. margin을 크게 주면 서로 가까운
@@ -248,6 +254,39 @@ trigger 내부 주행 구간까지 유지하는 시간 의미만 명확해진다
 `--simultaneous-crossing-frames`는 Ego 궤적이 서로 다른 실제 trigger volume을
 거의 동시에 교차한 경우에만 적용한다.
 
+## VAD vector GT
+
+각 `<frame>.npz`는 수정 annotation의 `sensors.LIDAR_TOP.world2lidar`와
+`Town*_HD_map.npz`를 직접 사용한다. 중간 train/val PKL은 만들지 않으며,
+`points (N, 20, 2)`, `labels (N,)`, `types`, `closed`, `frame_idx`, `town`,
+`pc_range`를 저장한다. 기본 ROI는
+`[-51.2, -51.2, -5, 51.2, 51.2, 3]`이고 학습 config가 범위를 override하면
+`--point-cloud-range`도 같은 값으로 지정해야 한다.
+
+Stock Bench2DriveZoo 학습은 이 프레임 NPZ를 직접 읽지 않는다. 학습용
+`b2d_infos_{train,val}.pkl`과 `b2d_map_infos.pkl`은
+`2026-Summer-Internship/team_code/data/`의 공식 파이프라인을 사용한다.
+`patches/bench2drivezoo_b2d_vad_map_gt.patch`는 원본 mmcv Bench2DriveZoo의
+`prepare_B2D.py`와 `B2D_vad_dataset.py`를 그대로 쓸 때만 참고한다.
+
+`visualize_vad_gt.py`는 QA 시각화에서 `b2d_map_infos.pkl`도 직접 읽을 수 있다.
+패치 전 PKL에 `stopline_points`와 `stopline_types`가 없으면 raw annotation의
+trigger volume에서 정지선을 다시 계산한다.
+
+```bash
+python3 visualize_vad_gt.py \
+  --anno-dir ./outputs/<scenario>/traffic_light/corrected_anno \
+  --map-infos-pkl /path/to/Bench2DriveZoo/data/infos/b2d_map_infos.pkl \
+  --scenario-name <scenario> \
+  --vectors-dir ./vector_gt/vectors \
+  --output-dir ./vector_gt/visualization \
+  --all-frames
+```
+
+BEV 선 스타일은 `Broken` 점선, `Solid` 실선, `SolidSolid` 이중실선,
+`Center` 초록색 선이다. 열린 선의 정방향/역방향 permutation-equivalence는
+stock 런타임의 `LiDARInstanceLines.shift_fixed_num_sampled_points_v2`가 만든다.
+
 ## 실행 옵션
 
 | 옵션 | 설명 | 기본값 |
@@ -262,7 +301,10 @@ trigger 내부 주행 구간까지 유지하는 시간 의미만 명확해진다
 | `--visualization`, `--no-visualization` | 카메라/BEV bbox 이미지 생성 여부 | 생성 |
 | `--video`, `--no-video` | 수정 결과 및 조건부 비교 MP4 생성 여부 | 생성 |
 | `--vector-map`, `--no-vector-map` | HD vector map 및 BEV lane overlay 생성 여부 | 생성 |
-| `--map-root PATH` | `Town*_HD_map.npz` 파일이 있는 폴더 | `Scenario_Filtering/maps` |
+| `--vad-vector-gt`, `--no-vad-vector-gt` | 프레임별 수치 vector GT와 확인용 BEV | 생성 |
+| `--vad-vector-stride N` | vector GT 생성 프레임 간격 | `1` |
+| `--point-cloud-range XMIN YMIN ZMIN XMAX YMAX ZMAX` | 학습 config와 맞출 vector GT ROI | `-51.2 -51.2 -5 51.2 51.2 3` |
+| `--maps-root PATH`, `--map-root PATH` | `Town*_HD_map.npz` 파일이 있는 폴더 | `Scenario_Filtering/maps` |
 | `--fps NUMBER` | MP4 초당 프레임 수 | `10.0` |
 | `--scale NUMBER` | BEFORE/AFTER 비교 영상 크기 배율 | `0.75` |
 | `--start-frame NUMBER` | 시각화를 시작할 프레임 번호 | 전체 시작 |
@@ -310,6 +352,9 @@ HD vector lane overlay가 포함된다.
     │       ├── relevance_frames.csv
     │       ├── relevance_events.csv
     │       └── affects_ego_changes.csv
+    ├── vad_vector_gt/
+    │   ├── vectors/*.npz
+    │   └── visualization/*.png
     ├── visualization/
     │   ├── after/
     │   │   └── camera/
@@ -324,6 +369,7 @@ HD vector lane overlay가 포함된다.
         ├── after_front.mp4
         ├── after_bev.mp4
         ├── vector_map.mp4                  # vector map 활성화 시
+        ├── vad_vector_gt.mp4               # VAD GT 활성화 시
         ├── before_after_front.mp4          # annotation 변경 시
         └── before_after_bev.mp4            # annotation 변경 시
 ```
@@ -342,6 +388,7 @@ HD vector lane overlay가 포함된다.
 | `affects_ego_changed_frames`, `affects_ego_changed_entries` | 실제 `affects_ego` 변경량 |
 | `visualized_frames`, `vector_map_frames` | 카메라/BEV 및 vector map 프레임 수 |
 | `after_front_video`, `after_bev_video`, `vector_map_video` | 수정 결과 영상 경로 |
+| `vad_vector_gt_status`, `vad_vector_gt_frames` | VAD vector GT 상태와 프레임 수 |
 | `comparison_created` | BEFORE/AFTER 비교 영상 생성 여부 |
 | `detail_csv`, `summary_csv` | 전체 bbox 진단 CSV 경로 |
 | `status` | `completed`, `review`, 또는 `failed` |
@@ -382,7 +429,7 @@ python3 fix_tl_bbox_permutation.py \
 ## 테스트
 
 ```bash
-python3 -m unittest -v test_traffic_light_relevance
+python3 -m unittest discover -s tests -v
 python3 -m compileall -q .
 ```
 
@@ -391,7 +438,8 @@ python3 -m compileall -q .
 ### HD vector map을 찾지 못함
 
 시나리오 이름의 Town과 같은 `Town*_HD_map.npz`가 `--map-root` 아래에 있는지
-확인한다. map 시각화가 필요하지 않으면 `--no-vector-map`을 사용한다.
+확인한다. map 시각화와 VAD GT가 모두 필요하지 않으면
+`--no-vector-map --no-vad-vector-gt`를 사용한다.
 
 ### 시각화에서 이미지 파일을 찾지 못함
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run traffic-light correction, visualization, videos, and CSV reporting."""
+"""Run traffic-light correction, VAD vector GT, visualization, and reporting."""
 
 from __future__ import annotations
 
@@ -43,8 +43,11 @@ from traffic_light_relevance import RelevanceConfig, correct_affects_ego
 SCRIPT_DIR = Path(__file__).resolve().parent
 FIX_SCRIPT = SCRIPT_DIR / "fix_tl_bbox_permutation.py"
 VISUALIZE_SCRIPT = SCRIPT_DIR / "visualize.py"
+VAD_VISUALIZE_SCRIPT = SCRIPT_DIR / "visualize_vad_gt.py"
+INTERNSHIP_ROOT = SCRIPT_DIR / "2026-Summer-Internship"
 ROUTE_RE = re.compile(r"_Route(\d+)_")
-TOWN_RE = re.compile(r"_Town([^_]+?)_Route")
+TOWN_RE = re.compile(r"_(Town\d+)(?:HD)?_Route", re.IGNORECASE)
+DEFAULT_PC_RANGE = (-51.2, -51.2, -5.0, 51.2, 51.2, 3.0)
 
 RESULT_FIELDS = [
     "component",
@@ -70,6 +73,11 @@ RESULT_FIELDS = [
     "comparison_bev_video",
     "detail_csv",
     "summary_csv",
+    "vad_vector_gt_status",
+    "vad_vector_gt_frames",
+    "vad_vector_gt_dir",
+    "vad_vector_gt_visualization_dir",
+    "vad_vector_gt_video",
     "elapsed_seconds",
     "status",
     "completion_sha256",
@@ -99,6 +107,11 @@ COMPLETION_METRIC_FIELDS = (
     "review_frames",
     "affects_ego_changed_frames",
     "affects_ego_changed_entries",
+    "vad_vector_gt_status",
+    "vad_vector_gt_frames",
+    "vad_vector_gt_dir",
+    "vad_vector_gt_visualization_dir",
+    "vad_vector_gt_video",
 )
 
 
@@ -249,7 +262,7 @@ def run_visualization(
         "--output-dir",
         str(output_dir),
         "--profile",
-        "camera-bev-map" if map_path is not None else "camera-bev",
+        "full" if map_path is not None else "camera-bev",
     ]
     if map_path is not None:
         command.extend(["--map-file", str(map_path)])
@@ -331,11 +344,80 @@ def empty_result(
         "comparison_bev_video": "",
         "detail_csv": str(bbox_detail_csv or ""),
         "summary_csv": str(bbox_summary_csv or ""),
+        "vad_vector_gt_status": "pending",
+        "vad_vector_gt_frames": 0,
+        "vad_vector_gt_dir": "",
+        "vad_vector_gt_visualization_dir": "",
+        "vad_vector_gt_video": "",
         "elapsed_seconds": "",
         "status": "failed",
         "completion_sha256": "",
         "approved": "false",
         "error": "",
+    }
+
+
+def generate_vad_vector_gt(
+    scenario: str,
+    anno_dir: Path,
+    clip_output: Path,
+    args: argparse.Namespace,
+) -> dict[str, Any]:
+    match = TOWN_RE.search(scenario)
+    if match is None:
+        raise ValueError(f"시나리오 이름에서 Town을 찾을 수 없습니다: {scenario}")
+    town = "Town" + re.search(r"\d+", match.group(1)).group(0)
+    map_file = args.maps_root / f"{town}_HD_map.npz"
+    if not map_file.is_file():
+        raise FileNotFoundError(f"Town HD map이 없습니다: {map_file}")
+
+    gt_root = clip_output / "vad_vector_gt"
+    vectors_dir = gt_root / "vectors"
+    visualization_dir = gt_root / "visualization"
+    command = [
+        sys.executable,
+        str(VAD_VISUALIZE_SCRIPT),
+        "--anno-dir",
+        str(anno_dir),
+        "--map-file",
+        str(map_file),
+        "--scenario-name",
+        scenario,
+        "--vectors-dir",
+        str(vectors_dir),
+        "--output-dir",
+        str(visualization_dir),
+        "--all-frames",
+        "--stride",
+        str(args.vad_vector_stride),
+        "--point-cloud-range",
+        *(str(value) for value in args.point_cloud_range),
+        "--show-training-points",
+    ]
+    run_command(command, "VAD-VECTOR-GT")
+
+    vector_frames = len(list(vectors_dir.glob("*.npz")))
+    visualized_frames = len(image_map(visualization_dir))
+    if vector_frames == 0:
+        raise RuntimeError("생성된 VAD vector GT가 없습니다")
+    if vector_frames != visualized_frames:
+        raise RuntimeError(
+            "VAD vector GT와 BEV 이미지 수가 다릅니다: "
+            f"{vector_frames} != {visualized_frames}"
+        )
+
+    video_path = ""
+    if args.video:
+        output_video = clip_output / "videos" / "vad_vector_gt.mp4"
+        make_video(visualization_dir, output_video, args.fps)
+        video_path = str(output_video)
+
+    return {
+        "vad_vector_gt_status": "completed",
+        "vad_vector_gt_frames": vector_frames,
+        "vad_vector_gt_dir": str(vectors_dir),
+        "vad_vector_gt_visualization_dir": str(visualization_dir),
+        "vad_vector_gt_video": video_path,
     }
 
 
@@ -392,13 +474,23 @@ def process_scenario(
     result.update(metrics)
     result["output_anno"] = str(output_anno)
 
+    if args.vad_vector_gt:
+        print("  VAD 학습용 vector-map GT/BEV 생성", flush=True)
+        result.update(
+            generate_vad_vector_gt(scenario, output_anno, clip_output, args)
+        )
+    else:
+        result["vad_vector_gt_status"] = "skipped"
+        print("  VAD vector-map GT 생성 생략 (--no-vad-vector-gt)")
+
     if args.visualization:
         map_path = None
         if args.vector_map:
             town_match = TOWN_RE.search(scenario)
             if town_match is None:
                 raise ValueError(f"시나리오 이름에서 Town을 찾지 못했습니다: {scenario}")
-            map_path = args.map_root / f"Town{town_match.group(1)}_HD_map.npz"
+            town = "Town" + re.search(r"\d+", town_match.group(1)).group(0)
+            map_path = args.maps_root / f"{town}_HD_map.npz"
             if not map_path.is_file():
                 raise FileNotFoundError(f"HD vector map을 찾지 못했습니다: {map_path}")
         after_visualization = clip_output / "visualization" / "after"
@@ -540,7 +632,32 @@ def build_parser() -> argparse.ArgumentParser:
         help="Town HD vector map 이미지와 MP4 생성 (기본값: true)",
     )
     parser.add_argument(
+        "--vad-vector-gt",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="수정 annotation 기반 프레임별 VAD vector-map GT 생성 (기본값: true)",
+    )
+    parser.add_argument(
+        "--vad-vector-stride",
+        type=int,
+        default=1,
+        help="vector GT를 생성할 annotation 프레임 간격 (기본값: 1)",
+    )
+    parser.add_argument(
+        "--point-cloud-range",
+        nargs=6,
+        type=float,
+        default=list(DEFAULT_PC_RANGE),
+        metavar=("XMIN", "YMIN", "ZMIN", "XMAX", "YMAX", "ZMAX"),
+        help=(
+            "VAD vector GT ROI. 학습 config와 동일하게 지정해야 합니다 "
+            "(기본값: -51.2 -51.2 -5 51.2 51.2 3)"
+        ),
+    )
+    parser.add_argument(
+        "--maps-root",
         "--map-root",
+        dest="maps_root",
         type=Path,
         default=SCRIPT_DIR / "maps",
         help="Town*_HD_map.npz가 있는 폴더 (기본값: ./maps)",
@@ -586,6 +703,35 @@ def build_parser() -> argparse.ArgumentParser:
         default=3,
         help="AUTO_FIX 동일 ID 최소 연속 프레임 수 (기본값: 3)",
     )
+    parser.add_argument(
+        "--build-pkl",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help=(
+            "corrected_anno로 학습용 b2d_infos_{train,val}.pkl/b2d_map_infos.pkl "
+            "생성 및 검증 (기본값: true). --manifest 없으면 train/val 구분이 없어 "
+            "항상 생략됨"
+        ),
+    )
+    parser.add_argument(
+        "--pkl-output-dir",
+        type=Path,
+        help="pkl 출력 폴더 (기본값: <output>/infos)",
+    )
+    parser.add_argument(
+        "--pkl-path-prefix",
+        default="",
+        help=(
+            "pkl에 저장할 논리 경로 접두사 (예: v1). 물리 --input은 그대로 두고 "
+            "folder/camera 경로만 이 접두사를 붙여 저장 (기본값: 없음, flat)"
+        ),
+    )
+    parser.add_argument(
+        "--pkl-workers",
+        type=int,
+        default=4,
+        help="prepare_b2d_infos.py 변환 worker 수 (기본값: 4)",
+    )
     return parser
 
 
@@ -597,6 +743,7 @@ def production_hashes(args: argparse.Namespace) -> tuple[str, str]:
             FIX_SCRIPT,
             SCRIPT_DIR / "traffic_light_relevance.py",
             SCRIPT_DIR / "production_contract.py",
+            VAD_VISUALIZE_SCRIPT,
         ]
     )
     config = {
@@ -611,6 +758,9 @@ def production_hashes(args: argparse.Namespace) -> tuple[str, str]:
         "visualization": args.visualization,
         "video": args.video,
         "vector_map": args.vector_map,
+        "vad_vector_gt": args.vad_vector_gt,
+        "vad_vector_stride": args.vad_vector_stride,
+        "point_cloud_range": args.point_cloud_range,
         "fps": args.fps,
         "comparison_scale": args.scale,
         "visualization_start_frame": args.start_frame,
@@ -880,12 +1030,93 @@ def check_production_outputs(
     return errors
 
 
+def build_training_pkl(
+    selection: ManifestSelection,
+    input_path: Path,
+    output_root: Path,
+    args: argparse.Namespace,
+) -> Path:
+    """Build b2d_infos_{train,val}.pkl + b2d_map_infos.pkl from corrected_anno.
+
+    ``validate_source_inventory`` already guaranteed ``input_path`` contains
+    exactly ``selection.clips`` and nothing else, so prepare_b2d_infos.py's
+    own "available - val" derivation of train (via discover_folders) lands on
+    the same train set as ``selection.train`` without passing it explicitly.
+    Every clip in ``selection.val``/``selection.train`` must already have a
+    complete ``<clip>/traffic_light/corrected_anno`` under ``output_root``
+    (guaranteed by finalize_completion's frame-set check for clips that
+    finished this run, or by a prior --resume run for skipped ones).
+    """
+    pkl_output_dir = args.pkl_output_dir or (output_root / "infos")
+    pkl_output_dir.mkdir(parents=True, exist_ok=True)
+    split_file = pkl_output_dir / "_split.json"
+    split_file.write_text(
+        json.dumps({"val": list(selection.val)}), encoding="utf-8"
+    )
+
+    command = [
+        sys.executable, "-m", "team_code.data.prepare_b2d_infos",
+        "--data-root", str(input_path),
+        "--split-file", str(split_file),
+        "--annotation-source", "corrected",
+        "--corrected-root", str(output_root),
+        "--map-root", str(args.maps_root),
+        "--output-dir", str(pkl_output_dir),
+        "--workers", str(args.pkl_workers),
+    ]
+    if args.pkl_path_prefix:
+        command.extend(["--path-prefix", args.pkl_path_prefix])
+    print(f"    [PREPARE-PKL] cwd={INTERNSHIP_ROOT} {' '.join(command)}", flush=True)
+    result = subprocess.run(command, cwd=INTERNSHIP_ROOT)
+    if result.returncode != 0:
+        raise RuntimeError(f"PREPARE-PKL 실패 (exit={result.returncode})")
+
+    train_pkl = pkl_output_dir / "b2d_infos_train.pkl"
+    val_pkl = pkl_output_dir / "b2d_infos_val.pkl"
+    map_pkl = pkl_output_dir / "b2d_map_infos.pkl"
+    for path in (train_pkl, val_pkl, map_pkl):
+        if not path.is_file():
+            raise RuntimeError(f"PREPARE-PKL 결과가 없습니다: {path}")
+
+    x_scale = max(abs(args.point_cloud_range[0]), abs(args.point_cloud_range[3]))
+    y_scale = max(abs(args.point_cloud_range[1]), abs(args.point_cloud_range[4]))
+    for split_name, info_file, peer_file in (
+        ("train", train_pkl, val_pkl),
+        ("val", val_pkl, train_pkl),
+    ):
+        report_path = pkl_output_dir / f"validation_report_{split_name}.json"
+        command = [
+            sys.executable, "-m", "team_code.data.validate_pkls",
+            "--data-root", str(input_path),
+            "--info-file", str(info_file),
+            "--map-file", str(map_pkl),
+            "--split-peer-info-file", str(peer_file),
+            "--stopline-normalization-metres", str(x_scale), str(y_scale),
+            "--output", str(report_path),
+        ]
+        print(f"    [VALIDATE-PKL] {' '.join(command)}", flush=True)
+        result = subprocess.run(command, cwd=INTERNSHIP_ROOT)
+        if result.returncode != 0:
+            raise RuntimeError(f"VALIDATE-PKL 실패 (exit={result.returncode})")
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        if report.get("status") != "passed" or report.get("errors"):
+            raise RuntimeError(
+                f"{split_name} pkl validation 실패: {report_path} "
+                f"(status={report.get('status')}, errors={report.get('errors')})"
+            )
+        print(
+            f"    {split_name}: records={report.get('records')}, "
+            f"status={report.get('status')}"
+        )
+    return pkl_output_dir
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     input_path = args.input.expanduser().resolve()
     output_root = args.output.expanduser().resolve()
-    args.map_root = args.map_root.expanduser().resolve()
+    args.maps_root = args.maps_root.expanduser().resolve()
 
     if args.manifest is not None:
         args.manifest = args.manifest.expanduser().resolve()
@@ -910,6 +1141,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         parser.error("--start-frame은 0 이상이어야 합니다")
     if args.max_frames is not None and args.max_frames < 1:
         parser.error("--max-frames는 1 이상이어야 합니다")
+    if args.vad_vector_stride < 1:
+        parser.error("--vad-vector-stride는 1 이상이어야 합니다")
+    if any(
+        lower >= upper
+        for lower, upper in zip(
+            args.point_cloud_range[:3], args.point_cloud_range[3:]
+        )
+    ):
+        parser.error("--point-cloud-range는 각 축에서 MIN이 MAX보다 작아야 합니다")
+    if (args.vad_vector_gt or args.vector_map) and not args.maps_root.is_dir():
+        parser.error(f"maps 폴더가 없습니다: {args.maps_root}")
     if args.approach_distance <= 0:
         parser.error("--approach-distance는 0보다 커야 합니다")
     if args.max_step <= 0:
@@ -934,6 +1176,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
     if args.check_only and args.resume:
         parser.error("--check-only와 --resume은 동시에 사용할 수 없습니다")
+    if args.pkl_workers < 1:
+        parser.error("--pkl-workers는 1 이상이어야 합니다")
+    if args.build_pkl and args.manifest is not None:
+        prepare_script = INTERNSHIP_ROOT / "team_code" / "data" / "prepare_b2d_infos.py"
+        if not prepare_script.is_file():
+            parser.error(f"pkl 생성 스크립트가 없습니다: {prepare_script}")
+    if args.pkl_output_dir is not None:
+        args.pkl_output_dir = args.pkl_output_dir.expanduser().resolve()
 
     selection: ManifestSelection | None = None
     try:
@@ -1091,6 +1341,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         update_production_reports(output_root, approvals)
     failures = sum(result["status"] == "failed" for result in results)
     print(f"최종 결과 CSV: {results_csv}")
+
+    if args.build_pkl:
+        if selection is None:
+            print("pkl 생성 생략: --manifest 없음 (train/val 구분 불가)")
+        elif failures:
+            print(f"pkl 생성 생략: 실패한 clip {failures}개 (results.csv 확인 후 재실행)")
+        else:
+            print("학습용 pkl 생성 및 검증", flush=True)
+            pkl_dir = build_training_pkl(selection, input_path, output_root, args)
+            print(f"pkl 출력: {pkl_dir}")
+
     return 1 if failures else 0
 
 
