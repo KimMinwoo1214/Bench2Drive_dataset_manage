@@ -46,6 +46,9 @@ NEIGHBOUR_RADIUS_M = 12.0
 CONTACT_CLEARANCE_M = 0.10
 # Frames inspected on each side of a contact run for the impulse response.
 IMPULSE_WINDOW = 4
+# A speed change larger than this in one frame is a spawn or teleport in the
+# log, not an impact: it would be 150 m/s^2 sustained over the whole frame.
+ARTIFACT_JUMP_M_S = 15.0
 
 
 def _finite(value: Any) -> float | None:
@@ -81,12 +84,21 @@ def _centre(box: Mapping[str, Any]) -> tuple[float, float] | None:
 
 
 def _series_jump(values: Sequence[float | None]) -> float:
-    """Largest change between consecutive samples, ignoring gaps."""
+    """Largest physically possible change between consecutive samples.
+
+    Changes above ARTIFACT_JUMP_M_S are dropped rather than reported. A car
+    cannot shed 25 m/s in one 100 ms frame; that value shows up because actors
+    are logged at full speed the frame they spawn, which made every
+    YieldToEmergencyVehicle clip look like a two-body impact.
+    """
     best = 0.0
     for before, after in zip(values, values[1:]):
         if before is None or after is None:
             continue
-        best = max(best, abs(after - before))
+        change = abs(after - before)
+        if change > ARTIFACT_JUMP_M_S:
+            continue
+        best = max(best, change)
     return best
 
 
