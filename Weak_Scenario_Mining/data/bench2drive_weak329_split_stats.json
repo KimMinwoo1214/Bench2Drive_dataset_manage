@@ -1,0 +1,218 @@
+{
+  "schema_version": 2,
+  "dataset": "Bench2Drive Weak329",
+  "totals": {
+    "clips": 329,
+    "train": 312,
+    "val": 17,
+    "validation_ratio": 0.05167173252279635,
+    "scenario_types": 4,
+    "towns": 8,
+    "weathers": 23,
+    "val_scenario_types": 4,
+    "val_towns": 7,
+    "val_weathers": 17
+  },
+  "by_scenario": {
+    "LaneChange": {
+      "all": 50,
+      "train": 47,
+      "val": 3
+    },
+    "VanillaNonSignalizedTurnEncounterStopsign": {
+      "all": 100,
+      "train": 95,
+      "val": 5
+    },
+    "VanillaSignalizedTurnEncounterRedLight": {
+      "all": 100,
+      "train": 95,
+      "val": 5
+    },
+    "YieldToEmergencyVehicle": {
+      "all": 79,
+      "train": 75,
+      "val": 4
+    }
+  },
+  "by_town": {
+    "Town03": {
+      "all": 2,
+      "train": 1,
+      "val": 1
+    },
+    "Town04": {
+      "all": 2,
+      "train": 1,
+      "val": 1
+    },
+    "Town05": {
+      "all": 2,
+      "train": 1,
+      "val": 1
+    },
+    "Town06": {
+      "all": 3,
+      "train": 3,
+      "val": 0
+    },
+    "Town10HD": {
+      "all": 2,
+      "train": 1,
+      "val": 1
+    },
+    "Town12": {
+      "all": 280,
+      "train": 277,
+      "val": 3
+    },
+    "Town13": {
+      "all": 37,
+      "train": 28,
+      "val": 9
+    },
+    "Town15": {
+      "all": 1,
+      "train": 0,
+      "val": 1
+    }
+  },
+  "by_weather": {
+    "Weather0": {
+      "all": 15,
+      "train": 14,
+      "val": 1
+    },
+    "Weather1": {
+      "all": 19,
+      "train": 18,
+      "val": 1
+    },
+    "Weather10": {
+      "all": 16,
+      "train": 15,
+      "val": 1
+    },
+    "Weather11": {
+      "all": 15,
+      "train": 14,
+      "val": 1
+    },
+    "Weather12": {
+      "all": 13,
+      "train": 12,
+      "val": 1
+    },
+    "Weather13": {
+      "all": 13,
+      "train": 12,
+      "val": 1
+    },
+    "Weather14": {
+      "all": 14,
+      "train": 13,
+      "val": 1
+    },
+    "Weather15": {
+      "all": 10,
+      "train": 9,
+      "val": 1
+    },
+    "Weather18": {
+      "all": 11,
+      "train": 11,
+      "val": 0
+    },
+    "Weather19": {
+      "all": 13,
+      "train": 12,
+      "val": 1
+    },
+    "Weather2": {
+      "all": 14,
+      "train": 13,
+      "val": 1
+    },
+    "Weather20": {
+      "all": 14,
+      "train": 14,
+      "val": 0
+    },
+    "Weather21": {
+      "all": 17,
+      "train": 16,
+      "val": 1
+    },
+    "Weather22": {
+      "all": 12,
+      "train": 12,
+      "val": 0
+    },
+    "Weather23": {
+      "all": 15,
+      "train": 15,
+      "val": 0
+    },
+    "Weather25": {
+      "all": 11,
+      "train": 10,
+      "val": 1
+    },
+    "Weather26": {
+      "all": 1,
+      "train": 0,
+      "val": 1
+    },
+    "Weather3": {
+      "all": 22,
+      "train": 21,
+      "val": 1
+    },
+    "Weather5": {
+      "all": 14,
+      "train": 14,
+      "val": 0
+    },
+    "Weather6": {
+      "all": 14,
+      "train": 14,
+      "val": 0
+    },
+    "Weather7": {
+      "all": 14,
+      "train": 13,
+      "val": 1
+    },
+    "Weather8": {
+      "all": 20,
+      "train": 19,
+      "val": 1
+    },
+    "Weather9": {
+      "all": 22,
+      "train": 21,
+      "val": 1
+    }
+  },
+  "algorithm": "coverage_aware_v1",
+  "seed": 42,
+  "weak_validation_ratio": 0.05,
+  "quota_rounding": "ceil",
+  "minimum_validation_per_scenario": 1,
+  "preserve_train_per_scenario": true,
+  "requested_weak_validation_count": 17,
+  "effective_weak_validation_count": 17,
+  "scenario_order": [
+    "VanillaNonSignalizedTurnEncounterStopsign",
+    "VanillaSignalizedTurnEncounterRedLight",
+    "LaneChange",
+    "YieldToEmergencyVehicle"
+  ],
+  "scenario_quotas": {
+    "VanillaNonSignalizedTurnEncounterStopsign": 5,
+    "VanillaSignalizedTurnEncounterRedLight": 5,
+    "LaneChange": 3,
+    "YieldToEmergencyVehicle": 4
+  },
+  "selection_sha256": "d40b361637d35c8758853adbd9772eaaac2eb08b5fdae13095e06088eec06a94"
+}

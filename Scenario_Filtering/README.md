@@ -83,6 +83,74 @@ maps/
 map이 다른 위치에 있으면 `--map-root /path/to/maps`를 지정한다. vector map 결과가
 필요하지 않으면 `--no-vector-map`을 사용한다.
 
+## Base1000 + Weak329 production
+
+Production에서는 폴더 전체를 재귀적으로 처리하지 않고 고정 결합 split의 clip만
+처리한다. Base와 Weak는 서로 다른 물리 root를 사용하되 같은 output root에
+component별로 누적한다.
+
+```bash
+SPLIT=Weak_Scenario_Mining/data/bench2drive_base1000_weak329_train_val_split.json
+
+python3 Scenario_Filtering/run_scenario_pipeline.py \
+  --input "$BASE_ROOT" --manifest "$SPLIT" --component base \
+  --output "$RELABEL_ROOT" --resume \
+  --no-visualization --no-video --no-vector-map
+
+python3 Scenario_Filtering/run_scenario_pipeline.py \
+  --input "$WEAK_ROOT" --manifest "$SPLIT" --component weak \
+  --output "$RELABEL_ROOT" --resume \
+  --no-visualization --no-video --no-vector-map
+```
+
+입력 root는 해당 component 목록과 정확히 같아야 한다. 누락, 중복 이름, split 밖
+annotation clip이 있으면 수정 전에 실패한다. bbox consensus는 매 실행마다 선택된
+component 전체를 스캔하므로, 일부 실패 clip을 재처리할 때도 나머지 clip의 bbox
+근거가 유지된다.
+
+각 clip의 `traffic_light/completion.json`에는 component, manifest/config/구현
+SHA256, 원본·corrected annotation SHA256, frame 수와 집합 일치 여부, status와
+판정 지표가 저장된다. `--resume`은 현재 값과 모두 일치하는 `completed` clip만
+건너뛴다. `review`나 hash가 오래된 clip은 다시 처리된다. 주행과 무관한 다른
+신호등의 bbox `no_consensus`는 warning이지만 관련 trigger 판정이 명확하면 clip은
+`completed`가 될 수 있다.
+
+사람 승인은 annotation을 바꾸지 않고 별도 JSON으로 관리한다. component, clip,
+`completion_sha256`가 모두 같아야 유효하므로 결과가 바뀌면 옛 승인은 자동
+무효다.
+
+```json
+{
+  "schema_version": 1,
+  "approvals": [
+    {
+      "component": "weak",
+      "clip": "Example_Town10HD_Route1_Weather26",
+      "completion_sha256": "...",
+      "approved_by": "reviewer-name",
+      "reason": "front/BEV와 원본 frame 집합 확인"
+    }
+  ]
+}
+```
+
+최종 검사는 production 실행과 같은 relevance/visualization 옵션을 전달한다.
+`--check-only`는 bbox, annotation, CSV를 새로 쓰지 않는다.
+
+```bash
+python3 Scenario_Filtering/run_scenario_pipeline.py \
+  --input "$BASE_ROOT" --manifest "$SPLIT" --component base \
+  --output "$RELABEL_ROOT" --check-only \
+  --review-approvals "$APPROVALS" \
+  --no-visualization --no-video --no-vector-map
+
+python3 Scenario_Filtering/run_scenario_pipeline.py \
+  --input "$WEAK_ROOT" --manifest "$SPLIT" --component weak \
+  --output "$RELABEL_ROOT" --check-only \
+  --review-approvals "$APPROVALS" \
+  --no-visualization --no-video --no-vector-map
+```
+
 ## 기본 실행
 
 시나리오 하나를 전체 처리한다.
@@ -186,6 +254,11 @@ trigger 내부 주행 구간까지 유지하는 시간 의미만 명확해진다
 | --- | --- | --- |
 | `--input PATH` | 시나리오, `anno`, 또는 데이터셋 상위 폴더 | 필수 |
 | `--output PATH` | 모든 결과가 생성될 폴더 | 필수 |
+| `--manifest PATH` | 고정 train/val 및 component 목록 | 단일 입력에서는 미사용 |
+| `--component {base,weak,all}` | manifest에서 처리할 물리 component | `all` |
+| `--resume` | hash가 맞는 `completed` clip만 건너뜀 | 끔 |
+| `--check-only` | output을 쓰지 않고 production 완결성 검사 | 끔 |
+| `--review-approvals PATH` | completion hash에 묶인 사람 승인 JSON | 없음 |
 | `--visualization`, `--no-visualization` | 카메라/BEV bbox 이미지 생성 여부 | 생성 |
 | `--video`, `--no-video` | 수정 결과 및 조건부 비교 MP4 생성 여부 | 생성 |
 | `--vector-map`, `--no-vector-map` | HD vector map 및 BEV lane overlay 생성 여부 | 생성 |
@@ -218,12 +291,18 @@ HD vector lane overlay가 포함된다.
 
 ```text
 <output>/
-├── results.csv
-├── bbox_reports/
+├── production_reports/                # --manifest 실행
+│   ├── base/{bbox_details.csv,bbox_details_summary.csv,results.csv}
+│   ├── weak/{bbox_details.csv,bbox_details_summary.csv,results.csv}
+│   ├── aggregate_results.csv
+│   └── review_queue.csv
+├── results.csv                         # 기존 단일 입력 실행
+├── bbox_reports/                       # 기존 단일 입력 실행
 │   ├── bbox_details.csv
 │   └── bbox_details_summary.csv
 └── <scenario>/
     ├── traffic_light/
+    │   ├── completion.json             # --manifest 실행
     │   ├── corrected_anno/
     │   │   ├── 00000.json.gz
     │   │   └── ...

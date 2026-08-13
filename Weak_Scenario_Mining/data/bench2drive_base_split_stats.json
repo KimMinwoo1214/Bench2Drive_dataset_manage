@@ -1,0 +1,456 @@
+{
+ "totals": {
+  "clips": {
+   "all": 1000,
+   "train": 950,
+   "val": 50
+  },
+  "frames": {
+   "all": 247575,
+   "train": 234769,
+   "val": 12806
+  },
+  "num_scenario_types": 43,
+  "num_towns": 12,
+  "num_weathers": 23
+ },
+ "by_scenario": {
+  "HazardAtSideLane": {
+   "all": 43,
+   "train": 42,
+   "val": 1,
+   "val_ratio_pct": 2.3
+  },
+  "ParkingCutIn": {
+   "all": 38,
+   "train": 37,
+   "val": 1,
+   "val_ratio_pct": 2.6
+  },
+  "AccidentTwoWays": {
+   "all": 35,
+   "train": 34,
+   "val": 1,
+   "val_ratio_pct": 2.9
+  },
+  "HardBreakRoute": {
+   "all": 35,
+   "train": 34,
+   "val": 1,
+   "val_ratio_pct": 2.9
+  },
+  "NonSignalizedJunctionLeftTurn": {
+   "all": 34,
+   "train": 33,
+   "val": 1,
+   "val_ratio_pct": 2.9
+  },
+  "TJunction": {
+   "all": 32,
+   "train": 30,
+   "val": 2,
+   "val_ratio_pct": 6.2
+  },
+  "VanillaNonSignalizedTurnEncounterStopsign": {
+   "all": 30,
+   "train": 29,
+   "val": 1,
+   "val_ratio_pct": 3.3
+  },
+  "VanillaSignalizedTurnEncounterRedLight": {
+   "all": 30,
+   "train": 28,
+   "val": 2,
+   "val_ratio_pct": 6.7
+  },
+  "HighwayExit": {
+   "all": 29,
+   "train": 28,
+   "val": 1,
+   "val_ratio_pct": 3.4
+  },
+  "Accident": {
+   "all": 28,
+   "train": 27,
+   "val": 1,
+   "val_ratio_pct": 3.6
+  },
+  "ParkedObstacle": {
+   "all": 28,
+   "train": 26,
+   "val": 2,
+   "val_ratio_pct": 7.1
+  },
+  "ConstructionObstacle": {
+   "all": 27,
+   "train": 25,
+   "val": 2,
+   "val_ratio_pct": 7.4
+  },
+  "ConstructionObstacleTwoWays": {
+   "all": 27,
+   "train": 26,
+   "val": 1,
+   "val_ratio_pct": 3.7
+  },
+  "HazardAtSideLaneTwoWays": {
+   "all": 27,
+   "train": 26,
+   "val": 1,
+   "val_ratio_pct": 3.7
+  },
+  "HighwayCutIn": {
+   "all": 27,
+   "train": 26,
+   "val": 1,
+   "val_ratio_pct": 3.7
+  },
+  "ParkingExit": {
+   "all": 27,
+   "train": 26,
+   "val": 1,
+   "val_ratio_pct": 3.7
+  },
+  "SignalizedJunctionLeftTurnEnterFlow": {
+   "all": 27,
+   "train": 26,
+   "val": 1,
+   "val_ratio_pct": 3.7
+  },
+  "VanillaSignalizedTurnEncounterGreenLight": {
+   "all": 27,
+   "train": 26,
+   "val": 1,
+   "val_ratio_pct": 3.7
+  },
+  "VehicleTurningRoute": {
+   "all": 27,
+   "train": 26,
+   "val": 1,
+   "val_ratio_pct": 3.7
+  },
+  "CrossingBicycleFlow": {
+   "all": 26,
+   "train": 25,
+   "val": 1,
+   "val_ratio_pct": 3.8
+  },
+  "DynamicObjectCrossing": {
+   "all": 26,
+   "train": 24,
+   "val": 2,
+   "val_ratio_pct": 7.7
+  },
+  "StaticCutIn": {
+   "all": 24,
+   "train": 23,
+   "val": 1,
+   "val_ratio_pct": 4.2
+  },
+  "BlockedIntersection": {
+   "all": 23,
+   "train": 22,
+   "val": 1,
+   "val_ratio_pct": 4.3
+  },
+  "ParkedObstacleTwoWays": {
+   "all": 23,
+   "train": 22,
+   "val": 1,
+   "val_ratio_pct": 4.3
+  },
+  "OppositeVehicleRunningRedLight": {
+   "all": 21,
+   "train": 20,
+   "val": 1,
+   "val_ratio_pct": 4.8
+  },
+  "OppositeVehicleTakingPriority": {
+   "all": 21,
+   "train": 20,
+   "val": 1,
+   "val_ratio_pct": 4.8
+  },
+  "SignalizedJunctionLeftTurn": {
+   "all": 21,
+   "train": 20,
+   "val": 1,
+   "val_ratio_pct": 4.8
+  },
+  "ParkingCrossingPedestrian": {
+   "all": 20,
+   "train": 19,
+   "val": 1,
+   "val_ratio_pct": 5.0
+  },
+  "PedestrianCrossing": {
+   "all": 20,
+   "train": 19,
+   "val": 1,
+   "val_ratio_pct": 5.0
+  },
+  "YieldToEmergencyVehicle": {
+   "all": 19,
+   "train": 18,
+   "val": 1,
+   "val_ratio_pct": 5.3
+  },
+  "MergerIntoSlowTrafficV2": {
+   "all": 18,
+   "train": 17,
+   "val": 1,
+   "val_ratio_pct": 5.6
+  },
+  "NonSignalizedJunctionLeftTurnEnterFlow": {
+   "all": 18,
+   "train": 17,
+   "val": 1,
+   "val_ratio_pct": 5.6
+  },
+  "VehicleTurningRoutePedestrian": {
+   "all": 18,
+   "train": 16,
+   "val": 2,
+   "val_ratio_pct": 11.1
+  },
+  "EnterActorFlow": {
+   "all": 15,
+   "train": 14,
+   "val": 1,
+   "val_ratio_pct": 6.7
+  },
+  "InterurbanAdvancedActorFlow": {
+   "all": 15,
+   "train": 14,
+   "val": 1,
+   "val_ratio_pct": 6.7
+  },
+  "LaneChange": {
+   "all": 15,
+   "train": 14,
+   "val": 1,
+   "val_ratio_pct": 6.7
+  },
+  "SignalizedJunctionRightTurn": {
+   "all": 15,
+   "train": 14,
+   "val": 1,
+   "val_ratio_pct": 6.7
+  },
+  "NonSignalizedJunctionRightTurn": {
+   "all": 14,
+   "train": 13,
+   "val": 1,
+   "val_ratio_pct": 7.1
+  },
+  "ControlLoss": {
+   "all": 13,
+   "train": 11,
+   "val": 2,
+   "val_ratio_pct": 15.4
+  },
+  "InterurbanActorFlow": {
+   "all": 13,
+   "train": 12,
+   "val": 1,
+   "val_ratio_pct": 7.7
+  },
+  "InvadingTurn": {
+   "all": 13,
+   "train": 12,
+   "val": 1,
+   "val_ratio_pct": 7.7
+  },
+  "MergerIntoSlowTraffic": {
+   "all": 8,
+   "train": 7,
+   "val": 1,
+   "val_ratio_pct": 12.5
+  },
+  "VehicleOpensDoorTwoWays": {
+   "all": 3,
+   "train": 2,
+   "val": 1,
+   "val_ratio_pct": 33.3
+  }
+ },
+ "by_town": {
+  "Town12": {
+   "all": 429,
+   "train": 417,
+   "val": 12
+  },
+  "Town13": {
+   "all": 189,
+   "train": 184,
+   "val": 5
+  },
+  "Town15": {
+   "all": 99,
+   "train": 95,
+   "val": 4
+  },
+  "Town05": {
+   "all": 55,
+   "train": 52,
+   "val": 3
+  },
+  "Town04": {
+   "all": 52,
+   "train": 47,
+   "val": 5
+  },
+  "Town03": {
+   "all": 49,
+   "train": 45,
+   "val": 4
+  },
+  "Town06": {
+   "all": 46,
+   "train": 40,
+   "val": 6
+  },
+  "Town07": {
+   "all": 33,
+   "train": 30,
+   "val": 3
+  },
+  "Town10HD": {
+   "all": 18,
+   "train": 14,
+   "val": 4
+  },
+  "Town01": {
+   "all": 13,
+   "train": 11,
+   "val": 2
+  },
+  "Town02": {
+   "all": 12,
+   "train": 10,
+   "val": 2
+  },
+  "Town11": {
+   "all": 5,
+   "train": 5,
+   "val": 0
+  }
+ },
+ "by_weather": {
+  "Weather0": {
+   "all": 39,
+   "train": 36,
+   "val": 3
+  },
+  "Weather1": {
+   "all": 41,
+   "train": 38,
+   "val": 3
+  },
+  "Weather2": {
+   "all": 49,
+   "train": 46,
+   "val": 3
+  },
+  "Weather3": {
+   "all": 67,
+   "train": 65,
+   "val": 2
+  },
+  "Weather5": {
+   "all": 37,
+   "train": 35,
+   "val": 2
+  },
+  "Weather6": {
+   "all": 40,
+   "train": 38,
+   "val": 2
+  },
+  "Weather7": {
+   "all": 40,
+   "train": 38,
+   "val": 2
+  },
+  "Weather8": {
+   "all": 59,
+   "train": 57,
+   "val": 2
+  },
+  "Weather9": {
+   "all": 64,
+   "train": 61,
+   "val": 3
+  },
+  "Weather10": {
+   "all": 39,
+   "train": 36,
+   "val": 3
+  },
+  "Weather11": {
+   "all": 38,
+   "train": 36,
+   "val": 2
+  },
+  "Weather12": {
+   "all": 43,
+   "train": 42,
+   "val": 1
+  },
+  "Weather13": {
+   "all": 38,
+   "train": 37,
+   "val": 1
+  },
+  "Weather14": {
+   "all": 43,
+   "train": 40,
+   "val": 3
+  },
+  "Weather15": {
+   "all": 39,
+   "train": 37,
+   "val": 2
+  },
+  "Weather18": {
+   "all": 40,
+   "train": 38,
+   "val": 2
+  },
+  "Weather19": {
+   "all": 34,
+   "train": 32,
+   "val": 2
+  },
+  "Weather20": {
+   "all": 40,
+   "train": 39,
+   "val": 1
+  },
+  "Weather21": {
+   "all": 36,
+   "train": 34,
+   "val": 2
+  },
+  "Weather22": {
+   "all": 37,
+   "train": 35,
+   "val": 2
+  },
+  "Weather23": {
+   "all": 62,
+   "train": 59,
+   "val": 3
+  },
+  "Weather25": {
+   "all": 33,
+   "train": 31,
+   "val": 2
+  },
+  "Weather26": {
+   "all": 42,
+   "train": 40,
+   "val": 2
+  }
+ }
+}
