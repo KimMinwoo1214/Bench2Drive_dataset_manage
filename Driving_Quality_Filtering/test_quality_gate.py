@@ -9,6 +9,7 @@ import struct
 import tempfile
 import unittest
 from pathlib import Path
+from typing import Sequence
 
 import numpy as np
 
@@ -84,54 +85,121 @@ class AuditTest(unittest.TestCase):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(header + b"test" + trailer)
 
-    def test_previous_expert_action_alignment(self) -> None:
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            clip = "Scenario_Town04_Route1_Weather0"
-            clip_dir = root / "base" / clip
-            config = {
-                "sample_hz": 10.0,
-                "sensor_validation_policy": "inventory_and_nonzero_size_all_signature_first_middle_last",
-                "required_sensor_keys": ["CAM_FRONT"],
-                "required_rgb_folders": ["rgb_front"],
-                "required_depth_folders": ["depth_front"],
-            }
-            actions = (5, 0)
-            for frame, action in enumerate(actions):
-                stem = f"{frame:05d}"
-                annotation = {
-                    "x": float(frame), "y": 0.0,
-                    "theta": 3.13 if frame == 0 else -3.13,
-                    "sensors": {"CAM_FRONT": {"intrinsic": [[1, 0, 0], [0, 1, 0], [0, 0, 1]]}},
-                    "bounding_boxes": [
-                        {"class": "ego_vehicle", "id": "ego", **box(float(frame), 0.0)}
-                    ],
-                }
-                anno = clip_dir / "anno" / f"{stem}.json.gz"
-                anno.parent.mkdir(parents=True, exist_ok=True)
-                with gzip.open(str(anno), "wt", encoding="utf-8") as file:
-                    json.dump(annotation, file)
-                self._media(clip_dir / "camera" / "rgb_front" / f"{stem}.jpg", b"\xff\xd8", b"\xff\xd9")
-                self._media(clip_dir / "camera" / "depth_front" / f"{stem}.png", b"\x89PNG\r\n\x1a\n")
-                self._media(clip_dir / "lidar" / f"{stem}.laz", b"LASF0000")
-                self._media(clip_dir / "radar" / f"{stem}.h5", b"\x89HDF\r\n\x1a\n")
-                expert_stem = "-0001" if frame == 0 else f"{frame - 1:05d}"
-                expert = clip_dir / "expert_assessment" / f"{expert_stem}.npz"
-                expert.parent.mkdir(parents=True, exist_ok=True)
-                np.savez(str(expert), arr_0=np.asarray([float(action)], dtype=np.float32))
-            payload = {
+    def _audit(
+        self, root: Path, annotations: Sequence[dict], actions: Sequence[int] = (5, 0)
+    ) -> dict:
+        """Materialize a minimal readable clip and audit it read-only."""
+        clip = "Scenario_Town04_Route1_Weather0"
+        clip_dir = root / "base" / clip
+        # Present so the unrelated MAP_MISSING review issue stays out of the way.
+        (root / "maps").mkdir(parents=True, exist_ok=True)
+        (root / "maps" / "Town04_HD_map.npz").touch()
+        for frame, (annotation, action) in enumerate(zip(annotations, actions)):
+            stem = f"{frame:05d}"
+            anno = clip_dir / "anno" / f"{stem}.json.gz"
+            anno.parent.mkdir(parents=True, exist_ok=True)
+            with gzip.open(str(anno), "wt", encoding="utf-8") as file:
+                json.dump(annotation, file)
+            self._media(clip_dir / "camera" / "rgb_front" / f"{stem}.jpg", b"\xff\xd8", b"\xff\xd9")
+            self._media(clip_dir / "camera" / "depth_front" / f"{stem}.png", b"\x89PNG\r\n\x1a\n")
+            self._media(clip_dir / "lidar" / f"{stem}.laz", b"LASF0000")
+            self._media(clip_dir / "radar" / f"{stem}.h5", b"\x89HDF\r\n\x1a\n")
+            expert_stem = "-0001" if frame == 0 else f"{frame - 1:05d}"
+            expert = clip_dir / "expert_assessment" / f"{expert_stem}.npz"
+            expert.parent.mkdir(parents=True, exist_ok=True)
+            np.savez(str(expert), arr_0=np.asarray([float(action)], dtype=np.float32))
+        return audit_clip(
+            {
                 "record": {
                     "name": clip, "component": "base", "split": "train",
                     "scenario": "Scenario", "town": "Town04", "weather": "Weather0",
                 },
-                "config": config,
+                "config": {
+                    "sample_hz": 10.0,
+                    "sensor_validation_policy": (
+                        "inventory_and_nonzero_size_all_signature_first_middle_last"
+                    ),
+                    "required_sensor_keys": ["CAM_FRONT"],
+                    "required_rgb_folders": ["rgb_front"],
+                    "required_depth_folders": ["depth_front"],
+                },
                 "base_root": str(root / "base"),
                 "weak_root": str(root / "weak"),
                 "map_root": str(root / "maps"),
             }
-            result = audit_clip(payload)
+        )
+
+    @staticmethod
+    def _annotation(frame: int, **overrides) -> dict:
+        annotation = {
+            "x": float(frame), "y": 0.0,
+            "theta": 3.13 if frame == 0 else -3.13,
+            "sensors": {"CAM_FRONT": {"intrinsic": [[1, 0, 0], [0, 1, 0], [0, 0, 1]]}},
+            "bounding_boxes": [
+                {"class": "ego_vehicle", "id": "ego", **box(float(frame), 0.0)}
+            ],
+        }
+        annotation.update(overrides)
+        return annotation
+
+    def test_previous_expert_action_alignment(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            result = self._audit(root, [self._annotation(0), self._annotation(1)])
             self.assertEqual(result["frames"][1]["x"], 1.0)
             self.assertEqual([row["expert_action_id"] for row in result["frames"]], [5, 0])
+
+    def test_nonfinite_top_level_pose_does_not_block_collision_audit(self) -> None:
+        """Approved policy: top-level x/y/theta never gate a clip.
+
+        No quality decision reads the ego pose, so a NaN there is recorded and
+        counted but must not be structurally fatal and must not stop the frame's
+        bbox collision scan.
+        """
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            overlapping = [
+                {"class": "ego_vehicle", "id": "ego", **box(0.0, 0.0)},
+                {"class": "vehicle", "id": "other", **box(0.5, 0.0)},
+            ]
+            result = self._audit(
+                root,
+                [
+                    self._annotation(0, theta=float("nan"), bounding_boxes=overlapping),
+                    self._annotation(1),
+                ],
+            )
+            metrics = result["metrics"]
+            self.assertEqual(metrics["structural_fatal_count"], 0)
+            self.assertEqual(metrics["structural_review_count"], 0)
+            self.assertEqual(metrics["nonfinite_ego_state_frames"], 1)
+            self.assertIsNone(result["frames"][0]["theta_rad"])
+            codes = {event["code"]: event["severity"] for event in result["events"]}
+            self.assertEqual(codes["EGO_STATE_NONFINITE"], "note")
+            # The whole point of the policy: the overlap is still measured.
+            self.assertEqual(metrics["positive_overlap_frames"], 1)
+            self.assertIn("BBOX_3D_OVERLAP", codes)
+
+    def test_nonfinite_bounding_box_is_still_fatal(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            broken = [{"class": "ego_vehicle", "id": "ego", **box(float("nan"), 0.0)}]
+            result = self._audit(
+                root, [self._annotation(0, bounding_boxes=broken), self._annotation(1)]
+            )
+            self.assertEqual(result["metrics"]["structural_fatal_count"], 1)
+            self.assertEqual(result["metrics"]["nonfinite_ego_state_frames"], 0)
+            self.assertIn("ANNOTATION_NONFINITE", result["metrics"]["issue_codes"])
+
+    def test_nonfinite_sensor_calibration_is_still_fatal(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            sensors = {"CAM_FRONT": {"intrinsic": [[float("nan"), 0, 0]]}}
+            result = self._audit(
+                root, [self._annotation(0, sensors=sensors), self._annotation(1)]
+            )
+            self.assertEqual(result["metrics"]["structural_fatal_count"], 1)
+            self.assertIn("ANNOTATION_NONFINITE", result["metrics"]["issue_codes"])
 
     def test_actor_categories_are_limited_to_three_dynamic_groups(self) -> None:
         self.assertEqual(actor_category({"class": "vehicle"}), "vehicle")

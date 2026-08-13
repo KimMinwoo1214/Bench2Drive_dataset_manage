@@ -17,6 +17,11 @@
 - `classify_quality.py`는 `mode=production`이고 review/exclude collision band가 모두
   채워진 config만 허용한다. calibration config를 넘기면 즉시 실패한다.
 - 위치 미분 속도·가속도·jerk·yaw-rate 등 ego 궤적 판정은 이 gate에서 사용하지 않는다.
+- 위 궤적 판정 제거에 따라 top-level `x`/`y`/`theta`는 어떤 판정에도 쓰이지 않는다.
+  이 세 필드의 비유한값은 `EGO_STATE_NONFINITE`(severity `note`)로 기록하고
+  `nonfinite_ego_state_frames`로 집계할 뿐, structural fatal이 아니며 해당 프레임의
+  bbox 충돌 검사를 중단하지도 않는다. 반면 실제 판정에 쓰는 bbox·transform·extent,
+  sensor/calibration, expert action의 비유한값은 그대로 structural fatal이다.
 - 자동 `EXCLUDE`는 구조 파손과 승인된 지속/심각 충돌 기준에만 사용한다. 양의 overlap
   전부를 사람이 보는 것이 아니라, 승인된 review band 이상만 `REVIEW`로 보낸다.
 - 사람 결정은 audit 전체 metrics/events hash와 clip metrics hash에 묶인다. audit이나

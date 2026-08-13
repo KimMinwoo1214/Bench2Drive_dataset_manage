@@ -36,6 +36,7 @@ NUMERIC_METRICS = (
     "duration_s",
     "structural_fatal_count",
     "structural_review_count",
+    "nonfinite_ego_state_frames",
     "sensor_inventory_file_count",
     "sensor_signature_sample_count",
     "positive_overlap_frames",

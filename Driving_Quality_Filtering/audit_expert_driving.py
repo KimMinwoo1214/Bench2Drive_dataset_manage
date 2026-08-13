@@ -60,10 +60,17 @@ CAMERA_TO_DEPTH = {
     "rgb_back_right": "depth_back_right",
 }
 VALID_ACTION_IDS = frozenset(range(39))
+# Top-level ego pose. No quality decision reads these: collisions come from the
+# oriented bboxes, and trajectory-derivative judgements were dropped from the
+# gate. A non-finite value here is therefore recorded and counted, but it never
+# marks the clip structurally fatal and never aborts the frame's bbox audit.
+# The PKL converter independently substitutes theta=NaN with pi.
+EGO_POSE_KEYS = ("x", "y", "theta")
 CSV_FIELDS = (
     "clip", "component", "split", "scenario", "town", "weather",
     "frame_count", "duration_s", "structural_fatal_count",
-    "structural_review_count", "map_available", "source_unchanged",
+    "structural_review_count", "nonfinite_ego_state_frames",
+    "map_available", "source_unchanged",
     "sensor_validation_policy", "sensor_inventory_file_count",
     "sensor_signature_sample_count",
     "positive_overlap_frames", "overlap_event_count",
@@ -322,6 +329,7 @@ def audit_clip(payload: Mapping[str, Any]) -> dict[str, Any]:
     frames: list[dict[str, Any]] = []
     issue_counts: Counter[str] = Counter()
     issue_severity: Counter[str] = Counter()
+    nonfinite_ego_state_frames = 0
 
     def issue(severity: str, code: str, message: str, affected: Sequence[int] = ()) -> None:
         issue_counts[code] += 1
@@ -407,7 +415,10 @@ def audit_clip(payload: Mapping[str, Any]) -> dict[str, Any]:
             frames.append(frame_row)
             continue
 
-        if not _finite_tree(annotation):
+        decisive = {
+            key: value for key, value in annotation.items() if key not in EGO_POSE_KEYS
+        }
+        if not _finite_tree(decisive):
             issue(
                 "fatal", "ANNOTATION_NONFINITE",
                 f"frame={number}: annotation contains a non-finite numeric value",
@@ -416,14 +427,23 @@ def audit_clip(payload: Mapping[str, Any]) -> dict[str, Any]:
             frames.append(frame_row)
             continue
 
-        try:
-            x = _finite_number(annotation.get("x"))
-            y = _finite_number(annotation.get("y"))
-            theta = _finite_number(annotation.get("theta"))
-        except (TypeError, ValueError) as error:
-            issue("fatal", "EGO_STATE_INVALID", f"frame={number}: {error}", [number])
-            frames.append(frame_row)
-            continue
+        pose: dict[str, float | None] = {}
+        invalid_pose_keys = []
+        for key in EGO_POSE_KEYS:
+            try:
+                pose[key] = _finite_number(annotation.get(key))
+            except (TypeError, ValueError) as error:
+                pose[key] = None
+                invalid_pose_keys.append(f"{key}: {error}")
+        if invalid_pose_keys:
+            nonfinite_ego_state_frames += 1
+            issue(
+                "note", "EGO_STATE_NONFINITE",
+                f"frame={number}: top-level {'; '.join(invalid_pose_keys)}; "
+                "recorded only, collision audit continues",
+                [number],
+            )
+        x, y, theta = pose["x"], pose["y"], pose["theta"]
 
         sensors = annotation.get("sensors")
         if not isinstance(sensors, dict):
@@ -559,6 +579,7 @@ def audit_clip(payload: Mapping[str, Any]) -> dict[str, Any]:
         "duration_s": len(anno_paths) / float(config["sample_hz"]),
         "structural_fatal_count": issue_severity["fatal"],
         "structural_review_count": issue_severity["review"],
+        "nonfinite_ego_state_frames": nonfinite_ego_state_frames,
         "map_available": map_available,
         "source_unchanged": source_unchanged,
         "sensor_validation_policy": config["sensor_validation_policy"],
