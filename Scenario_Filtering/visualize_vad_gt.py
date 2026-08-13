@@ -29,7 +29,6 @@ from typing import Any
 
 import cv2
 import numpy as np
-from scipy.spatial import cKDTree
 
 
 MAP_ELEMENT_CLASS = {
@@ -53,21 +52,13 @@ LEFTHAND_EGO_TO_LIDAR = np.array(
 )
 
 MAP_STYLE = {
-    "Broken": {"dashed": True, "color": (220, 120, 30)},
-    "Solid": {"dashed": False, "color": (0, 145, 255)},
-    "SolidSolid": {"dashed": False, "color": (40, 40, 220)},
-    "Center": {"dashed": True, "color": (45, 160, 45)},
-    "TrafficLight": {"dashed": False, "color": (180, 80, 220)},
-    "StopSign": {"dashed": False, "color": (150, 60, 140)},
+    "Broken": {"dashed": True, "double": False, "color": (220, 120, 30)},
+    "Solid": {"dashed": False, "double": False, "color": (0, 145, 255)},
+    "SolidSolid": {"dashed": False, "double": True, "color": (40, 40, 220)},
+    "Center": {"dashed": False, "double": False, "color": (45, 160, 45)},
+    "TrafficLight": {"dashed": False, "double": False, "color": (180, 80, 220)},
+    "StopSign": {"dashed": False, "double": False, "color": (150, 60, 140)},
 }
-
-# Trigger-volume types converted into a 2-point stop-line segment instead of
-# a closed polygon (see _trigger_edge_to_stopline).
-STOPLINE_SOURCE_TYPES = ("StopSign", "TrafficLight")
-# Tolerance (dot-product magnitude) around the most-perpendicular edge score
-# when picking which trigger-volume edge represents the stop line.
-STOPLINE_EDGE_TOLERANCE = 0.15
-
 
 def resample_polyline(points: np.ndarray, fixed_num: int = DEFAULT_POLYLINE_POINTS) -> np.ndarray:
     """Arc-length interpolation used only to visualize the fixed_num=20 target points."""
@@ -103,90 +94,6 @@ def contiguous_true_runs(mask: np.ndarray) -> list[tuple[int, int]]:
     return runs
 
 
-def clip_segment_to_rect(
-    a: np.ndarray,
-    b: np.ndarray,
-    xmin: float,
-    xmax: float,
-    ymin: float,
-    ymax: float,
-) -> tuple[np.ndarray, np.ndarray] | None:
-    """Liang-Barsky clip of segment a->b against an axis-aligned rectangle.
-
-    Unlike a plain "both endpoints inside" test, this also keeps the visible
-    part of a segment that straddles the ROI boundary (one or both endpoints
-    outside but the segment still crosses the box).
-    """
-    dx, dy = float(b[0] - a[0]), float(b[1] - a[1])
-    t0, t1 = 0.0, 1.0
-    for p, q in (
-        (-dx, a[0] - xmin),
-        (dx, xmax - a[0]),
-        (-dy, a[1] - ymin),
-        (dy, ymax - a[1]),
-    ):
-        if abs(p) < 1e-12:
-            if q < 0:
-                return None
-            continue
-        r = q / p
-        if p < 0:
-            if r > t1:
-                return None
-            t0 = max(t0, r)
-        else:
-            if r < t0:
-                return None
-            t1 = min(t1, r)
-    if t0 >= t1:
-        return None
-    direction = np.array([dx, dy])
-    return a + t0 * direction, a + t1 * direction
-
-
-def clip_polyline_to_rect(
-    points: np.ndarray,
-    xmin: float,
-    xmax: float,
-    ymin: float,
-    ymax: float,
-) -> list[np.ndarray]:
-    """Clip a polyline into connected ROI pieces without bridging gaps."""
-    xy = np.asarray(points, dtype=float).reshape(-1, 2)
-    if len(xy) < 2:
-        return []
-
-    pieces: list[np.ndarray] = []
-    current: list[np.ndarray] = []
-
-    def finish_current() -> None:
-        nonlocal current
-        if len(current) >= 2:
-            piece = np.asarray(current, dtype=float)
-            if np.any(np.linalg.norm(np.diff(piece, axis=0), axis=1) > 1e-9):
-                pieces.append(piece)
-        current = []
-
-    for start, end in zip(xy[:-1], xy[1:]):
-        clipped = clip_segment_to_rect(
-            start, end, xmin=xmin, xmax=xmax, ymin=ymin, ymax=ymax
-        )
-        if clipped is None:
-            finish_current()
-            continue
-
-        clipped_start, clipped_end = clipped
-        if current and np.allclose(current[-1], clipped_start, atol=1e-8):
-            if not np.allclose(current[-1], clipped_end, atol=1e-8):
-                current.append(clipped_end)
-        else:
-            finish_current()
-            current = [clipped_start, clipped_end]
-
-    finish_current()
-    return pieces
-
-
 def load_pickle(path: Path) -> Any:
     with path.open("rb") as f:
         return pickle.load(f)
@@ -218,131 +125,6 @@ def normalize_map_points(raw: Any, lane_mode: bool) -> np.ndarray:
         if array.size >= 3:
             points.append(array[:3])
     return np.asarray(points, dtype=float).reshape(-1, 3)
-
-
-def _build_center_lane_index(
-    center_lines: list[np.ndarray],
-) -> tuple[cKDTree, list[np.ndarray], np.ndarray, np.ndarray] | None:
-    """KD-tree over every Center-lane point for fast nearest-neighbor lookup.
-
-    Brute-force nearest-point search (all triggers x all Center-lane points)
-    is fine for small towns but times out on the large open-world maps
-    (Town12/Town13 have far more lane points than Town03), so this builds one
-    KD-tree per Town instead. ``owner_lane``/``owner_point`` map a flattened
-    point index back to (lane index into ``center_lines``, point index within
-    that lane) so a local tangent can still be estimated from neighbors.
-    """
-    lane_xy_list = [pts[:, :2] for pts in center_lines if len(pts) >= 2]
-    if not lane_xy_list:
-        return None
-    owner_lane = np.concatenate(
-        [np.full(len(xy), i, dtype=np.int32) for i, xy in enumerate(lane_xy_list)]
-    )
-    owner_point = np.concatenate(
-        [np.arange(len(xy), dtype=np.int32) for xy in lane_xy_list]
-    )
-    flat_xy = np.concatenate(lane_xy_list, axis=0)
-    tree = cKDTree(flat_xy)
-    return tree, lane_xy_list, owner_lane, owner_point
-
-
-def _nearest_center_tangent(
-    index: tuple[cKDTree, list[np.ndarray], np.ndarray, np.ndarray] | None,
-    query_xy: np.ndarray,
-) -> np.ndarray | None:
-    """Unit tangent of the Center-lane point closest to ``query_xy`` (world XY)."""
-    if index is None:
-        return None
-    tree, lane_xy_list, owner_lane, owner_point = index
-    _, flat_idx = tree.query(query_xy)
-    lane_idx = int(owner_lane[flat_idx])
-    point_idx = int(owner_point[flat_idx])
-    xy = lane_xy_list[lane_idx]
-    lo, hi = max(point_idx - 1, 0), min(point_idx + 1, len(xy) - 1)
-    tangent = xy[hi] - xy[lo]
-    norm = float(np.linalg.norm(tangent))
-    if norm < 1e-6:
-        return None
-    return tangent / norm
-
-
-def _trigger_edge_to_stopline(
-    points: np.ndarray, lane_dir: np.ndarray | None
-) -> tuple[np.ndarray, np.ndarray] | None:
-    """Pick the trigger-volume polygon edge that best represents a stop line.
-
-    Scores every polygon edge by how perpendicular it is to ``lane_dir`` (the
-    local direction of travel), keeps the edges tied for most-perpendicular,
-    and returns the one on the upstream/approach side -- the edge a vehicle
-    reaches first while entering the trigger volume.
-    """
-    points = np.asarray(points, dtype=float)
-    if len(points) >= 3 and np.allclose(points[0, :2], points[-1, :2]):
-        points = points[:-1]
-    xy = points[:, :2]
-    n = len(xy)
-    if n < 2:
-        return None
-    if lane_dir is None:
-        # No nearby Center lane found: fall back to the shortest edge, which
-        # is usually the cross-lane edge for an elongated trigger box.
-        lengths = [
-            (float(np.linalg.norm(xy[(i + 1) % n] - xy[i])), i) for i in range(n)
-        ]
-        _, chosen = min(lengths)
-        return points[chosen], points[(chosen + 1) % n]
-
-    centroid = xy.mean(axis=0)
-    scored = []
-    for i in range(n):
-        a, b = xy[i], xy[(i + 1) % n]
-        edge = b - a
-        length = float(np.linalg.norm(edge))
-        if length < 1e-6:
-            continue
-        edge_dir = edge / length
-        perpendicularity = abs(float(np.dot(edge_dir, lane_dir)))
-        scored.append((perpendicularity, i))
-    if not scored:
-        return None
-    best_score = min(score for score, _ in scored)
-    candidates = [
-        i for score, i in scored if score <= best_score + STOPLINE_EDGE_TOLERANCE
-    ]
-
-    def upstream_projection(i: int) -> float:
-        a, b = xy[i], xy[(i + 1) % n]
-        mid = (a + b) / 2.0
-        return float(np.dot(mid - centroid, lane_dir))
-
-    chosen = min(candidates, key=upstream_projection)
-    return points[chosen], points[(chosen + 1) % n]
-
-
-def extract_stoplines(
-    lane_points: list[np.ndarray],
-    lane_types: list[str],
-    trigger_points: list[np.ndarray],
-    trigger_types: list[str],
-) -> tuple[list[np.ndarray], list[str]]:
-    """Convert every supported trigger polygon into one open stop-line segment."""
-    center_lines = [
-        pts for pts, typ in zip(lane_points, lane_types) if typ == "Center"
-    ]
-    center_lane_index = _build_center_lane_index(center_lines)
-    stopline_points: list[np.ndarray] = []
-    stopline_types: list[str] = []
-    for points, typ in zip(trigger_points, trigger_types):
-        if typ not in STOPLINE_SOURCE_TYPES:
-            continue
-        centroid_xy = np.asarray(points, dtype=float)[:, :2].mean(axis=0)
-        lane_dir = _nearest_center_tangent(center_lane_index, centroid_xy)
-        segment = _trigger_edge_to_stopline(points, lane_dir)
-        if segment is None:
-            continue
-        stopline_points.append(np.stack(segment, axis=0))
-        stopline_types.append(typ)
-    return stopline_points, stopline_types
 
 
 def load_raw_map_info(map_file: Path, town: str) -> dict[str, dict[str, Any]]:
@@ -377,13 +159,6 @@ def load_raw_map_info(map_file: Path, town: str) -> dict[str, dict[str, Any]]:
                     lane_samples.append(points[indices])
                     lane_types.append(typ)
 
-    # Stop-line extraction only depends on static Town geometry (trigger
-    # polygon + nearest Center-lane tangent), so it is computed once here
-    # per Town instead of per frame.
-    stopline_points, stopline_types = extract_stoplines(
-        lane_points, lane_types, trigger_points, trigger_types
-    )
-
     return {town: {
         "lane_points": lane_points,
         "lane_sample_points": lane_samples,
@@ -391,9 +166,39 @@ def load_raw_map_info(map_file: Path, town: str) -> dict[str, dict[str, Any]]:
         "trigger_volumes_points": trigger_points,
         "trigger_volumes_sample_points": trigger_samples,
         "trigger_volumes_types": trigger_types,
-        "stopline_points": stopline_points,
-        "stopline_types": stopline_types,
     }}
+
+
+def load_map_infos_pkl(pkl_path: Path, town: str) -> dict[str, dict[str, Any]]:
+    """Load a single Town entry from prepare_b2d_infos.py's map-PKL output.
+
+    ``b2d_map_infos.pkl`` already stores per-town ``lane_points``/``lane_types``/
+    ``trigger_volumes_points`` in the exact shape ``map_vectors`` expects, so no
+    extra normalization is needed here -- unlike ``load_raw_map_info``, which
+    still parses the raw ``Town*_HD_map.npz``.
+    """
+    with pkl_path.open("rb") as f:
+        raw_map_infos = pickle.load(f)
+    if town not in raw_map_infos:
+        raise KeyError(f"town {town!r} not found in {pkl_path}")
+    return {town: raw_map_infos[town]}
+
+
+def detect_town(
+    anno_dir: Path, map_file: Path | None, scenario_name: str | None
+) -> str:
+    candidates = []
+    if map_file is not None:
+        candidates.append(map_file.stem)
+    if scenario_name:
+        candidates.append(scenario_name)
+    candidates.append(anno_dir.name)
+    candidates.append(anno_dir.parent.name)
+    for candidate in candidates:
+        match = re.search(r"Town\d+", candidate, re.IGNORECASE)
+        if match is not None:
+            return "Town" + re.search(r"\d+", match.group(0)).group(0)
+    raise ValueError(f"Town name not found near: {anno_dir}")
 
 
 def raw_infos_from_annotations(
@@ -635,6 +440,15 @@ def ego_future(
 
 
 def map_vectors(info: dict[str, Any], map_infos: dict[str, Any], pc_range: np.ndarray):
+    """Reproduce B2D_VAD_Dataset.get_map_info() exactly (team_code/data/b2d_vad_dataset.py).
+
+    Candidate lane prefilter distance (50 m) is hardcoded there regardless of
+    pc_range, boundary masks are strict (``>``/``<``, not ``>=``/``<=``), lane
+    points outside the mask are dropped (not clipped) before connecting the
+    remainder into one LineString, and trigger volumes (TrafficLight/StopSign)
+    are kept as closed polygons (all 4 corners must be in range) rather than
+    reduced to a stop-line segment.
+    """
     town = info["town_name"]
     if town not in map_infos:
         return []
@@ -642,59 +456,46 @@ def map_vectors(info: dict[str, Any], map_infos: dict[str, Any], pc_range: np.nd
     m = map_infos[town]
     w2l = np.asarray(info["sensors"]["LIDAR_TOP"]["world2lidar"], dtype=float)
     ego_xy_world = np.linalg.inv(w2l)[:2, 3]
-    roi_radius = math.hypot(
-        max(abs(float(pc_range[0])), abs(float(pc_range[3]))),
-        max(abs(float(pc_range[1])), abs(float(pc_range[4]))),
-    )
+    max_distance = 50.0
     vectors = []
 
-    for pts, samples, typ in zip(m["lane_points"], m["lane_sample_points"], m["lane_types"]):
+    lane_points = m["lane_points"]
+    lane_sample_points = m["lane_sample_points"]
+    lane_types = m["lane_types"]
+    for idx in range(len(lane_sample_points)):
+        samples = np.asarray(lane_sample_points[idx], dtype=float)
+        if np.min(np.linalg.norm(samples[:, :2] - ego_xy_world, axis=-1)) >= max_distance:
+            continue
+        typ = lane_types[idx]
         if typ not in MAP_ELEMENT_CLASS:
             continue
-        if np.min(
-            np.linalg.norm(np.asarray(samples)[:, :2] - ego_xy_world, axis=-1)
-        ) >= roi_radius:
-            continue
-        pts = np.asarray(pts, dtype=float)
+        pts = np.asarray(lane_points[idx], dtype=float)
         hom = np.concatenate([pts, np.ones((len(pts), 1))], axis=1)
         local = (w2l @ hom.T).T
-        # Clip every original segment and group only adjacent clipped segments.
-        # A lane that exits and later re-enters the ROI therefore becomes
-        # multiple instances instead of one fake diagonal across the gap.
-        for piece in clip_polyline_to_rect(
-            local[:, :2],
-            pc_range[0], pc_range[3], pc_range[1], pc_range[4],
-        ):
-            vectors.append((typ, piece, False))
-
-    stopline_points = m.get("stopline_points")
-    stopline_types = m.get("stopline_types")
-    if stopline_points is None or stopline_types is None:
-        stopline_points, stopline_types = extract_stoplines(
-            m.get("lane_points", []),
-            m.get("lane_types", []),
-            m.get("trigger_volumes_points", []),
-            m.get("trigger_volumes_types", []),
+        mask = (
+            (local[:, 0] > pc_range[0]) & (local[:, 0] < pc_range[3])
+            & (local[:, 1] > pc_range[1]) & (local[:, 1] < pc_range[4])
         )
+        local_in_range = local[mask, 0:2]
+        if len(local_in_range) > 1:
+            vectors.append((typ, local_in_range, False))
 
-    for pts, typ in zip(stopline_points, stopline_types):
+    trigger_points = m.get("trigger_volumes_points", [])
+    trigger_types = m.get("trigger_volumes_types", [])
+    for pts, typ in zip(trigger_points, trigger_types):
         if typ not in MAP_ELEMENT_CLASS:
             continue
         pts = np.asarray(pts, dtype=float)
         hom = np.concatenate([pts, np.ones((len(pts), 1))], axis=1)
         local = (w2l @ hom.T).T
         mask = (
-            (local[:, 0] >= pc_range[0]) & (local[:, 0] <= pc_range[3])
-            & (local[:, 1] >= pc_range[1]) & (local[:, 1] <= pc_range[4])
+            (local[:, 0] > pc_range[0]) & (local[:, 0] < pc_range[3])
+            & (local[:, 1] > pc_range[1]) & (local[:, 1] < pc_range[4])
         )
-        if not mask.any():
-            continue
-        pieces = clip_polyline_to_rect(
-            local[:, :2],
-            pc_range[0], pc_range[3], pc_range[1], pc_range[4],
-        )
-        for piece in pieces:
-            vectors.append((typ, piece, False))
+        local_in_range = local[mask, 0:2]
+        if mask.all():
+            closed = np.concatenate([local_in_range, local_in_range[0:1]], axis=0)
+            vectors.append((typ, closed, False))
     return vectors
 
 
@@ -728,15 +529,53 @@ def plot_sample(
         ) * (plot_bottom - plot_top)
         return np.rint(np.column_stack([x, y])).astype(np.int32)
 
-    def draw_polyline(points: np.ndarray, color, thickness=2, dashed=False):
+    def draw_polyline(points: np.ndarray, color, thickness=2, dashed=False, double=False):
         pixels = to_pixel(points)
         if len(pixels) < 2:
             return
-        if dashed:
+        if double:
+            # SolidSolid (double solid line): offset two parallel solid
+            # lines perpendicular to each segment instead of a single line.
+            offset = 2.0
             for i in range(len(pixels) - 1):
-                if i % 2 == 0:
-                    cv2.line(image, tuple(pixels[i]), tuple(pixels[i + 1]),
-                             color, thickness, cv2.LINE_AA)
+                p1 = pixels[i].astype(np.float64)
+                p2 = pixels[i + 1].astype(np.float64)
+                seg = p2 - p1
+                seg_norm = float(np.linalg.norm(seg))
+                if seg_norm < 1e-6:
+                    continue
+                perp = np.array([-seg[1], seg[0]]) / seg_norm * offset
+                for sign in (-1.0, 1.0):
+                    a = tuple(np.rint(p1 + sign * perp).astype(np.int32))
+                    b = tuple(np.rint(p2 + sign * perp).astype(np.int32))
+                    cv2.line(image, a, b, color, thickness, cv2.LINE_AA)
+        elif dashed:
+            # Dash by cumulative pixel arc-length, not by point index: source
+            # lane points can be a few cm apart (dense HD-map sampling), far
+            # below one pixel, so alternating raw segments would depend on
+            # rounding luck instead of drawing an actual visible dash.
+            dash_on, dash_off = 6.0, 4.0
+            pts = pixels.astype(np.float64)
+            seg_len = np.linalg.norm(np.diff(pts, axis=0), axis=1)
+            cumulative = np.concatenate([[0.0], np.cumsum(seg_len)])
+            total = float(cumulative[-1])
+            if total < 1e-6:
+                return
+            pos = 0.0
+            while pos < total:
+                end = min(pos + dash_on, total)
+                a = np.column_stack([
+                    np.interp(pos, cumulative, pts[:, 0]),
+                    np.interp(pos, cumulative, pts[:, 1]),
+                ])[0]
+                b = np.column_stack([
+                    np.interp(end, cumulative, pts[:, 0]),
+                    np.interp(end, cumulative, pts[:, 1]),
+                ])[0]
+                cv2.line(image, tuple(np.rint(a).astype(np.int32)),
+                         tuple(np.rint(b).astype(np.int32)),
+                         color, thickness, cv2.LINE_AA)
+                pos += dash_on + dash_off
         else:
             cv2.polylines(image, [pixels], False, color, thickness, cv2.LINE_AA)
 
@@ -752,8 +591,8 @@ def plot_sample(
 
     seen_labels = set()
     for typ, xy, _ in map_vectors(info, map_infos, pc_range):
-        style = MAP_STYLE.get(typ, {"dashed": False, "color": (30, 30, 30)})
-        draw_polyline(xy, style["color"], 2, style["dashed"])
+        style = MAP_STYLE.get(typ, {"dashed": False, "double": False, "color": (30, 30, 30)})
+        draw_polyline(xy, style["color"], 1, style["dashed"], style.get("double", False))
         if show_training_points:
             for point in to_pixel(resample_polyline(xy, DEFAULT_POLYLINE_POINTS)):
                 cv2.circle(image, tuple(point), 3, style["color"], -1, cv2.LINE_AA)
@@ -908,8 +747,14 @@ def plot_sample(
         if typ not in seen_labels:
             continue
         style = MAP_STYLE[typ]
-        cv2.line(image, (legend_x, legend_y), (legend_x + 22, legend_y),
-                 style["color"], 3, cv2.LINE_AA)
+        if style.get("double"):
+            cv2.line(image, (legend_x, legend_y - 2), (legend_x + 22, legend_y - 2),
+                     style["color"], 2, cv2.LINE_AA)
+            cv2.line(image, (legend_x, legend_y + 2), (legend_x + 22, legend_y + 2),
+                     style["color"], 2, cv2.LINE_AA)
+        else:
+            cv2.line(image, (legend_x, legend_y), (legend_x + 22, legend_y),
+                     style["color"], 3, cv2.LINE_AA)
         cv2.putText(image, typ, (legend_x + 27, legend_y + 5),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.36, (60, 60, 60), 1,
                     cv2.LINE_AA)
@@ -1015,7 +860,15 @@ def main() -> int:
         )
     )
     p.add_argument("--anno-dir", type=Path)
-    p.add_argument("--map-file", type=Path)
+    p.add_argument("--map-file", type=Path, help="Town*_HD_map.npz")
+    p.add_argument(
+        "--map-infos-pkl",
+        type=Path,
+        help=(
+            "prepare_b2d_infos.py 결과 b2d_map_infos.pkl 경로. 지정하면 "
+            "--map-file(npz) 대신 이 PKL에서 town map(lane/trigger_volumes)을 읽는다."
+        ),
+    )
     p.add_argument("--scenario-name")
     p.add_argument(
         "--vectors-dir",
@@ -1101,10 +954,18 @@ def main() -> int:
     )
     args = p.parse_args()
 
-    raw_mode = args.anno_dir is not None or args.map_file is not None
+    raw_mode = (
+        args.anno_dir is not None
+        or args.map_file is not None
+        or args.map_infos_pkl is not None
+    )
     if raw_mode:
-        if args.anno_dir is None or args.map_file is None:
-            p.error("raw mode requires both --anno-dir and --map-file")
+        if args.anno_dir is None:
+            p.error("raw mode requires --anno-dir")
+        if args.map_file is None and args.map_infos_pkl is None:
+            p.error("raw mode requires --map-file or --map-infos-pkl")
+        if args.map_file is not None and args.map_infos_pkl is not None:
+            p.error("use only one of --map-file or --map-infos-pkl")
         if args.infos is not None or args.map_infos is not None:
             p.error("do not mix raw annotation and legacy PKL inputs")
         if args.vectors_dir is None:
@@ -1113,18 +974,24 @@ def main() -> int:
             p.error("tracking modes are only available with legacy PKL inputs")
 
         anno_dir = args.anno_dir.expanduser().resolve()
-        map_file = args.map_file.expanduser().resolve()
         if not anno_dir.is_dir():
             p.error(f"annotation folder not found: {anno_dir}")
-        if not map_file.is_file():
-            p.error(f"map file not found: {map_file}")
-        town_match = re.search(r"Town\d+", map_file.stem, re.IGNORECASE)
-        if town_match is None:
-            p.error(f"Town name not found in map filename: {map_file.name}")
-        town = "Town" + re.search(r"\d+", town_match.group(0)).group(0)
         scenario_name = args.scenario_name or anno_dir.parent.name
+
+        if args.map_infos_pkl is not None:
+            map_infos_pkl = args.map_infos_pkl.expanduser().resolve()
+            if not map_infos_pkl.is_file():
+                p.error(f"map infos pkl not found: {map_infos_pkl}")
+            town = detect_town(anno_dir, None, scenario_name)
+            map_infos = load_map_infos_pkl(map_infos_pkl, town)
+        else:
+            map_file = args.map_file.expanduser().resolve()
+            if not map_file.is_file():
+                p.error(f"map file not found: {map_file}")
+            town = detect_town(anno_dir, map_file, scenario_name)
+            map_infos = load_raw_map_info(map_file, town)
+
         infos = raw_infos_from_annotations(anno_dir, town, scenario_name)
-        map_infos = load_raw_map_info(map_file, town)
         if not infos:
             p.error(f"annotation files not found: {anno_dir}")
     else:

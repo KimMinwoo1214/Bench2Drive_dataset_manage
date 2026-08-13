@@ -1,3 +1,5 @@
+"""Regression tests for trigger-volume traffic-light relevance decisions."""
+
 from __future__ import annotations
 
 import csv
