@@ -16,7 +16,12 @@ import numpy as np
 
 from audit_expert_driving import actor_category, audit_clip
 from build_patched_weak_root import build as build_patched_weak_root
-from classify_quality import automatic_classification, load_decisions
+from classify_quality import (
+    automatic_classification,
+    load_decisions,
+    load_sweep,
+    sweep_classification,
+)
 from geometry import oriented_box_metrics
 from materialize_depth_patches import materialize
 from quality_contract import (
@@ -443,6 +448,93 @@ class CalibrationSummaryTest(unittest.TestCase):
         ]
         self.assertEqual([row["clip"] for row in ranked], ["high", "low"])
         self.assertEqual([row["rank"] for row in ranked], [1, 2])
+
+
+class SweepClassificationTest(unittest.TestCase):
+    """The sweep decides what a person rules on; nothing auto-excludes on collision."""
+
+    @staticmethod
+    def _sweep(directory: Path, rows: list) -> Path:
+        directory.mkdir(parents=True, exist_ok=True)
+        (directory / "sweep_summary.json").write_text(
+            json.dumps({"schema_version": 1, "summary_sha256": "abc123"}), encoding="utf-8"
+        )
+        (directory / "contacts.jsonl").write_text(
+            "".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8"
+        )
+        return directory
+
+    @staticmethod
+    def _result(clip: str, **metrics) -> dict:
+        base = {"clip": clip, "structural_fatal_count": 0, "structural_review_count": 0}
+        base.update(metrics)
+        return {"metrics": base, "events": []}
+
+    def test_collision_evidence_becomes_review_not_exclude(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            sweep = self._sweep(
+                Path(directory),
+                [{"clip": "A", "verdict": "likely_collision", "category": "vehicle",
+                  "overlap_frames": 2, "reasons": ["EGO_IMPULSE_BEYOND_BRAKING"]}],
+            )
+            reasons, sha = load_sweep(sweep)
+            self.assertEqual(sha, "abc123")
+            status, codes = sweep_classification(self._result("A"), reasons)
+            # A person rules on it; the gate never excludes a collision on its own.
+            self.assertEqual(status, "REVIEW")
+            self.assertIn("SWEEP_LIKELY_COLLISION", codes)
+
+    def test_vulnerable_road_user_overlap_is_flagged(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            sweep = self._sweep(
+                Path(directory),
+                [{"clip": "A", "verdict": "suspect", "category": "pedestrian",
+                  "overlap_frames": 1, "reasons": []}],
+            )
+            reasons, _ = load_sweep(sweep)
+            status, codes = sweep_classification(self._result("A"), reasons)
+            self.assertEqual(status, "REVIEW")
+            self.assertIn("VULNERABLE_ROAD_USER_OVERLAP", codes)
+
+    def test_graze_and_static_overlap_pass(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            sweep = self._sweep(
+                Path(directory),
+                [{"clip": "A", "verdict": "contact_without_reaction", "category": "vehicle",
+                  "overlap_frames": 3, "reasons": []},
+                 {"clip": "B", "verdict": "static_overlap", "category": "vehicle",
+                  "overlap_frames": 9, "reasons": []}],
+            )
+            reasons, _ = load_sweep(sweep)
+            for clip in ("A", "B"):
+                self.assertEqual(sweep_classification(self._result(clip), reasons)[0], "PASS")
+
+    def test_structural_damage_still_excludes(self) -> None:
+        status, codes = sweep_classification(
+            self._result("A", structural_fatal_count=1), {}
+        )
+        self.assertEqual(status, "EXCLUDE")
+        self.assertEqual(codes, ["STRUCTURAL_FATAL"])
+
+    def test_decisions_are_bound_to_the_sweep_hash(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "decisions.json"
+            path.write_text(
+                json.dumps(
+                    {"schema_version": 1, "metrics_sha256": "m", "events_sha256": "e",
+                     "sweep_sha256": "old",
+                     "decisions": [{"clip": "A", "decision": "EXCLUDE", "reviewer": "r",
+                                    "reason_code": "c", "note": "n",
+                                    "clip_metrics_sha256": "h"}]}
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaises(ValueError):
+                load_decisions(path, metrics_sha256="m", events_sha256="e",
+                               sweep_sha256="new")
+            kept = load_decisions(path, metrics_sha256="m", events_sha256="e",
+                                  sweep_sha256="old")
+            self.assertEqual(kept["A"]["decision"], "EXCLUDE")
 
 
 class ClassificationTest(unittest.TestCase):

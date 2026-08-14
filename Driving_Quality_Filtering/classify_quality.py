@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Classify a completed calibration audit using an approved production config."""
+"""Classify a completed calibration audit into accepted and excluded clips.
+
+Collision evidence comes from the frame sweep (--sweep-dir), not from the
+calibration audit's penetration thresholds. Penetration cannot rank collisions
+in a rigid-body simulator: measured over the 1,329 clips, stationary box
+overlaps were deeper (median 0.20 m) than contacts made while driving (0.12 m).
+The sweep instead grades a contact by whether both bodies changed motion, and a
+moving car overlapping a pedestrian or cyclist counts on its own.
+
+Every clip the sweep grades as collision evidence becomes REVIEW, so a person
+decides it. Nothing is excluded for a collision automatically.
+"""
 
 from __future__ import annotations
 
@@ -35,6 +46,10 @@ except ImportError:
 
 
 STATUSES = {"PASS", "REVIEW", "EXCLUDE"}
+# Sweep verdicts that a person must rule on. "contact_without_reaction" and
+# "static_overlap" are left to PASS: the first is a graze with no evidence at
+# all, the second cannot be a collision because neither body was moving.
+SWEEP_REVIEW_VERDICTS = {"likely_collision", "suspect"}
 DECISIONS = {"ACCEPT", "EXCLUDE"}
 CLASSIFICATION_FIELDS = (
     "clip", "component", "split", "automatic_status", "final_status",
@@ -97,6 +112,44 @@ def _has_severe_collision(
     )
 
 
+def load_sweep(sweep_dir: Path) -> tuple[dict[str, list[str]], str]:
+    """Return per-clip sweep reason codes and the sweep's own hash."""
+    summary = read_json(sweep_dir / "sweep_summary.json")
+    if not isinstance(summary, dict) or "summary_sha256" not in summary:
+        raise ValueError(f"sweep summary is missing or malformed: {sweep_dir}")
+    reasons: dict[str, list[str]] = {}
+    with (sweep_dir / "contacts.jsonl").open(encoding="utf-8") as file:
+        for line in file:
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            if row.get("verdict") not in SWEEP_REVIEW_VERDICTS:
+                continue
+            codes = reasons.setdefault(str(row["clip"]), [])
+            codes.extend(str(code) for code in row.get("reasons", ()))
+            if row["verdict"] == "likely_collision":
+                codes.append("SWEEP_LIKELY_COLLISION")
+            if row.get("category") in ("pedestrian", "bicycle") and row.get("overlap_frames", 0) > 0:
+                codes.append("VULNERABLE_ROAD_USER_OVERLAP")
+    return {clip: sorted(set(codes)) for clip, codes in reasons.items()}, str(summary["summary_sha256"])
+
+
+def sweep_classification(
+    result: Mapping[str, Any], sweep_reasons: Mapping[str, Sequence[str]]
+) -> tuple[str, list[str]]:
+    """Structural damage still excludes; collision evidence goes to a person."""
+    metrics = result["metrics"]
+    clip = str(metrics["clip"])
+    if int(metrics.get("structural_fatal_count") or 0) > 0:
+        return "EXCLUDE", ["STRUCTURAL_FATAL"]
+    codes = list(sweep_reasons.get(clip, ()))
+    if int(metrics.get("structural_review_count") or 0) > 0:
+        codes.append("STRUCTURAL_REVIEW")
+    if codes:
+        return "REVIEW", sorted(set(codes))
+    return "PASS", []
+
+
 def automatic_classification(
     result: Mapping[str, Any], config: Mapping[str, Any]
 ) -> tuple[str, list[str]]:
@@ -145,6 +198,7 @@ def load_decisions(
     *,
     metrics_sha256: str,
     events_sha256: str,
+    sweep_sha256: str | None = None,
 ) -> dict[str, Mapping[str, Any]]:
     if path is None:
         return {}
@@ -153,6 +207,8 @@ def load_decisions(
         raise ValueError("decision file must have schema_version=1")
     if raw.get("metrics_sha256") != metrics_sha256 or raw.get("events_sha256") != events_sha256:
         raise ValueError("decision file is stale: audit metrics/events hash mismatch")
+    if sweep_sha256 is not None and raw.get("sweep_sha256") != sweep_sha256:
+        raise ValueError("decision file is stale: collision sweep hash mismatch")
     rows = raw.get("decisions")
     if not isinstance(rows, list):
         raise ValueError("decision file decisions must be a list")
@@ -188,6 +244,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--audit-dir", required=True, type=Path)
     parser.add_argument("--manifest", required=True, type=Path)
     parser.add_argument("--config", required=True, type=Path)
+    parser.add_argument(
+        "--sweep-dir",
+        type=Path,
+        help="collision sweep directory; its verdicts replace the penetration thresholds",
+    )
     parser.add_argument("--decisions", type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     args = parser.parse_args(argv)
@@ -200,7 +261,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     if not isinstance(completion, dict) or completion.get("status") != "completed":
         parser.error("audit completion is missing or incomplete")
     manifest = load_manifest(args.manifest)
-    config = load_config(args.config, require_production=True)
+    sweep_dir = args.sweep_dir.expanduser().resolve() if args.sweep_dir else None
+    sweep_reasons: dict[str, list[str]] = {}
+    sweep_sha: str | None = None
+    if sweep_dir is not None:
+        sweep_reasons, sweep_sha = load_sweep(sweep_dir)
+    # A sweep supplies the collision evidence itself, so the config only has to
+    # name the collision categories; its thresholds are unused in that mode.
+    config = load_config(args.config, require_production=sweep_dir is None)
     results = []
     for record in manifest.clips:
         result = _read_result(audit_dir / "clips" / f"{record.name}.json.gz")
@@ -214,8 +282,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     if metrics_sha != completion.get("metrics_sha256") or events_sha != completion.get("events_sha256"):
         parser.error("audit completion hash does not match clip artifacts")
     decisions = load_decisions(
-        args.decisions, metrics_sha256=metrics_sha, events_sha256=events_sha
+        args.decisions, metrics_sha256=metrics_sha, events_sha256=events_sha,
+        sweep_sha256=sweep_sha,
     )
+    if sweep_dir is not None:
+        unknown = set(sweep_reasons) - {record.name for record in manifest.clips}
+        if unknown:
+            parser.error(f"sweep grades clips outside the manifest: {sorted(unknown)[:5]}")
 
     rows = []
     accepted = []
@@ -224,7 +297,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     for result in results:
         metrics = result["metrics"]
         clip = str(metrics["clip"])
-        automatic_status, reasons = automatic_classification(result, config)
+        if sweep_dir is not None:
+            automatic_status, reasons = sweep_classification(result, sweep_reasons)
+        else:
+            automatic_status, reasons = automatic_classification(result, config)
         if automatic_status == "PASS":
             final_status = "ACCEPTED"
             accepted.append(clip)
@@ -283,6 +359,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         "audit_metrics_sha256": metrics_sha,
         "audit_events_sha256": events_sha,
         "config_sha256": sha256_file(args.config.expanduser().resolve()),
+        "collision_evidence": "sweep" if sweep_dir is not None else "audit_thresholds",
+        "sweep_sha256": sweep_sha,
         "accepted": len(accepted),
         "excluded": len(excluded),
         "unresolved": len(unresolved),
