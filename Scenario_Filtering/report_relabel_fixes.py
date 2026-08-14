@@ -62,6 +62,9 @@ def scan_details(path: Path) -> dict:
     after = [0] * HIST_BINS
     actions = Counter()
     ok = Counter()
+    ego = Counter()
+    ego_unverified = Counter()
+    group_sizes = Counter()
     per_clip = defaultdict(lambda: Counter())
     reassigned_before = []
     reassigned_after = []
@@ -73,6 +76,17 @@ def scan_details(path: Path) -> dict:
             counts = per_clip[clip]
             counts["entries"] += 1
             counts[action] += 1
+            # Only the lights that control the ego reach the model in a way
+            # that matters; the rest sit on other approaches. Counting them
+            # apart keeps a large, harmless "left alone" figure from reading
+            # as a large problem.
+            if row.get("affects_ego_after") == "1":
+                counts["ego"] += 1
+                ego[action] += 1
+                if row.get("ok_after") != "1":
+                    counts["ego_unverified"] += 1
+                    ego_unverified[action] += 1
+                    group_sizes[row.get("group_size", "")] += 1
             for phase in ("before", "after"):
                 if row.get(f"ok_{phase}") == "1":
                     ok[phase] += 1
@@ -87,6 +101,7 @@ def scan_details(path: Path) -> dict:
                     (reassigned_before if phase == "before" else reassigned_after).append(value)
     return {
         "before": before, "after": after, "actions": actions, "ok": ok,
+        "ego": ego, "ego_unverified": ego_unverified, "group_sizes": group_sizes,
         "per_clip": dict(per_clip),
         "reassigned_before": reassigned_before,
         "reassigned_after": reassigned_after,
@@ -205,6 +220,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "already_ok": counts["already_ok"],
                 "no_consensus": counts["no_consensus"],
                 "target_absent": counts["target_absent"],
+                "ego_entries": counts["ego"],
+                "ego_unverified": counts["ego_unverified"],
                 "ok_before": counts["ok_before"],
                 "ok_after": counts["ok_after"],
                 "ok_before_pct": round(counts["ok_before"] / entries * 100, 1),
@@ -324,11 +341,84 @@ def main(argv: Sequence[str] | None = None) -> int:
             "아래: 수정 후 — 그 봉우리가 사라진다.",
         ]
 
+    # The figure that actually decides whether anything needs eyes on it.
+    ego_total = sum(sum(scan["ego"].values()) for scan in scans.values())
+    ego_unverified = Counter()
+    group_sizes = Counter()
+    for scan in scans.values():
+        ego_unverified.update(scan["ego_unverified"])
+        group_sizes.update(scan["group_sizes"])
+    unverified_total = sum(ego_unverified.values())
+    affected = sorted(
+        (row for row in clip_rows if row["ego_unverified"]),
+        key=lambda row: (-row["ego_unverified"], row["clip"]),
+    )
+    lines += [
+        "",
+        "## 5. 손대지 않은 것은 문제인가",
+        "",
+        f"`합의 없음`이 {actions['no_consensus']:,}개로 크지만, 그 대부분은 **ego와",
+        "무관한 신호등**이다. 복구 규칙은 head가 교차로 건너편에 있다는 기하에",
+        "기대는데, T자 교차로나 신호등이 1~2개뿐인 곳에서는 그 조건으로 배정이",
+        "**유일하게 결정되지 않는다.** 그런 엔트리는 추측하지 않고 그대로 둔다.",
+        "",
+        f"전체 {entries:,}개 중 **ego에 영향을 주는 것은 {ego_total:,}개",
+        f"({ego_total / entries * 100:.1f}%)** 뿐이다. 그 기준으로 다시 세면:",
+        "",
+    ]
+    lines += _table(
+        [["판정", "ego 영향", "그중 각도 불일치"]]
+        + [[ACTION_LABEL.get(action, action), f"{count:,}",
+            f"**{ego_unverified[action]:,}**" if ego_unverified[action] else "0"]
+           for action, count in sorted(
+               ((a, c) for a, c in
+                ((a, sum(scan["ego"][a] for scan in scans.values()))
+                 for a in ACTION_LABEL)), key=lambda item: -item[1])],
+        ["l", "r", "r"],
+    )
+    lines += [
+        "",
+        f"> **재배정한 것 중 각도가 안 맞는 엔트리는 0개다.** 고친 것은 전부",
+        f"> 고쳐졌다. 남은 것은 `합의 없음` 쪽의 **{unverified_total:,}개",
+        f"> (전체의 {unverified_total / entries * 100:.2f}%)** 이고, 이것이 육안으로",
+        f"> 확인할 실제 범위다.",
+        "",
+    ]
+    if group_sizes:
+        lines += ["그 엔트리들이 속한 교차로의 신호등 수:", ""]
+        lines += _table(
+            [["교차로 신호등 수", "엔트리"]]
+            + [[size or "(미기록)", f"{count:,}"]
+               for size, count in sorted(group_sizes.items(),
+                                         key=lambda item: -item[1])],
+            ["l", "r"],
+        )
+        lines += [
+            "",
+            "3개 미만이면 배정을 결정할 정보 자체가 없다.",
+        ]
+    if affected:
+        lines += [
+            "",
+            f"### 확인 대상 클립 {len(affected)}개",
+            "",
+        ]
+        lines += _table(
+            [["클립", "구분", "ego 신호등", "각도 불일치", "비율"]]
+            + [[row["clip"], row["component"], f"{row['ego_entries']:,}",
+                f"{row['ego_unverified']:,}",
+                f"{row['ego_unverified'] / row['ego_entries'] * 100:.0f}%"]
+               for row in affected[:20]],
+            ["l", "l", "r", "r", "r"],
+        )
+        if len(affected) > 20:
+            lines += ["", f"이하 {len(affected) - 20}개는 `fix_by_clip.csv` 참조."]
+
     worst = [row for row in clip_rows if row["reassigned"]][:15]
     if worst:
         lines += [
             "",
-            "## 5. 피해가 컸던 클립 (육안 확인 우선순위)",
+            "## 6. 재배정이 많았던 클립",
             "",
         ]
         lines += _table(
@@ -349,7 +439,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         f"재배정이 한 건도 없었던 클립 **{len(untouched):,}개** — 원래 배정이 맞았거나",
         "신호등이 없는 구간이다.",
         "",
-        "## 6. 어디에 생기나",
+        "## 7. 어디에 생기나",
         "",
         "```",
         "relabel/",
