@@ -83,6 +83,10 @@ def _completed_classification(args: argparse.Namespace) -> Path:
 
 
 def _run_logged(args: argparse.Namespace, command: Sequence[str], label: str, cwd: Path) -> None:
+    # Logs are never overwritten, so a re-run has to name itself rather than
+    # delete the record of the attempt it is replacing.
+    if getattr(args, "run_label", None):
+        label = f"{label}-{args.run_label}"
     log = args.release_root / "logs" / f"{label}.log"
     if log.exists():
         raise ValueError(f"stage log already exists; refusing overwrite: {log}")
@@ -130,9 +134,7 @@ def _relabel_label(args: argparse.Namespace, component: str, check: bool) -> str
         base = f"relabel-{component}-approved-resume"
     else:
         base = f"relabel-{component}"
-    # Logs are never overwritten, so a re-run has to say which run it is
-    # rather than delete the record of the last one.
-    return f"{base}-{args.run_label}" if args.run_label else base
+    return base
 
 
 def _internship_module(args: argparse.Namespace, module: str, values: Sequence[str], label: str) -> None:
