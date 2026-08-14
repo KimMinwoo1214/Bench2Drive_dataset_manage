@@ -46,10 +46,20 @@ except ImportError:
 
 
 STATUSES = {"PASS", "REVIEW", "EXCLUDE"}
-# Sweep verdicts that a person must rule on. "contact_without_reaction" and
-# "static_overlap" are left to PASS: the first is a graze with no evidence at
-# all, the second cannot be a collision because neither body was moving.
-SWEEP_REVIEW_VERDICTS = {"likely_collision", "suspect"}
+# A contact reaches a person when any of three rules fires. Reaction evidence
+# alone is not enough, because two kinds of real collision leave no reaction:
+#   - hitting a pedestrian or a bicycle does not slow a car down, so the
+#     two-body reaction test is structurally blind to them;
+#   - a side swipe transfers no momentum along the direction of travel, so a
+#     confirmed one (LaneChange_Town12_Route17604, 54 km/h) had ego dv 0.00.
+# "static_overlap" never qualifies: neither body was moving, so the boxes
+# merely share space (a parked car alongside), which cannot be a collision.
+VULNERABLE_CATEGORIES = {"pedestrian", "bicycle"}
+STATIC_VERDICT = "static_overlap"
+# A vehicle contact with no reaction still needs eyes on it when the ego was
+# driving and the boxes genuinely interpenetrated rather than just grazed.
+VEHICLE_CONTACT_MIN_EGO_SPEED_M_S = 2.0
+VEHICLE_CONTACT_MIN_PENETRATION_M = 0.10
 DECISIONS = {"ACCEPT", "EXCLUDE"}
 CLASSIFICATION_FIELDS = (
     "clip", "component", "split", "automatic_status", "final_status",
@@ -112,6 +122,27 @@ def _has_severe_collision(
     )
 
 
+def contact_review_codes(row: Mapping[str, Any]) -> list[str]:
+    """Reason codes that send one contact run to a reviewer, empty if none do."""
+    if row.get("verdict") == STATIC_VERDICT:
+        return []
+    overlapped = int(row.get("overlap_frames") or 0) > 0
+    if row.get("category") in VULNERABLE_CATEGORIES and overlapped:
+        return ["VULNERABLE_ROAD_USER_OVERLAP"]
+    codes = [str(code) for code in row.get("reasons", ())]
+    if codes:
+        if row.get("verdict") == "likely_collision":
+            codes.append("SWEEP_LIKELY_COLLISION")
+        return codes
+    if (
+        overlapped
+        and float(row.get("ego_speed_before") or 0.0) >= VEHICLE_CONTACT_MIN_EGO_SPEED_M_S
+        and float(row.get("max_penetration_m") or 0.0) >= VEHICLE_CONTACT_MIN_PENETRATION_M
+    ):
+        return ["MOVING_VEHICLE_CONTACT"]
+    return []
+
+
 def load_sweep(sweep_dir: Path) -> tuple[dict[str, list[str]], str]:
     """Return per-clip sweep reason codes and the sweep's own hash."""
     summary = read_json(sweep_dir / "sweep_summary.json")
@@ -123,14 +154,9 @@ def load_sweep(sweep_dir: Path) -> tuple[dict[str, list[str]], str]:
             if not line.strip():
                 continue
             row = json.loads(line)
-            if row.get("verdict") not in SWEEP_REVIEW_VERDICTS:
-                continue
-            codes = reasons.setdefault(str(row["clip"]), [])
-            codes.extend(str(code) for code in row.get("reasons", ()))
-            if row["verdict"] == "likely_collision":
-                codes.append("SWEEP_LIKELY_COLLISION")
-            if row.get("category") in ("pedestrian", "bicycle") and row.get("overlap_frames", 0) > 0:
-                codes.append("VULNERABLE_ROAD_USER_OVERLAP")
+            codes = contact_review_codes(row)
+            if codes:
+                reasons.setdefault(str(row["clip"]), []).extend(codes)
     return {clip: sorted(set(codes)) for clip, codes in reasons.items()}, str(summary["summary_sha256"])
 
 

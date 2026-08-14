@@ -153,6 +153,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--quality-config", type=Path)
     parser.add_argument("--calibration-version", default="calibration_v1")
     parser.add_argument("--review-decisions", type=Path)
+    parser.add_argument(
+        "--collision-sweep",
+        type=Path,
+        help="collision sweep directory; its graded contacts replace the "
+             "penetration thresholds as the evidence a reviewer rules on",
+    )
     parser.add_argument("--review-approvals", type=Path)
     parser.add_argument("--clip-list", type=Path)
     parser.add_argument("--runtime-data-root", type=Path)
@@ -170,7 +176,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     for field in ("manifest", "base_root", "weak_root", "map_root", "internship_root", "release_root"):
         value = getattr(args, field).expanduser().resolve()
         setattr(args, field, value)
-    for field in ("quality_config", "review_decisions", "review_approvals", "clip_list", "runtime_data_root"):
+    for field in (
+        "quality_config", "review_decisions", "review_approvals",
+        "clip_list", "runtime_data_root", "collision_sweep",
+    ):
         value = getattr(args, field)
         if value is not None:
             setattr(args, field, value.expanduser().resolve())
@@ -209,6 +218,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             "--manifest", str(args.manifest), "--config", str(args.quality_config),
             "--output-dir", str(classification_output),
         ]
+        if args.collision_sweep is not None:
+            command.extend(["--sweep-dir", str(args.collision_sweep)])
         if final:
             command.extend(["--decisions", str(args.review_decisions)])
         # The candidate pass and the decision-bound final pass write different

@@ -496,18 +496,53 @@ class SweepClassificationTest(unittest.TestCase):
             self.assertEqual(status, "REVIEW")
             self.assertIn("VULNERABLE_ROAD_USER_OVERLAP", codes)
 
-    def test_graze_and_static_overlap_pass(self) -> None:
+    def test_moving_vehicle_contact_is_flagged_without_any_reaction(self) -> None:
+        # A side swipe transfers no momentum along the direction of travel, so
+        # the reaction tests stay silent on a collision that is plainly visible.
         with tempfile.TemporaryDirectory() as directory:
             sweep = self._sweep(
                 Path(directory),
                 [{"clip": "A", "verdict": "contact_without_reaction", "category": "vehicle",
-                  "overlap_frames": 3, "reasons": []},
-                 {"clip": "B", "verdict": "static_overlap", "category": "vehicle",
-                  "overlap_frames": 9, "reasons": []}],
+                  "overlap_frames": 4, "reasons": [], "ego_speed_before": 15.0,
+                  "max_penetration_m": 0.18}],
             )
             reasons, _ = load_sweep(sweep)
-            for clip in ("A", "B"):
+            status, codes = sweep_classification(self._result("A"), reasons)
+            self.assertEqual(status, "REVIEW")
+            self.assertEqual(codes, ["MOVING_VEHICLE_CONTACT"])
+
+    def test_graze_and_static_overlap_pass(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            sweep = self._sweep(
+                Path(directory),
+                # Deep contact, but the ego was crawling; and a parked-car
+                # overlap deep enough to outrank every moving run there is.
+                [{"clip": "A", "verdict": "contact_without_reaction", "category": "vehicle",
+                  "overlap_frames": 3, "reasons": [], "ego_speed_before": 0.4,
+                  "max_penetration_m": 0.22},
+                 {"clip": "B", "verdict": "static_overlap", "category": "vehicle",
+                  "overlap_frames": 9, "reasons": [], "ego_speed_before": 0.0,
+                  "max_penetration_m": 0.31},
+                 # Moving and overlapping, but only just touching.
+                 {"clip": "C", "verdict": "contact_without_reaction", "category": "vehicle",
+                  "overlap_frames": 2, "reasons": [], "ego_speed_before": 12.0,
+                  "max_penetration_m": 0.04}],
+            )
+            reasons, _ = load_sweep(sweep)
+            for clip in ("A", "B", "C"):
                 self.assertEqual(sweep_classification(self._result(clip), reasons)[0], "PASS")
+
+    def test_static_overlap_never_reaches_review_even_for_a_pedestrian(self) -> None:
+        # Standing beside a pedestrian shares space; it cannot be a collision.
+        with tempfile.TemporaryDirectory() as directory:
+            sweep = self._sweep(
+                Path(directory),
+                [{"clip": "A", "verdict": "static_overlap", "category": "pedestrian",
+                  "overlap_frames": 40, "reasons": [], "ego_speed_before": 0.0,
+                  "max_penetration_m": 0.5}],
+            )
+            reasons, _ = load_sweep(sweep)
+            self.assertEqual(sweep_classification(self._result("A"), reasons)[0], "PASS")
 
     def test_structural_damage_still_excludes(self) -> None:
         status, codes = sweep_classification(
