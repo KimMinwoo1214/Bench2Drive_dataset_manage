@@ -37,7 +37,11 @@ from production_contract import (
     validate_source_inventory,
     write_completion,
 )
-from traffic_light_relevance import RelevanceConfig, correct_affects_ego
+from traffic_light_relevance import (
+    RelevanceConfig,
+    correct_affects_ego,
+    read_bbox_reliability_index,
+)
 
 
 def add_boolean_flag(
@@ -461,6 +465,7 @@ def process_scenario(
     bbox_summary_csv: Path,
     output_root: Path,
     args: argparse.Namespace,
+    bbox_reliability: Mapping[tuple[str, str], bool] | None = None,
 ) -> dict[str, Any]:
     started = time.perf_counter()
     clip_output = output_root / scenario
@@ -497,6 +502,7 @@ def process_scenario(
         bbox_detail_csv=bbox_detail_csv,
         bbox_clip_key=bbox_clip_key,
         config=relevance_config,
+        bbox_reliability=bbox_reliability,
     )
     metrics = {**bbox_metrics, **relevance_metrics}
     if not output_anno.is_dir():
@@ -1291,6 +1297,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             clip_list_path,
             workers=args.bbox_workers,
         )
+        # Group the diagnostic CSV once. Asking it per clip re-read the whole
+        # file every time, which dominated the run for a production-sized set.
+        bbox_reliability_index = read_bbox_reliability_index(bbox_detail_csv)
         for index, (scenario, scenario_dir, anno_dir) in enumerate(scenarios, start=1):
             print(f"[{index}/{len(scenarios)}] {scenario}", flush=True)
             clip_output = output_root / scenario
@@ -1331,6 +1340,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                     bbox_summary_csv,
                     output_root,
                     args,
+                    bbox_reliability_index.get(bbox_clip_key, {}),
                 )
                 print(
                     "  완료: bbox_frames={bbox}, affects_frames={affects}, "

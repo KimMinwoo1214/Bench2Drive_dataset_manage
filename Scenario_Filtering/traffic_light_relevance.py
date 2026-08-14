@@ -20,7 +20,7 @@ import math
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterable, Sequence
+from typing import Any, Iterable, Mapping, Sequence
 
 
 DECISION_FIELDS = [
@@ -370,23 +370,36 @@ def _approach_start(
     return start
 
 
+def read_bbox_reliability_index(
+    detail_csv: Path | None,
+) -> dict[str, dict[tuple[str, str], bool]]:
+    """Group the whole bbox diagnostic CSV by clip in one pass.
+
+    The caller used to ask this file for one clip at a time, and each ask read
+    all of it. Across a production run that is the same 100 MB parsed once per
+    clip -- about 100 GB of CSV for a thousand clips, and by far the slowest
+    part of relabelling. Reading it once costs a few hundred MB of memory and
+    turns that back into 100 MB.
+    """
+    index: dict[str, dict[tuple[str, str], bool]] = {}
+    if detail_csv is None or not detail_csv.is_file():
+        return index
+    with detail_csv.open(newline="", encoding="utf-8-sig") as file:
+        for row in csv.DictReader(file):
+            frame = str(row.get("frame", ""))
+            if frame.endswith(".json"):
+                frame = frame[: -len(".json")]
+            clip = str(row.get("clip", ""))
+            key = frame, str(row.get("tl_id", ""))
+            index.setdefault(clip, {})[key] = str(row.get("ok_after", "0")) == "1"
+    return index
+
+
 def read_bbox_reliability(
     detail_csv: Path | None,
     clip_key: str,
 ) -> dict[tuple[str, str], bool]:
-    if detail_csv is None or not detail_csv.is_file():
-        return {}
-    result: dict[tuple[str, str], bool] = {}
-    with detail_csv.open(newline="", encoding="utf-8-sig") as file:
-        for row in csv.DictReader(file):
-            if row.get("clip") != clip_key:
-                continue
-            frame = str(row.get("frame", ""))
-            if frame.endswith(".json"):
-                frame = frame[: -len(".json")]
-            key = frame, str(row.get("tl_id", ""))
-            result[key] = str(row.get("ok_after", "0")) == "1"
-    return result
+    return read_bbox_reliability_index(detail_csv).get(clip_key, {})
 
 
 def build_crossing_events(
@@ -646,10 +659,17 @@ def correct_affects_ego(
     bbox_detail_csv: Path | None = None,
     bbox_clip_key: str = ".",
     config: RelevanceConfig | None = None,
+    bbox_reliability: Mapping[tuple[str, str], bool] | None = None,
 ) -> dict[str, Any]:
     config = config or RelevanceConfig()
     frames = load_frames(bbox_annotation_directory)
-    reliability = read_bbox_reliability(bbox_detail_csv, bbox_clip_key)
+    # A caller processing many clips builds the index once and passes this
+    # clip's slice; on its own the fallback re-reads the whole CSV.
+    reliability = (
+        dict(bbox_reliability)
+        if bbox_reliability is not None
+        else read_bbox_reliability(bbox_detail_csv, bbox_clip_key)
+    )
     events = build_crossing_events(frames, scenario, reliability, config)
     decisions = make_decisions(frames, events, config)
     output_annotation_directory.mkdir(parents=True, exist_ok=True)

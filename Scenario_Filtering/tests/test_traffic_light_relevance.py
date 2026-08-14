@@ -9,6 +9,8 @@ import unittest
 from pathlib import Path
 
 from traffic_light_relevance import (
+    read_bbox_reliability,
+    read_bbox_reliability_index,
     RelevanceConfig,
     correct_affects_ego,
     segment_intersects_trigger,
@@ -259,3 +261,45 @@ class RelevanceCorrectionTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class BboxReliabilityIndexTest(unittest.TestCase):
+    """Grouping the CSV once must answer exactly what asking per clip did."""
+
+    HEADER = "clip,frame,tl_id,ok_after\n"
+    ROWS = [
+        "clipA,00000.json,11,1\n",
+        "clipA,00000.json,12,0\n",
+        "clipA,00001.json,11,1\n",
+        "clipB,00000.json,11,0\n",
+        "clipB,00007.json,99,1\n",
+    ]
+
+    def _csv(self, directory: Path) -> Path:
+        path = directory / "bbox_details.csv"
+        path.write_text(self.HEADER + "".join(self.ROWS), encoding="utf-8-sig")
+        return path
+
+    def test_index_matches_the_per_clip_reader(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = self._csv(Path(directory))
+            index = read_bbox_reliability_index(path)
+            self.assertEqual(sorted(index), ["clipA", "clipB"])
+            for clip in ("clipA", "clipB", "missing"):
+                self.assertEqual(
+                    index.get(clip, {}), read_bbox_reliability(path, clip)
+                )
+
+    def test_frame_suffix_is_stripped_and_flag_parsed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            index = read_bbox_reliability_index(self._csv(Path(directory)))
+            self.assertEqual(
+                index["clipA"], {("00000", "11"): True, ("00000", "12"): False,
+                                 ("00001", "11"): True},
+            )
+
+    def test_absent_csv_is_empty_not_an_error(self) -> None:
+        self.assertEqual(read_bbox_reliability_index(None), {})
+        self.assertEqual(
+            read_bbox_reliability_index(Path("/nonexistent/bbox_details.csv")), {}
+        )
