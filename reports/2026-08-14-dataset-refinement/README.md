@@ -39,7 +39,9 @@ Base 1,000 + Weak 329 = **1,329 클립 / 324,566 프레임**
 | 03 | [EXCLUSION_LEDGER](03_EXCLUSION_LEDGER.md) | **제외**: 29개가 어디서 왜 빠졌나. 클립별 측정값 |
 | 04 | [RELABEL_FIX_LEDGER](04_RELABEL_FIX_LEDGER.md) | **처리**: 신호등 배정을 어떻게 고쳤나 |
 | 05 | [REVIEW_DECISION](05_REVIEW_DECISION.md) | **판단**: 보류 83개를 왜 승인했나, 무엇을 포기했나 |
-| 06 | `06_PKL.md` | **반영**: PKL 에 어떻게 들어갔나 *(PKL 생성 후 추가)* |
+| 06 | `06_PKL.md` | **반영**: PKL 에 어떻게 들어갔나 *(변환 완료 시 자동 생성)* |
+| — | [NEXT](NEXT.md) | **돌아와서 할 것.** PKL 결과 확인 · push · 실패 시 재개 |
+| — | `STATUS.md` | **PKL 이 어떻게 끝났나.** 성공이든 실패든 여기 적힌다 |
 
 `ops/` 에는 진행 중 남긴 운영 기록이 있다(작업 계획, 중간 감사, 단계별 리포트).
 
