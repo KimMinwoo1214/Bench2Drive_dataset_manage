@@ -89,7 +89,7 @@ provenance      모든 입력의 sha256, 두 repo 의 커밋
 
 ## 그림 — `figures/`
 
-48장. 각 묶음이 하나의 주장을 뒷받침한다.
+78장. 각 묶음이 하나의 주장을 뒷받침한다.
 
 | 폴더 | 장수 | 무엇을 보여주나 |
 |---|---:|---|
@@ -98,8 +98,31 @@ provenance      모든 입력의 sha256, 두 repo 의 커밋
 | `03_affects_ego/` | 12 | **`affects_ego` 가 실제로 바뀐 프레임.** 시나리오 계열이 겹치지 않게 선정. `UNAFFECTED` → `AFFECTS` 로 켜지는 것이 보인다 |
 | `04_withheld/` | 2 | **왜 보류했나.** T자 교차로 — 신호등이 3개 미만이라 "head 는 건너편에 있다" 규칙으로 배정이 결정되지 않는다 |
 | `05_charts/` | 1 | **facing error 전/후 히스토그램.** 수정 전 18° 봉우리(=한 칸 밀린 배정의 지문)가 수정 후 사라진다 |
+| `06_signalized/` | 30 | **신호 시나리오에서의 `affects_ego` 수정.** 10개 계열 × 프레임 3개. `UNAFFECTED` → `AFFECTS` 로 켜지는 순간이고, 좌우 신호등은 `UNAFFECTED` 로 남아 **엉뚱한 걸 켠 게 아님**까지 보인다 |
 
 > 비교 이미지는 전부 **위 = 원본 anno / 아래 = 수정본 anno, 같은 프레임** 이다.
+
+### 신호 시나리오에서 얼마나 고쳐졌나
+
+`affects_ego` 수정 17,196 엔트리 중 **신호 관련 계열이 3,915개(22.8%), 188 클립**이다.
+
+| 계열 | 엔트리 | 클립 |
+|---|---:|---:|
+| `VanillaSignalizedTurnEncounterRedLight` | **1,530** | **120** |
+| `VanillaSignalizedTurnEncounterGreenLight` | 758 | 19 |
+| `SignalizedJunctionLeftTurn` | 556 | 12 |
+| `NonSignalizedJunctionLeftTurn` | 534 | — |
+| `VanillaNonSignalizedTurnEncounterStopsign` | 303 | — |
+| `SignalizedJunctionRightTurn` | 178 | — |
+| `SignalizedJunctionLeftTurnEnterFlow` | 56 | — |
+
+엔트리 1위인 `AccidentTwoWays`(2,755)는 클립이 6개뿐이라 한 클립에 몰린 것이고,
+**신호 계열은 120 클립에 넓게 퍼져 있다** — 신호등 시나리오 전반에서 원본이
+통제 신호등을 놓치고 있었다는 뜻이다.
+
+> 프레임 선택 주의: 신호등이 60m 밖에서 통제를 시작하는 프레임은 변경이 맞아도
+> 화면에서 몇 픽셀이라 확인이 안 된다. `06_signalized/` 는 **통제 신호등이 가장
+> 가까운 프레임**을 골라 렌더했다.
 
 ---
 

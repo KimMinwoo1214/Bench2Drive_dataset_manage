@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import gzip
 import json
 import re
 import subprocess
@@ -49,6 +50,56 @@ def review_frames(relevance_csv: Path, limit: int) -> list[str]:
             if frame and (not found or found[-1] != frame):
                 found.append(frame)
     return _spread(found, limit)
+
+
+def _affecting_distance(anno_dir: Path, frame: str, light_id: str) -> float:
+    """How far the newly-affecting light was, in metres."""
+    for suffix in (".json.gz", ".json"):
+        path = anno_dir / f"{frame}{suffix}"
+        if not path.is_file():
+            continue
+        opener = gzip.open if suffix.endswith(".gz") else open
+        try:
+            with opener(str(path), "rt", encoding="utf-8") as file:
+                data = json.load(file)
+        except Exception:
+            return float("inf")
+        for box in data.get("bounding_boxes", ()):
+            if box.get("class") == "traffic_light" and str(box.get("id")) == light_id:
+                value = box.get("distance")
+                return float(value) if isinstance(value, (int, float)) else float("inf")
+    return float("inf")
+
+
+def near_changed_frames(changes_csv: Path, anno_dir: Path, limit: int) -> list[str]:
+    """Changed frames where the light is close enough to actually see.
+
+    A light that starts controlling the ego 60 m out is a correct change and a
+    useless picture: at that range it is a few pixels at the end of the road.
+    Ranking by distance puts the same edit where a person can check it.
+    """
+    seen: dict[str, str] = {}
+    with changes_csv.open(newline="", encoding="utf-8-sig") as file:
+        for row in csv.DictReader(file):
+            if row.get("after_affects_ego") != "true":
+                continue
+            frame = row.get("frame", "").split(".")[0]
+            if frame:
+                seen.setdefault(frame, str(row.get("traffic_light_id", "")))
+    if not seen:
+        return []
+    ranked = sorted(
+        seen.items(),
+        key=lambda item: _affecting_distance(anno_dir, item[0], item[1]),
+    )
+    # Keep them apart in time so the panels are not three views of one moment.
+    chosen: list[str] = []
+    for frame, _ in ranked:
+        if all(abs(int(frame) - int(other)) >= 15 for other in chosen):
+            chosen.append(frame)
+        if len(chosen) >= limit:
+            break
+    return sorted(chosen)
 
 
 def changed_frames(changes_csv: Path, limit: int) -> list[str]:
@@ -170,7 +221,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         reports = relabel / clip / "traffic_light" / "reports"
         if args.frames_from == "changed":
             source_csv = reports / "affects_ego_changes.csv"
-            picker = changed_frames
+            corrected_anno = relabel / clip / "traffic_light" / "corrected_anno"
+            picker = lambda path, limit: near_changed_frames(path, corrected_anno, limit)
         else:
             source_csv = reports / "relevance_frames.csv"
             picker = review_frames
