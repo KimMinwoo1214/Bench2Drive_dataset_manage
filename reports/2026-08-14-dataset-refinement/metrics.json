@@ -1,0 +1,411 @@
+{
+  "schema_version": 1,
+  "dataset": {
+    "clips": 1329,
+    "components": {
+      "base": {
+        "train": 950,
+        "val": 50,
+        "total": 1000
+      },
+      "weak": {
+        "train": 312,
+        "val": 17,
+        "total": 329
+      }
+    },
+    "parent_split": {
+      "train": 1262,
+      "val": 67,
+      "val_share": 0.050414
+    }
+  },
+  "collision": {
+    "clips_scanned": 1329,
+    "contact_runs": 296,
+    "clips_with_contact": 237,
+    "verdicts": {
+      "likely_collision": 4,
+      "suspect": 40,
+      "contact_without_reaction": 228,
+      "static_overlap": 24
+    },
+    "review_queue": 77,
+    "by_family": {
+      "Accident": {
+        "contact": 9,
+        "review": 1
+      },
+      "AccidentTwoWays": {
+        "contact": 12,
+        "review": 1
+      },
+      "BlockedIntersection": {
+        "contact": 2,
+        "review": 2
+      },
+      "ConstructionObstacle": {
+        "contact": 6,
+        "review": 1
+      },
+      "ConstructionObstacleTwoWays": {
+        "contact": 3,
+        "review": 1
+      },
+      "CrossingBicycleFlow": {
+        "contact": 7,
+        "review": 6
+      },
+      "DynamicObjectCrossing": {
+        "contact": 5,
+        "review": 2
+      },
+      "EnterActorFlow": {
+        "contact": 1,
+        "review": 1
+      },
+      "HardBreakRoute": {
+        "contact": 1,
+        "review": 1
+      },
+      "HazardAtSideLane": {
+        "contact": 23,
+        "review": 2
+      },
+      "HazardAtSideLaneTwoWays": {
+        "contact": 1
+      },
+      "HighwayExit": {
+        "contact": 1,
+        "review": 1
+      },
+      "InterurbanActorFlow": {
+        "contact": 2,
+        "review": 1
+      },
+      "InterurbanAdvancedActorFlow": {
+        "contact": 4,
+        "review": 2
+      },
+      "InvadingTurn": {
+        "contact": 5,
+        "review": 1
+      },
+      "LaneChange": {
+        "contact": 31,
+        "review": 18
+      },
+      "MergerIntoSlowTraffic": {
+        "contact": 2,
+        "review": 2
+      },
+      "MergerIntoSlowTrafficV2": {
+        "contact": 4,
+        "review": 2
+      },
+      "NonSignalizedJunctionLeftTurn": {
+        "contact": 10,
+        "review": 5
+      },
+      "NonSignalizedJunctionLeftTurnEnterFlow": {
+        "contact": 2,
+        "review": 2
+      },
+      "NonSignalizedJunctionRightTurn": {
+        "contact": 4,
+        "review": 1
+      },
+      "OppositeVehicleRunningRedLight": {
+        "contact": 1
+      },
+      "ParkedObstacle": {
+        "contact": 9
+      },
+      "ParkedObstacleTwoWays": {
+        "contact": 3
+      },
+      "ParkingCrossingPedestrian": {
+        "contact": 1
+      },
+      "ParkingCutIn": {
+        "contact": 1,
+        "review": 1
+      },
+      "ParkingExit": {
+        "contact": 8
+      },
+      "PedestrianCrossing": {
+        "contact": 2,
+        "review": 2
+      },
+      "SignalizedJunctionLeftTurn": {
+        "contact": 4,
+        "review": 1
+      },
+      "SignalizedJunctionLeftTurnEnterFlow": {
+        "contact": 4,
+        "review": 4
+      },
+      "SignalizedJunctionRightTurn": {
+        "contact": 2,
+        "review": 2
+      },
+      "TJunction": {
+        "contact": 1
+      },
+      "VanillaNonSignalizedTurnEncounterStopsign": {
+        "contact": 2,
+        "review": 1
+      },
+      "VanillaSignalizedTurnEncounterRedLight": {
+        "contact": 1,
+        "review": 1
+      },
+      "VehicleOpensDoorTwoWays": {
+        "contact": 1
+      },
+      "VehicleTurningRoute": {
+        "contact": 3,
+        "review": 2
+      },
+      "VehicleTurningRoutePedestrian": {
+        "contact": 1,
+        "review": 1
+      },
+      "YieldToEmergencyVehicle": {
+        "contact": 58,
+        "review": 9
+      }
+    },
+    "sweep_sha256": "9ed823df851d7ad89b9fac7d10490c6b0a4e59858a86a7cd431b2f2910458f3c"
+  },
+  "exclusion": {
+    "reviewed": 77,
+    "excluded": {
+      "count": 29,
+      "total": 1329,
+      "share": 0.021821,
+      "percent": 2.18
+    },
+    "accepted": 1300,
+    "by_component": {
+      "base": {
+        "count": 23,
+        "total": 1000,
+        "share": 0.023,
+        "percent": 2.3
+      },
+      "weak": {
+        "count": 6,
+        "total": 329,
+        "share": 0.018237,
+        "percent": 1.82
+      }
+    },
+    "by_split": {
+      "train": {
+        "count": 25,
+        "total": 1262,
+        "share": 0.01981,
+        "percent": 1.98
+      },
+      "val": {
+        "count": 4,
+        "total": 67,
+        "share": 0.059701,
+        "percent": 5.97
+      }
+    },
+    "by_family": {
+      "LaneChange": 9,
+      "CrossingBicycleFlow": 2,
+      "MergerIntoSlowTraffic": 2,
+      "NonSignalizedJunctionLeftTurnEnterFlow": 2,
+      "YieldToEmergencyVehicle": 2,
+      "ConstructionObstacleTwoWays": 1,
+      "DynamicObjectCrossing": 1,
+      "EnterActorFlow": 1,
+      "HighwayExit": 1,
+      "InterurbanActorFlow": 1,
+      "InterurbanAdvancedActorFlow": 1,
+      "MergerIntoSlowTrafficV2": 1,
+      "NonSignalizedJunctionLeftTurn": 1,
+      "SignalizedJunctionLeftTurnEnterFlow": 1,
+      "SignalizedJunctionLeftTurn": 1,
+      "SignalizedJunctionRightTurn": 1,
+      "VehicleTurningRoutePedestrian": 1
+    },
+    "families_reviewed_none_excluded": [
+      "Accident",
+      "AccidentTwoWays",
+      "BlockedIntersection",
+      "ConstructionObstacle",
+      "HardBreakRoute",
+      "HazardAtSideLane",
+      "InvadingTurn",
+      "NonSignalizedJunctionRightTurn",
+      "ParkingCutIn",
+      "PedestrianCrossing",
+      "VanillaNonSignalizedTurnEncounterStopsign",
+      "VanillaSignalizedTurnEncounterRedLight",
+      "VehicleTurningRoute"
+    ],
+    "reviewers": [
+      "kimminseong"
+    ],
+    "audit_metrics_sha256": "876f268ec873c9e04eeafb36b89ae24b2f3f0e888f70df6a292ef45fd4e00642",
+    "completion_sha256": "beb705673c30d767a665adf5afeeb6904ec5eca97b9975fb82d99efdeaf25921"
+  },
+  "split": {
+    "policy": "preserve_parent_membership_remove_excluded_no_backfill",
+    "train": 1237,
+    "val": 63,
+    "total": 1300,
+    "val_share_before": 0.050414,
+    "val_share_after": 0.048462,
+    "parent_manifest_sha256": "448438d80b43886cd1d7d45730ee500033ae2c44e5b190ac9fcd5862f7433c65"
+  },
+  "relabel": {
+    "clips": 1300,
+    "status": {
+      "completed": 1217,
+      "review": 83
+    },
+    "annotation_frames": 324566,
+    "traffic_light_entries": 1119119,
+    "bbox": {
+      "reassigned": {
+        "count": 186592,
+        "total": 1119119,
+        "share": 0.166731,
+        "percent": 16.67
+      },
+      "already_ok": {
+        "count": 458686,
+        "total": 1119119,
+        "share": 0.409863,
+        "percent": 40.99
+      },
+      "no_consensus": {
+        "count": 466963,
+        "total": 1119119,
+        "share": 0.417259,
+        "percent": 41.73
+      },
+      "target_absent": {
+        "count": 6878,
+        "total": 1119119,
+        "share": 0.006146,
+        "percent": 0.61
+      },
+      "changed_frames": 56539,
+      "in_band_before": {
+        "count": 646025,
+        "total": 1119119,
+        "share": 0.577262,
+        "percent": 57.73
+      },
+      "in_band_after": {
+        "count": 844111,
+        "total": 1119119,
+        "share": 0.754264,
+        "percent": 75.43
+      }
+    },
+    "affects_ego": {
+      "changed_entries": 17196,
+      "changed_frames": 17098,
+      "false_to_true": 17098,
+      "true_to_false": 98,
+      "controlling_entries": 74779,
+      "unverified": {
+        "count": 8983,
+        "total": 74779,
+        "share": 0.120127,
+        "percent": 12.01
+      },
+      "unverified_clips": 50,
+      "unverified_by_junction_size": {
+        "1": 4745,
+        "2": 607,
+        "3": 3631
+      }
+    },
+    "review": {
+      "clips": 83,
+      "frames": {
+        "count": 7546,
+        "total": 324566,
+        "share": 0.02325,
+        "percent": 2.32
+      }
+    },
+    "crossing_events": 390
+  },
+  "review_reasons": {
+    "clips": 83,
+    "by_main_reason": {
+      "bbox_not_verified": 42,
+      "existing_label_without_crossing_evidence": 36,
+      "trajectory_heading_mismatch": 4,
+      "multiple_near_simultaneous_crossings": 1
+    },
+    "frames_by_reason": {
+      "bbox_not_verified": 4292,
+      "existing_label_without_crossing_evidence": 3206,
+      "trajectory_heading_mismatch": 396,
+      "multiple_near_simultaneous_crossings": 48
+    }
+  },
+  "stop_and_go": {
+    "original": {
+      "stop_and_go_events": 712,
+      "with_controlling_light": 222,
+      "depart": {
+        "GREEN": 206,
+        "RED": 15
+      },
+      "within_40m": {
+        "count": 201,
+        "total": 209,
+        "share": 0.961722,
+        "percent": 96.17
+      }
+    },
+    "corrected": {
+      "stop_and_go_events": 712,
+      "with_controlling_light": 275,
+      "depart": {
+        "GREEN": 241,
+        "YELLOW": 2,
+        "RED": 32
+      },
+      "within_40m": {
+        "count": 227,
+        "total": 236,
+        "share": 0.961864,
+        "percent": 96.19
+      }
+    }
+  },
+  "provenance": {
+    "release_root": "/mnt/AILabDataset/03_Shared_Repository/2026-intern/Team_two/Bench2Drive_relabel/production_1329_corrected_v1",
+    "manifest": "/home/ailab/AILabSSD/99_Management/2026_internship/kimminseong/production_1329_v1_code/Bench2Drive_dataset_manage/Weak_Scenario_Mining/data/bench2drive_base1000_weak329_train_val_split.json",
+    "manifest_sha256": "448438d80b43886cd1d7d45730ee500033ae2c44e5b190ac9fcd5862f7433c65",
+    "bench_commit": "36b281f20a8afc905cd9cd87eee6744bc112067b",
+    "internship_commit": "eb51d8544f18e3ee4e22fa3f665309ab56bec66c",
+    "command": [
+      "collect_report_metrics.py",
+      "--release-root",
+      "/mnt/AILabDataset/03_Shared_Repository/2026-intern/Team_two/Bench2Drive_relabel/production_1329_corrected_v1",
+      "--manifest",
+      "/home/ailab/AILabSSD/99_Management/2026_internship/kimminseong/production_1329_v1_code/Bench2Drive_dataset_manage/Weak_Scenario_Mining/data/bench2drive_base1000_weak329_train_val_split.json",
+      "--bench-repo",
+      "/home/ailab/AILabSSD/99_Management/2026_internship/kimminseong/production_1329_v1_code/Bench2Drive_dataset_manage",
+      "--internship-repo",
+      "/home/ailab/AILabSSD/99_Management/2026_internship/kimminseong/production_1329_v1_code/2026-Summer-Internship",
+      "--output-dir",
+      "/home/ailab/AILabSSD/99_Management/2026_internship/kimminseong/production_1329_v1_code/Bench2Drive_dataset_manage/reports/2026-08-14-dataset-refinement"
+    ]
+  }
+}

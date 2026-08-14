@@ -1,0 +1,2787 @@
+{
+  "summary": {
+    "label": "corrected",
+    "clips": 1300,
+    "stop_and_go_events": 712,
+    "events_with_a_controlling_light": 275,
+    "events_without_any_light": 437,
+    "depart": {
+      "GREEN": 241,
+      "YELLOW": 2,
+      "RED": 32
+    },
+    "depart_no_light": 0,
+    "stopped": {
+      "RED": 265,
+      "YELLOW": 4,
+      "GREEN": 6
+    },
+    "at_stopline_events": 19,
+    "far_from_stopline_events": 256,
+    "at_stopline_depart": {
+      "GREEN": 17,
+      "RED": 2
+    },
+    "at_stopline_depart_green_rate": 0.8947,
+    "depart_green_rate": 0.8764,
+    "stopped_red_rate": 0.9636,
+    "thresholds": {
+      "stopped_m_s": 0.1,
+      "moving_m_s": 1.0,
+      "min_stop_frames": 10,
+      "depart_window": 5
+    }
+  },
+  "events": [
+    {
+      "clip": "AccidentTwoWays_Town12_Route1110_Weather18",
+      "stop_frame": 79,
+      "depart_frame": 185,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "58506",
+      "nearest_distance_m": 75.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1110_Weather18",
+      "stop_frame": 410,
+      "depart_frame": 448,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "58506",
+      "nearest_distance_m": 33.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1124_Weather18",
+      "stop_frame": 97,
+      "depart_frame": 189,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "43002",
+      "nearest_distance_m": 85.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1124_Weather18",
+      "stop_frame": 271,
+      "depart_frame": 758,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "43002",
+      "nearest_distance_m": 33.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1445_Weather1",
+      "stop_frame": 86,
+      "depart_frame": 189,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "9963",
+      "nearest_distance_m": 83.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1445_Weather1",
+      "stop_frame": 368,
+      "depart_frame": 446,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9963",
+      "nearest_distance_m": 33.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1453_Weather12",
+      "stop_frame": 75,
+      "depart_frame": 188,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "24903",
+      "nearest_distance_m": 81.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1453_Weather12",
+      "stop_frame": 284,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "24903",
+      "nearest_distance_m": 34.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1453_Weather12",
+      "stop_frame": 425,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "24903",
+      "nearest_distance_m": 34.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1461_Weather20",
+      "stop_frame": 84,
+      "depart_frame": 108,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "39694",
+      "nearest_distance_m": 74.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1461_Weather20",
+      "stop_frame": 141,
+      "depart_frame": 211,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "39694",
+      "nearest_distance_m": 73.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1461_Weather20",
+      "stop_frame": 286,
+      "depart_frame": 452,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "39694",
+      "nearest_distance_m": 24.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1468_Weather2",
+      "stop_frame": 78,
+      "depart_frame": 104,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "50872",
+      "nearest_distance_m": 69.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1468_Weather2",
+      "stop_frame": 132,
+      "depart_frame": 204,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "50872",
+      "nearest_distance_m": 67.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "AccidentTwoWays_Town12_Route1468_Weather2",
+      "stop_frame": 283,
+      "depart_frame": 441,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "50872",
+      "nearest_distance_m": 25.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "Accident_Town12_Route956_Weather20",
+      "stop_frame": 313,
+      "depart_frame": 448,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "16907",
+      "nearest_distance_m": 18.1,
+      "at_stopline": true
+    },
+    {
+      "clip": "Accident_Town15_Route412_Weather22",
+      "stop_frame": 253,
+      "depart_frame": 285,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "5056",
+      "nearest_distance_m": 24.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "Accident_Town15_Route412_Weather22",
+      "stop_frame": 264,
+      "depart_frame": 285,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "5056",
+      "nearest_distance_m": 24.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town03_Route134_Weather3",
+      "stop_frame": 41,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "549",
+      "nearest_distance_m": 39.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town03_Route135_Weather5",
+      "stop_frame": 37,
+      "depart_frame": 138,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "716",
+      "nearest_distance_m": 35.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town03_Route135_Weather5",
+      "stop_frame": 180,
+      "depart_frame": 279,
+      "stopped_state": "GREEN",
+      "depart_state": "RED",
+      "light_id": "722",
+      "nearest_distance_m": 72.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town03_Route135_Weather5",
+      "stop_frame": 327,
+      "depart_frame": 590,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "722",
+      "nearest_distance_m": 41.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town04_Route193_Weather11",
+      "stop_frame": 175,
+      "depart_frame": 211,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "288",
+      "nearest_distance_m": 58.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town04_Route195_Weather13",
+      "stop_frame": 178,
+      "depart_frame": 203,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "460",
+      "nearest_distance_m": 58.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town05_Route248_Weather14",
+      "stop_frame": 174,
+      "depart_frame": 186,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "2731",
+      "nearest_distance_m": 22.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town05_Route272_Weather12",
+      "stop_frame": 184,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "3988",
+      "nearest_distance_m": 35.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town10HD_Route391_Weather1",
+      "stop_frame": 40,
+      "depart_frame": 138,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "40",
+      "nearest_distance_m": 34.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town12_Route936_Weather0",
+      "stop_frame": 32,
+      "depart_frame": 442,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "28579",
+      "nearest_distance_m": 31.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town13_Route615_Weather9",
+      "stop_frame": 41,
+      "depart_frame": 139,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "19225",
+      "nearest_distance_m": 35.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town13_Route615_Weather9",
+      "stop_frame": 200,
+      "depart_frame": 301,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "19678",
+      "nearest_distance_m": 34.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "BlockedIntersection_Town13_Route616_Weather18",
+      "stop_frame": 40,
+      "depart_frame": 293,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "14579",
+      "nearest_distance_m": 25.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1011_Weather23",
+      "stop_frame": 42,
+      "depart_frame": 322,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "20924",
+      "nearest_distance_m": 23.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1032_Weather18",
+      "stop_frame": 41,
+      "depart_frame": 318,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "50750",
+      "nearest_distance_m": 22.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1044_Weather3",
+      "stop_frame": 42,
+      "depart_frame": 308,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "65867",
+      "nearest_distance_m": 24.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1050_Weather10",
+      "stop_frame": 40,
+      "depart_frame": 323,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "69078",
+      "nearest_distance_m": 24.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1061_Weather21",
+      "stop_frame": 284,
+      "depart_frame": 320,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1517",
+      "nearest_distance_m": 24.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1061_Weather21",
+      "stop_frame": 302,
+      "depart_frame": 320,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1517",
+      "nearest_distance_m": 24.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1062_Weather22",
+      "stop_frame": 184,
+      "depart_frame": 322,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1319",
+      "nearest_distance_m": 23.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1063_Weather23",
+      "stop_frame": 76,
+      "depart_frame": 321,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "28008",
+      "nearest_distance_m": 22.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1065_Weather25",
+      "stop_frame": 95,
+      "depart_frame": 308,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "5771",
+      "nearest_distance_m": 23.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1066_Weather0",
+      "stop_frame": 94,
+      "depart_frame": 308,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9875",
+      "nearest_distance_m": 25.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1068_Weather2",
+      "stop_frame": 238,
+      "depart_frame": 318,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "39390",
+      "nearest_distance_m": 31.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1068_Weather2",
+      "stop_frame": 300,
+      "depart_frame": 318,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "39390",
+      "nearest_distance_m": 31.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1070_Weather3",
+      "stop_frame": 284,
+      "depart_frame": 326,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "61734",
+      "nearest_distance_m": 27.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1071_Weather0",
+      "stop_frame": 77,
+      "depart_frame": 318,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "13068",
+      "nearest_distance_m": 22.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1072_Weather6",
+      "stop_frame": 286,
+      "depart_frame": 323,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1376",
+      "nearest_distance_m": 22.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1072_Weather6",
+      "stop_frame": 297,
+      "depart_frame": 323,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1376",
+      "nearest_distance_m": 22.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1073_Weather7",
+      "stop_frame": 174,
+      "depart_frame": 320,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1056",
+      "nearest_distance_m": 30.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1075_Weather9",
+      "stop_frame": 126,
+      "depart_frame": 323,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "5491",
+      "nearest_distance_m": 30.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1076_Weather10",
+      "stop_frame": 89,
+      "depart_frame": 317,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "5416",
+      "nearest_distance_m": 22.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1077_Weather11",
+      "stop_frame": 98,
+      "depart_frame": 316,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9869",
+      "nearest_distance_m": 25.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route1078_Weather12",
+      "stop_frame": 93,
+      "depart_frame": 319,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9514",
+      "nearest_distance_m": 22.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route860_Weather2",
+      "stop_frame": 158,
+      "depart_frame": 315,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "39854",
+      "nearest_distance_m": 25.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route862_Weather3",
+      "stop_frame": 156,
+      "depart_frame": 318,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "47280",
+      "nearest_distance_m": 26.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route863_Weather5",
+      "stop_frame": 273,
+      "depart_frame": 318,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "46581",
+      "nearest_distance_m": 25.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "CrossingBicycleFlow_Town12_Route977_Weather15",
+      "stop_frame": 42,
+      "depart_frame": 321,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "84487",
+      "nearest_distance_m": 27.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "EnterActorFlow_Town03_Route132_Weather2",
+      "stop_frame": 27,
+      "depart_frame": 442,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "541",
+      "nearest_distance_m": 41.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "EnterActorFlow_Town04_Route192_Weather10",
+      "stop_frame": 55,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "289",
+      "nearest_distance_m": 24.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "EnterActorFlow_Town05_Route271_Weather11",
+      "stop_frame": 197,
+      "depart_frame": 445,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "4904",
+      "nearest_distance_m": 33.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "EnterActorFlow_Town07_Route350_Weather12",
+      "stop_frame": 40,
+      "depart_frame": 441,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "2110",
+      "nearest_distance_m": 26.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "EnterActorFlow_Town13_Route612_Weather14",
+      "stop_frame": 40,
+      "depart_frame": 441,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "8800",
+      "nearest_distance_m": 27.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "EnterActorFlow_Town13_Route614_Weather8",
+      "stop_frame": 88,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1198",
+      "nearest_distance_m": 27.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "EnterActorFlow_Town13_Route681_Weather5",
+      "stop_frame": 36,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "29384",
+      "nearest_distance_m": 25.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "HazardAtSideLane_Town13_Route558_Weather12",
+      "stop_frame": 246,
+      "depart_frame": 472,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "23701",
+      "nearest_distance_m": 24.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "LaneChange_Town13_Route743_Weather3",
+      "stop_frame": 160,
+      "depart_frame": 183,
+      "stopped_state": "GREEN",
+      "depart_state": "GREEN",
+      "light_id": "19149",
+      "nearest_distance_m": 30.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "NonSignalizedJunctionLeftTurn_Town04_Route183_Weather1",
+      "stop_frame": 402,
+      "depart_frame": 595,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1449",
+      "nearest_distance_m": 25.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "NonSignalizedJunctionLeftTurn_Town05_Route239_Weather26",
+      "stop_frame": 107,
+      "depart_frame": 120,
+      "stopped_state": "YELLOW",
+      "depart_state": "RED",
+      "light_id": "299",
+      "nearest_distance_m": 84.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "NonSignalizedJunctionLeftTurn_Town05_Route239_Weather26",
+      "stop_frame": 199,
+      "depart_frame": 243,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "299",
+      "nearest_distance_m": 83.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "NonSignalizedJunctionLeftTurn_Town05_Route239_Weather26",
+      "stop_frame": 221,
+      "depart_frame": 243,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "299",
+      "nearest_distance_m": 83.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "NonSignalizedJunctionLeftTurn_Town05_Route239_Weather26",
+      "stop_frame": 277,
+      "depart_frame": 328,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "299",
+      "nearest_distance_m": 83.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "NonSignalizedJunctionLeftTurn_Town05_Route239_Weather26",
+      "stop_frame": 301,
+      "depart_frame": 328,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "299",
+      "nearest_distance_m": 83.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "NonSignalizedJunctionLeftTurn_Town05_Route239_Weather26",
+      "stop_frame": 336,
+      "depart_frame": 352,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "299",
+      "nearest_distance_m": 83.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "NonSignalizedJunctionLeftTurn_Town05_Route239_Weather26",
+      "stop_frame": 360,
+      "depart_frame": 380,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "299",
+      "nearest_distance_m": 83.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "OppositeVehicleRunningRedLight_Town12_Route929_Weather19",
+      "stop_frame": 49,
+      "depart_frame": 74,
+      "stopped_state": "GREEN",
+      "depart_state": "GREEN",
+      "light_id": "5546",
+      "nearest_distance_m": 17.8,
+      "at_stopline": true
+    },
+    {
+      "clip": "OppositeVehicleTakingPriority_Town04_Route187_Weather5",
+      "stop_frame": 167,
+      "depart_frame": 603,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1314",
+      "nearest_distance_m": 32.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "OppositeVehicleTakingPriority_Town04_Route188_Weather6",
+      "stop_frame": 101,
+      "depart_frame": 139,
+      "stopped_state": "YELLOW",
+      "depart_state": "RED",
+      "light_id": "118",
+      "nearest_distance_m": 71.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "OppositeVehicleTakingPriority_Town04_Route188_Weather6",
+      "stop_frame": 120,
+      "depart_frame": 139,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "118",
+      "nearest_distance_m": 71.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "OppositeVehicleTakingPriority_Town04_Route188_Weather6",
+      "stop_frame": 212,
+      "depart_frame": 603,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "118",
+      "nearest_distance_m": 32.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkedObstacleTwoWays_Town12_Route1181_Weather11",
+      "stop_frame": 95,
+      "depart_frame": 181,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "32320",
+      "nearest_distance_m": 81.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkedObstacleTwoWays_Town12_Route1181_Weather11",
+      "stop_frame": 255,
+      "depart_frame": 455,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "32320",
+      "nearest_distance_m": 43.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkedObstacle_Town11_Route395_Weather5",
+      "stop_frame": 74,
+      "depart_frame": 106,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "184",
+      "nearest_distance_m": 72.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkedObstacle_Town13_Route555_Weather9",
+      "stop_frame": 79,
+      "depart_frame": 109,
+      "stopped_state": "GREEN",
+      "depart_state": "YELLOW",
+      "light_id": "14592",
+      "nearest_distance_m": 75.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkedObstacle_Town13_Route555_Weather9",
+      "stop_frame": 169,
+      "depart_frame": 596,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "14592",
+      "nearest_distance_m": 39.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkingCrossingPedestrian_Town12_Route897_Weather13",
+      "stop_frame": 220,
+      "depart_frame": 612,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "91600",
+      "nearest_distance_m": 35.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkingCrossingPedestrian_Town13_Route669_Weather19",
+      "stop_frame": 154,
+      "depart_frame": 452,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9661",
+      "nearest_distance_m": 44.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkingCutIn_Town12_Route763_Weather9",
+      "stop_frame": 185,
+      "depart_frame": 460,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "98908",
+      "nearest_distance_m": 39.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkingCutIn_Town12_Route900_Weather19",
+      "stop_frame": 188,
+      "depart_frame": 457,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1656",
+      "nearest_distance_m": 47.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkingCutIn_Town12_Route954_Weather18",
+      "stop_frame": 151,
+      "depart_frame": 457,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "58407",
+      "nearest_distance_m": 39.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkingCutIn_Town13_Route671_Weather21",
+      "stop_frame": 155,
+      "depart_frame": 304,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "14209",
+      "nearest_distance_m": 44.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkingExit_Town12_Route1308_Weather21",
+      "stop_frame": 180,
+      "depart_frame": 456,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9864",
+      "nearest_distance_m": 41.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkingExit_Town12_Route1319_Weather3",
+      "stop_frame": 186,
+      "depart_frame": 462,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "17359",
+      "nearest_distance_m": 38.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkingExit_Town12_Route788_Weather8",
+      "stop_frame": 179,
+      "depart_frame": 456,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "24934",
+      "nearest_distance_m": 46.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkingExit_Town13_Route677_Weather1",
+      "stop_frame": 143,
+      "depart_frame": 603,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "24271",
+      "nearest_distance_m": 45.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "ParkingExit_Town13_Route732_Weather3",
+      "stop_frame": 206,
+      "depart_frame": 302,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "24772",
+      "nearest_distance_m": 29.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town12_Route1013_Weather25",
+      "stop_frame": 39,
+      "depart_frame": 135,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "24216",
+      "nearest_distance_m": 30.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town12_Route1014_Weather0",
+      "stop_frame": 39,
+      "depart_frame": 136,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "24461",
+      "nearest_distance_m": 26.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town12_Route1033_Weather20",
+      "stop_frame": 47,
+      "depart_frame": 85,
+      "stopped_state": "GREEN",
+      "depart_state": "YELLOW",
+      "light_id": "20315",
+      "nearest_distance_m": 23.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town12_Route865_Weather7",
+      "stop_frame": 150,
+      "depart_frame": 437,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "51211",
+      "nearest_distance_m": 20.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town12_Route866_Weather8",
+      "stop_frame": 51,
+      "depart_frame": 85,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "51013",
+      "nearest_distance_m": 26.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town12_Route866_Weather8",
+      "stop_frame": 69,
+      "depart_frame": 85,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "51013",
+      "nearest_distance_m": 26.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town13_Route636_Weather12",
+      "stop_frame": 35,
+      "depart_frame": 437,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "43727",
+      "nearest_distance_m": 27.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town13_Route638_Weather14",
+      "stop_frame": 38,
+      "depart_frame": 437,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "57783",
+      "nearest_distance_m": 27.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town13_Route716_Weather14",
+      "stop_frame": 41,
+      "depart_frame": 437,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "86394",
+      "nearest_distance_m": 26.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town13_Route718_Weather8",
+      "stop_frame": 146,
+      "depart_frame": 434,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "2194",
+      "nearest_distance_m": 25.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town13_Route736_Weather8",
+      "stop_frame": 363,
+      "depart_frame": 437,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "34060",
+      "nearest_distance_m": 25.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town13_Route747_Weather19",
+      "stop_frame": 363,
+      "depart_frame": 437,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "15081",
+      "nearest_distance_m": 21.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "PedestrianCrossing_Town15_Route448_Weather6",
+      "stop_frame": 46,
+      "depart_frame": 287,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "2122",
+      "nearest_distance_m": 12.6,
+      "at_stopline": true
+    },
+    {
+      "clip": "PedestrianCrossing_Town15_Route506_Weather12",
+      "stop_frame": 78,
+      "depart_frame": 286,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1969",
+      "nearest_distance_m": 10.2,
+      "at_stopline": true
+    },
+    {
+      "clip": "PedestrianCrossing_Town15_Route526_Weather6",
+      "stop_frame": 122,
+      "depart_frame": 286,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "2986",
+      "nearest_distance_m": 10.6,
+      "at_stopline": true
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurnEnterFlow_Town12_Route1034_Weather20",
+      "stop_frame": 37,
+      "depart_frame": 70,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "51034",
+      "nearest_distance_m": 30.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurnEnterFlow_Town12_Route948_Weather9",
+      "stop_frame": 40,
+      "depart_frame": 70,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "14106",
+      "nearest_distance_m": 26.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurnEnterFlow_Town12_Route981_Weather19",
+      "stop_frame": 34,
+      "depart_frame": 59,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "88115",
+      "nearest_distance_m": 29.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurnEnterFlow_Town13_Route1627_Weather3",
+      "stop_frame": 46,
+      "depart_frame": 71,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "24321",
+      "nearest_distance_m": 27.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurnEnterFlow_Town13_Route1633_Weather12",
+      "stop_frame": 51,
+      "depart_frame": 66,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "39053",
+      "nearest_distance_m": 26.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurnEnterFlow_Town13_Route1636_Weather15",
+      "stop_frame": 44,
+      "depart_frame": 68,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "47906",
+      "nearest_distance_m": 24.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurnEnterFlow_Town13_Route657_Weather2",
+      "stop_frame": 41,
+      "depart_frame": 54,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1893",
+      "nearest_distance_m": 24.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurnEnterFlow_Town13_Route658_Weather8",
+      "stop_frame": 39,
+      "depart_frame": 56,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "80927",
+      "nearest_distance_m": 27.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurnEnterFlow_Town13_Route692_Weather8",
+      "stop_frame": 44,
+      "depart_frame": 76,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "42815",
+      "nearest_distance_m": 31.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurnEnterFlow_Town13_Route719_Weather18",
+      "stop_frame": 35,
+      "depart_frame": 65,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9370",
+      "nearest_distance_m": 26.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurnEnterFlow_Town15_Route529_Weather9",
+      "stop_frame": 54,
+      "depart_frame": 73,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "3689",
+      "nearest_distance_m": 13.6,
+      "at_stopline": true
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurnEnterFlow_Town15_Route531_Weather11",
+      "stop_frame": 47,
+      "depart_frame": 68,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "3979",
+      "nearest_distance_m": 13.1,
+      "at_stopline": true
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurn_Town04_Route173_Weather26",
+      "stop_frame": 238,
+      "depart_frame": 595,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "14206",
+      "nearest_distance_m": 25.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurn_Town05_Route267_Weather3",
+      "stop_frame": 55,
+      "depart_frame": 78,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "285",
+      "nearest_distance_m": 10.2,
+      "at_stopline": true
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurn_Town07_Route334_Weather26",
+      "stop_frame": 47,
+      "depart_frame": 73,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "5445",
+      "nearest_distance_m": 28.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurn_Town12_Route1470_Weather5",
+      "stop_frame": 59,
+      "depart_frame": 72,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "39001",
+      "nearest_distance_m": 30.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurn_Town13_Route580_Weather26",
+      "stop_frame": 40,
+      "depart_frame": 54,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "15989",
+      "nearest_distance_m": 25.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurn_Town13_Route581_Weather26",
+      "stop_frame": 41,
+      "depart_frame": 67,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "15822",
+      "nearest_distance_m": 26.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionLeftTurn_Town15_Route471_Weather26",
+      "stop_frame": 47,
+      "depart_frame": 68,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "8484",
+      "nearest_distance_m": 13.0,
+      "at_stopline": true
+    },
+    {
+      "clip": "SignalizedJunctionRightTurn_Town03_Route118_Weather14",
+      "stop_frame": 44,
+      "depart_frame": 73,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "99",
+      "nearest_distance_m": 41.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionRightTurn_Town07_Route339_Weather1",
+      "stop_frame": 58,
+      "depart_frame": 79,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "2271",
+      "nearest_distance_m": 29.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionRightTurn_Town12_Route964_Weather2",
+      "stop_frame": 37,
+      "depart_frame": 58,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "69357",
+      "nearest_distance_m": 22.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "SignalizedJunctionRightTurn_Town12_Route988_Weather0",
+      "stop_frame": 43,
+      "depart_frame": 75,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "99188",
+      "nearest_distance_m": 22.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town01_Route90_Weather12",
+      "stop_frame": 129,
+      "depart_frame": 453,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "931",
+      "nearest_distance_m": 21.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town05_Route261_Weather1",
+      "stop_frame": 146,
+      "depart_frame": 161,
+      "stopped_state": "GREEN",
+      "depart_state": "GREEN",
+      "light_id": "4364",
+      "nearest_distance_m": 56.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town06_Route304_Weather18",
+      "stop_frame": 106,
+      "depart_frame": 456,
+      "stopped_state": "YELLOW",
+      "depart_state": "GREEN",
+      "light_id": "114",
+      "nearest_distance_m": 54.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town06_Route306_Weather20",
+      "stop_frame": 118,
+      "depart_frame": 455,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "114",
+      "nearest_distance_m": 45.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town07_Route365_Weather1",
+      "stop_frame": 128,
+      "depart_frame": 458,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "3563",
+      "nearest_distance_m": 24.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town12_Route1017_Weather3",
+      "stop_frame": 131,
+      "depart_frame": 293,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "28545",
+      "nearest_distance_m": 29.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town12_Route881_Weather23",
+      "stop_frame": 125,
+      "depart_frame": 155,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "57946",
+      "nearest_distance_m": 38.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town12_Route882_Weather23",
+      "stop_frame": 143,
+      "depart_frame": 451,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "76890",
+      "nearest_distance_m": 18.7,
+      "at_stopline": true
+    },
+    {
+      "clip": "TJunction_Town12_Route926_Weather8",
+      "stop_frame": 145,
+      "depart_frame": 305,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "17045",
+      "nearest_distance_m": 26.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town12_Route927_Weather9",
+      "stop_frame": 148,
+      "depart_frame": 304,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "20765",
+      "nearest_distance_m": 26.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town12_Route947_Weather11",
+      "stop_frame": 411,
+      "depart_frame": 451,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "13376",
+      "nearest_distance_m": 28.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town13_Route652_Weather2",
+      "stop_frame": 112,
+      "depart_frame": 149,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "76592",
+      "nearest_distance_m": 28.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town13_Route655_Weather5",
+      "stop_frame": 103,
+      "depart_frame": 157,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "81627",
+      "nearest_distance_m": 32.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town13_Route691_Weather15",
+      "stop_frame": 82,
+      "depart_frame": 300,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "52978",
+      "nearest_distance_m": 30.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town15_Route456_Weather14",
+      "stop_frame": 111,
+      "depart_frame": 299,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "3094",
+      "nearest_distance_m": 27.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "TJunction_Town15_Route495_Weather1",
+      "stop_frame": 404,
+      "depart_frame": 448,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "703",
+      "nearest_distance_m": 19.8,
+      "at_stopline": true
+    },
+    {
+      "clip": "TJunction_Town15_Route496_Weather2",
+      "stop_frame": 225,
+      "depart_frame": 312,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "966",
+      "nearest_distance_m": 25.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town03_Route137_Weather7",
+      "stop_frame": 17,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "712",
+      "nearest_distance_m": 38.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town03_Route139_Weather9",
+      "stop_frame": 21,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "72",
+      "nearest_distance_m": 39.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town04_Route196_Weather14",
+      "stop_frame": 121,
+      "depart_frame": 151,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "643",
+      "nearest_distance_m": 36.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town04_Route197_Weather15",
+      "stop_frame": 94,
+      "depart_frame": 138,
+      "stopped_state": "YELLOW",
+      "depart_state": "RED",
+      "light_id": "481",
+      "nearest_distance_m": 64.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town04_Route197_Weather15",
+      "stop_frame": 233,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "481",
+      "nearest_distance_m": 25.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town04_Route198_Weather8",
+      "stop_frame": 112,
+      "depart_frame": 151,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "813",
+      "nearest_distance_m": 36.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town07_Route354_Weather8",
+      "stop_frame": 0,
+      "depart_frame": 137,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "2934",
+      "nearest_distance_m": 23.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town07_Route355_Weather9",
+      "stop_frame": 0,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "2313",
+      "nearest_distance_m": 23.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town10HD_Route386_Weather22",
+      "stop_frame": 19,
+      "depart_frame": 138,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "3981",
+      "nearest_distance_m": 33.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town10HD_Route387_Weather23",
+      "stop_frame": 106,
+      "depart_frame": 140,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "40",
+      "nearest_distance_m": 34.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town10HD_Route392_Weather2",
+      "stop_frame": 36,
+      "depart_frame": 140,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1579",
+      "nearest_distance_m": 33.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town12_Route868_Weather10",
+      "stop_frame": 260,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "47419",
+      "nearest_distance_m": 29.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town12_Route870_Weather12",
+      "stop_frame": 213,
+      "depart_frame": 293,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "53867",
+      "nearest_distance_m": 21.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town12_Route871_Weather13",
+      "stop_frame": 405,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "61972",
+      "nearest_distance_m": 26.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town12_Route944_Weather8",
+      "stop_frame": 0,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "32326",
+      "nearest_distance_m": 30.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town13_Route640_Weather8",
+      "stop_frame": 6,
+      "depart_frame": 290,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "47677",
+      "nearest_distance_m": 27.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town13_Route641_Weather9",
+      "stop_frame": 0,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "57437",
+      "nearest_distance_m": 22.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town13_Route643_Weather19",
+      "stop_frame": 0,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "61989",
+      "nearest_distance_m": 36.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town15_Route451_Weather9",
+      "stop_frame": 118,
+      "depart_frame": 140,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "602",
+      "nearest_distance_m": 13.9,
+      "at_stopline": true
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town15_Route490_Weather22",
+      "stop_frame": 417,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "434",
+      "nearest_distance_m": 13.2,
+      "at_stopline": true
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterGreenLight_Town15_Route507_Weather13",
+      "stop_frame": 154,
+      "depart_frame": 185,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1463",
+      "nearest_distance_m": 13.9,
+      "at_stopline": true
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town03_Route140_Weather10",
+      "stop_frame": 21,
+      "depart_frame": 62,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "805",
+      "nearest_distance_m": 40.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town03_Route141_Weather11",
+      "stop_frame": 35,
+      "depart_frame": 88,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "85",
+      "nearest_distance_m": 35.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town03_Route142_Weather12",
+      "stop_frame": 38,
+      "depart_frame": 92,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "82",
+      "nearest_distance_m": 35.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town04_Route199_Weather9",
+      "stop_frame": 34,
+      "depart_frame": 142,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "658",
+      "nearest_distance_m": 26.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town04_Route199_Weather9",
+      "stop_frame": 128,
+      "depart_frame": 142,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "658",
+      "nearest_distance_m": 26.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town04_Route199_Weather9",
+      "stop_frame": 191,
+      "depart_frame": 210,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "643",
+      "nearest_distance_m": 66.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town04_Route200_Weather18",
+      "stop_frame": 112,
+      "depart_frame": 165,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "973",
+      "nearest_distance_m": 26.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town04_Route201_Weather19",
+      "stop_frame": 44,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "656",
+      "nearest_distance_m": 25.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town05_Route253_Weather19",
+      "stop_frame": 40,
+      "depart_frame": 80,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "3845",
+      "nearest_distance_m": 32.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town05_Route254_Weather20",
+      "stop_frame": 351,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "3088",
+      "nearest_distance_m": 34.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town05_Route255_Weather21",
+      "stop_frame": 26,
+      "depart_frame": 80,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "3970",
+      "nearest_distance_m": 37.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town07_Route357_Weather19",
+      "stop_frame": 0,
+      "depart_frame": 139,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1104",
+      "nearest_distance_m": 23.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town07_Route358_Weather20",
+      "stop_frame": 0,
+      "depart_frame": 140,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "944",
+      "nearest_distance_m": 23.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town07_Route359_Weather21",
+      "stop_frame": 0,
+      "depart_frame": 139,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1291",
+      "nearest_distance_m": 23.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town10HD_Route388_Weather23",
+      "stop_frame": 19,
+      "depart_frame": 138,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "4056",
+      "nearest_distance_m": 33.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town10HD_Route389_Weather25",
+      "stop_frame": 51,
+      "depart_frame": 84,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "4711",
+      "nearest_distance_m": 32.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town10HD_Route393_Weather3",
+      "stop_frame": 102,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "40",
+      "nearest_distance_m": 34.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15459_Weather18",
+      "stop_frame": 256,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9991",
+      "nearest_distance_m": 21.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15459_Weather18",
+      "stop_frame": 276,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9991",
+      "nearest_distance_m": 21.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15461_Weather20",
+      "stop_frame": 149,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "13392",
+      "nearest_distance_m": 29.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15462_Weather21",
+      "stop_frame": 252,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "13494",
+      "nearest_distance_m": 27.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15462_Weather21",
+      "stop_frame": 268,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "13494",
+      "nearest_distance_m": 27.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15464_Weather23",
+      "stop_frame": 103,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "17442",
+      "nearest_distance_m": 21.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15465_Weather23",
+      "stop_frame": 116,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "21036",
+      "nearest_distance_m": 30.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15467_Weather0",
+      "stop_frame": 263,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "24843",
+      "nearest_distance_m": 31.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15468_Weather1",
+      "stop_frame": 248,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "24774",
+      "nearest_distance_m": 31.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15468_Weather1",
+      "stop_frame": 418,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "24774",
+      "nearest_distance_m": 31.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15472_Weather5",
+      "stop_frame": 116,
+      "depart_frame": 293,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "32011",
+      "nearest_distance_m": 27.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15473_Weather6",
+      "stop_frame": 400,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "35969",
+      "nearest_distance_m": 30.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15474_Weather7",
+      "stop_frame": 82,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "35780",
+      "nearest_distance_m": 22.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15475_Weather8",
+      "stop_frame": 106,
+      "depart_frame": 290,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "39596",
+      "nearest_distance_m": 21.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15477_Weather10",
+      "stop_frame": 179,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "42934",
+      "nearest_distance_m": 29.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15478_Weather11",
+      "stop_frame": 111,
+      "depart_frame": 140,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "42892",
+      "nearest_distance_m": 22.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15481_Weather14",
+      "stop_frame": 0,
+      "depart_frame": 163,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "50583",
+      "nearest_distance_m": 32.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15482_Weather15",
+      "stop_frame": 0,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "50178",
+      "nearest_distance_m": 27.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15483_Weather8",
+      "stop_frame": 79,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "54611",
+      "nearest_distance_m": 21.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15484_Weather9",
+      "stop_frame": 0,
+      "depart_frame": 25,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "54449",
+      "nearest_distance_m": 22.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15484_Weather9",
+      "stop_frame": 149,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "54449",
+      "nearest_distance_m": 21.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15487_Weather20",
+      "stop_frame": 77,
+      "depart_frame": 291,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "62203",
+      "nearest_distance_m": 21.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15490_Weather23",
+      "stop_frame": 325,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1703",
+      "nearest_distance_m": 30.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15494_Weather1",
+      "stop_frame": 249,
+      "depart_frame": 291,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9560",
+      "nearest_distance_m": 21.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15495_Weather2",
+      "stop_frame": 400,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9815",
+      "nearest_distance_m": 30.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15496_Weather3",
+      "stop_frame": 121,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "13213",
+      "nearest_distance_m": 32.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15498_Weather5",
+      "stop_frame": 416,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "16931",
+      "nearest_distance_m": 31.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15501_Weather8",
+      "stop_frame": 404,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "21244",
+      "nearest_distance_m": 28.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15502_Weather9",
+      "stop_frame": 286,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "25008",
+      "nearest_distance_m": 29.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15505_Weather12",
+      "stop_frame": 238,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "28780",
+      "nearest_distance_m": 29.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15514_Weather21",
+      "stop_frame": 124,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "46696",
+      "nearest_distance_m": 27.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15515_Weather22",
+      "stop_frame": 177,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "47149",
+      "nearest_distance_m": 29.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15518_Weather25",
+      "stop_frame": 405,
+      "depart_frame": 441,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "54818",
+      "nearest_distance_m": 30.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15518_Weather25",
+      "stop_frame": 418,
+      "depart_frame": 441,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "54818",
+      "nearest_distance_m": 30.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15520_Weather1",
+      "stop_frame": 94,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "28172",
+      "nearest_distance_m": 24.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15521_Weather2",
+      "stop_frame": 267,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "28474",
+      "nearest_distance_m": 29.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15523_Weather3",
+      "stop_frame": 94,
+      "depart_frame": 140,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "964",
+      "nearest_distance_m": 30.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15525_Weather6",
+      "stop_frame": 400,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "6081",
+      "nearest_distance_m": 28.9,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15526_Weather7",
+      "stop_frame": 407,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9874",
+      "nearest_distance_m": 24.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15527_Weather8",
+      "stop_frame": 205,
+      "depart_frame": 291,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9615",
+      "nearest_distance_m": 21.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15529_Weather10",
+      "stop_frame": 313,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "13597",
+      "nearest_distance_m": 29.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15532_Weather13",
+      "stop_frame": 302,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "21304",
+      "nearest_distance_m": 31.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15533_Weather14",
+      "stop_frame": 421,
+      "depart_frame": 442,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "21219",
+      "nearest_distance_m": 29.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15537_Weather18",
+      "stop_frame": 235,
+      "depart_frame": 293,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "28198",
+      "nearest_distance_m": 23.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15539_Weather20",
+      "stop_frame": 92,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "32261",
+      "nearest_distance_m": 21.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15540_Weather21",
+      "stop_frame": 50,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "35471",
+      "nearest_distance_m": 26.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15544_Weather25",
+      "stop_frame": 223,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "42866",
+      "nearest_distance_m": 26.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15544_Weather25",
+      "stop_frame": 273,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "42866",
+      "nearest_distance_m": 26.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15550_Weather5",
+      "stop_frame": 254,
+      "depart_frame": 291,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "54250",
+      "nearest_distance_m": 21.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15552_Weather7",
+      "stop_frame": 234,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "58458",
+      "nearest_distance_m": 24.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15555_Weather10",
+      "stop_frame": 386,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "61723",
+      "nearest_distance_m": 30.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15559_Weather14",
+      "stop_frame": 65,
+      "depart_frame": 142,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1163",
+      "nearest_distance_m": 31.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15560_Weather15",
+      "stop_frame": 416,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "6026",
+      "nearest_distance_m": 33.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15567_Weather22",
+      "stop_frame": 253,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "16976",
+      "nearest_distance_m": 20.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15577_Weather6",
+      "stop_frame": 253,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "35892",
+      "nearest_distance_m": 24.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route15582_Weather11",
+      "stop_frame": 116,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "46750",
+      "nearest_distance_m": 21.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route872_Weather14",
+      "stop_frame": 266,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "50957",
+      "nearest_distance_m": 23.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route875_Weather9",
+      "stop_frame": 389,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "54891",
+      "nearest_distance_m": 31.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route945_Weather9",
+      "stop_frame": 19,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "47068",
+      "nearest_distance_m": 26.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town12_Route969_Weather7",
+      "stop_frame": 35,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "76872",
+      "nearest_distance_m": 26.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3865_Weather12",
+      "stop_frame": 250,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1448",
+      "nearest_distance_m": 33.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3870_Weather9",
+      "stop_frame": 168,
+      "depart_frame": 292,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "1689",
+      "nearest_distance_m": 25.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3871_Weather18",
+      "stop_frame": 308,
+      "depart_frame": 341,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9515",
+      "nearest_distance_m": 21.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3871_Weather18",
+      "stop_frame": 323,
+      "depart_frame": 341,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9515",
+      "nearest_distance_m": 21.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3874_Weather21",
+      "stop_frame": 134,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "14770",
+      "nearest_distance_m": 25.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3874_Weather21",
+      "stop_frame": 475,
+      "depart_frame": 501,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "14770",
+      "nearest_distance_m": 25.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3877_Weather23",
+      "stop_frame": 233,
+      "depart_frame": 444,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "24755",
+      "nearest_distance_m": 27.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3879_Weather0",
+      "stop_frame": 394,
+      "depart_frame": 442,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "29186",
+      "nearest_distance_m": 31.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3880_Weather1",
+      "stop_frame": 133,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "29218",
+      "nearest_distance_m": 20.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route3881_Weather2",
+      "stop_frame": 456,
+      "depart_frame": 497,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "33997",
+      "nearest_distance_m": 25.3,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route603_Weather15",
+      "stop_frame": 213,
+      "depart_frame": 442,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "2019",
+      "nearest_distance_m": 24.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route644_Weather20",
+      "stop_frame": 21,
+      "depart_frame": 75,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "52597",
+      "nearest_distance_m": 24.8,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route645_Weather21",
+      "stop_frame": 288,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "19935",
+      "nearest_distance_m": 27.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route647_Weather23",
+      "stop_frame": 46,
+      "depart_frame": 363,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "19827",
+      "nearest_distance_m": 25.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town13_Route689_Weather13",
+      "stop_frame": 20,
+      "depart_frame": 74,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "47567",
+      "nearest_distance_m": 28.7,
+      "at_stopline": false
+    },
+    {
+      "clip": "VanillaSignalizedTurnEncounterRedLight_Town15_Route491_Weather23",
+      "stop_frame": 414,
+      "depart_frame": 443,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "185",
+      "nearest_distance_m": 13.8,
+      "at_stopline": true
+    },
+    {
+      "clip": "VehicleTurningRoutePedestrian_Town12_Route1027_Weather13",
+      "stop_frame": 37,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "39076",
+      "nearest_distance_m": 25.4,
+      "at_stopline": false
+    },
+    {
+      "clip": "VehicleTurningRoutePedestrian_Town12_Route1040_Weather0",
+      "stop_frame": 398,
+      "depart_frame": 439,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "46616",
+      "nearest_distance_m": 24.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VehicleTurningRoutePedestrian_Town12_Route1040_Weather0",
+      "stop_frame": 421,
+      "depart_frame": 439,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "46616",
+      "nearest_distance_m": 24.6,
+      "at_stopline": false
+    },
+    {
+      "clip": "VehicleTurningRoutePedestrian_Town12_Route826_Weather20",
+      "stop_frame": 106,
+      "depart_frame": 139,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "80263",
+      "nearest_distance_m": 25.0,
+      "at_stopline": false
+    },
+    {
+      "clip": "VehicleTurningRoutePedestrian_Town12_Route829_Weather25",
+      "stop_frame": 44,
+      "depart_frame": 87,
+      "stopped_state": "RED",
+      "depart_state": "RED",
+      "light_id": "13989",
+      "nearest_distance_m": 16.5,
+      "at_stopline": true
+    },
+    {
+      "clip": "VehicleTurningRoutePedestrian_Town12_Route999_Weather11",
+      "stop_frame": 37,
+      "depart_frame": 290,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "5650",
+      "nearest_distance_m": 26.1,
+      "at_stopline": false
+    },
+    {
+      "clip": "VehicleTurningRoutePedestrian_Town13_Route609_Weather21",
+      "stop_frame": 144,
+      "depart_frame": 289,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "2254",
+      "nearest_distance_m": 17.9,
+      "at_stopline": true
+    },
+    {
+      "clip": "VehicleTurningRoute_Town12_Route1026_Weather12",
+      "stop_frame": 39,
+      "depart_frame": 141,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "42943",
+      "nearest_distance_m": 26.2,
+      "at_stopline": false
+    },
+    {
+      "clip": "VehicleTurningRoute_Town12_Route822_Weather18",
+      "stop_frame": 288,
+      "depart_frame": 440,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "9150",
+      "nearest_distance_m": 18.1,
+      "at_stopline": true
+    },
+    {
+      "clip": "VehicleTurningRoute_Town12_Route825_Weather21",
+      "stop_frame": 260,
+      "depart_frame": 440,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "18982",
+      "nearest_distance_m": 18.1,
+      "at_stopline": true
+    },
+    {
+      "clip": "VehicleTurningRoute_Town12_Route997_Weather9",
+      "stop_frame": 34,
+      "depart_frame": 441,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "5902",
+      "nearest_distance_m": 22.5,
+      "at_stopline": false
+    },
+    {
+      "clip": "VehicleTurningRoute_Town13_Route700_Weather23",
+      "stop_frame": 44,
+      "depart_frame": 140,
+      "stopped_state": "RED",
+      "depart_state": "GREEN",
+      "light_id": "61784",
+      "nearest_distance_m": 27.5,
+      "at_stopline": false
+    }
+  ]
+}

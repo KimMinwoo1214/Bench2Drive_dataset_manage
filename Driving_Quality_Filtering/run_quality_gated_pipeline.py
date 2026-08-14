@@ -294,6 +294,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         ]
         if source == "corrected":
             values.extend(["--corrected-root", str(args.release_root / "relabel")])
+            # Where the relabel could not verify a light's assignment, its centre
+            # still points at another head, so the projected pixel would train the
+            # model to look in the wrong place. This drops that supervision.
+            values.extend(["--bbox-verification", str(args.release_root / "relabel")])
         _internship_module(args, "team_code.data.prepare_b2d_infos", values, args.stage)
     elif args.stage == "validate-pkls":
         if args.runtime_data_root is None:
