@@ -220,7 +220,7 @@ def annotation_frame_name(path):
     return name[:-len(suffix)] if name.endswith(suffix) else path.stem
 
 
-def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=None, max_frames=None, review_events=None, review_context=20, vis_bbox=True,  vis_top_down=True, vis_road=True, vis_lidar_bev=True, vis_lidar_to_back_image=True, vis_lidar_to_front_image=True, vis_lidar_to_front_left_image=True, traffic_light_visual_map=None):
+def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=None, max_frames=None, review_events=None, review_context=20, vis_bbox=True, bbox_cameras=('CAM_FRONT',),  vis_top_down=True, vis_road=True, vis_lidar_bev=True, vis_lidar_to_back_image=True, vis_lidar_to_front_image=True, vis_lidar_to_front_left_image=True, traffic_light_visual_map=None):
     cm = None
     if (
         vis_lidar_to_back_image
@@ -330,8 +330,11 @@ def visualize_data(file_path, map_path, output_dir, anno_dir=None, start_frame=N
         )
         sensors_anno = anno['sensors']
         # ========================== bbox ==========================
-        if vis_bbox:            
-            for key in ['CAM_FRONT']:
+        if vis_bbox:
+            # Which cameras get 3D boxes drawn. Reviewing a side contact needs
+            # the front-left/right views, which were unreachable while this was
+            # pinned to CAM_FRONT.
+            for key in bbox_cameras:
                 K = sensors_anno[key]['intrinsic']
                 world2cam = sensors_anno[key]['world2cam']
                 visulize_img = cv2.imread(os.path.join(file_path, f'camera/{cam_map[key]}/{frame}.jpg'))
@@ -675,6 +678,14 @@ if __name__ == '__main__':
         help='scenario별 traffic-light camera geometry ID override JSON',
     )
     parser.add_argument(
+        '--bbox-cameras',
+        nargs='+',
+        default=['CAM_FRONT'],
+        choices=('CAM_FRONT', 'CAM_FRONT_LEFT', 'CAM_FRONT_RIGHT',
+                 'CAM_BACK', 'CAM_BACK_LEFT', 'CAM_BACK_RIGHT'),
+        help='3D bbox를 그릴 카메라 (기본값: CAM_FRONT)',
+    )
+    parser.add_argument(
         '--profile',
         choices=('bbox', 'camera-bev', 'camera-bev-map', 'full'),
         default='full',
@@ -720,6 +731,7 @@ if __name__ == '__main__':
         review_events=args.review_events,
         review_context=args.review_context,
         vis_bbox=True,
+        bbox_cameras=tuple(args.bbox_cameras),
         vis_top_down=camera_bev_profile,
         vis_road=road_profile,
         vis_lidar_bev=full_profile,
