@@ -30,11 +30,54 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 TOWN = re.compile(r"_(Town\d+(?:HD)?)_Route")
 
 
-def ego_frames(detail_csv: Path, clip: str, limit: int) -> list[str]:
-    """Frames where a light affects the ego, spread across the clip.
+def _spread(found: list[str], limit: int) -> list[str]:
+    """Take frames evenly across the clip; at 10 Hz neighbours are identical."""
+    if len(found) <= limit:
+        return found
+    step = len(found) / limit
+    return [found[int(index * step)] for index in range(limit)]
 
-    Consecutive frames look almost identical at 10 Hz, so take them evenly
-    spaced rather than the first few.
+
+def review_frames(relevance_csv: Path, limit: int) -> list[str]:
+    """The frames the relabel actually flagged, which is what is being judged."""
+    found = []
+    with relevance_csv.open(newline="", encoding="utf-8-sig") as file:
+        for row in csv.DictReader(file):
+            if row.get("status") != "REVIEW":
+                continue
+            frame = row.get("frame", "").split(".")[0]
+            if frame and (not found or found[-1] != frame):
+                found.append(frame)
+    return _spread(found, limit)
+
+
+def changed_frames(changes_csv: Path, limit: int) -> list[str]:
+    """Frames where affects_ego was actually rewritten.
+
+    The bbox repair can be checked against a physical rule the repair does not
+    control, so it verifies itself. The affects_ego decision cannot: it is
+    accepted on the tool's own confidence criteria. Looking at the frames it
+    changed is the only outside check there is.
+    """
+    found = []
+    with changes_csv.open(newline="", encoding="utf-8-sig") as file:
+        for row in csv.DictReader(file):
+            # Only where a light was switched on; switching one off leaves
+            # nothing in the picture to look at.
+            if row.get("after_affects_ego") != "true":
+                continue
+            frame = row.get("frame", "").split(".")[0]
+            if frame and (not found or found[-1] != frame):
+                found.append(frame)
+    return _spread(found, limit)
+
+
+def ego_frames(detail_csv: Path, clip: str, limit: int) -> list[str]:
+    """Fallback: frames where some light affects the ego.
+
+    Only for clips with no per-frame decision report. The diagnostic CSV holds
+    nothing for clips whose junctions never reach three lights, so it cannot
+    be the primary source.
     """
     found = []
     with detail_csv.open(newline="", encoding="utf-8-sig") as file:
@@ -46,10 +89,7 @@ def ego_frames(detail_csv: Path, clip: str, limit: int) -> list[str]:
             frame = row.get("frame", "").split(".")[0]
             if frame and (not found or found[-1] != frame):
                 found.append(frame)
-    if len(found) <= limit:
-        return found
-    step = len(found) / limit
-    return [found[int(index * step)] for index in range(limit)]
+    return _spread(found, limit)
 
 
 def _render(job: dict) -> tuple[str, str, bool, str]:
@@ -102,6 +142,13 @@ def main(argv: Sequence[str] | None = None) -> int:
                         help="한 줄에 클립 하나. fix_by_clip.csv에서 뽑은 목록")
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--frames-per-clip", type=int, default=4)
+    parser.add_argument(
+        "--frames-from", choices=("review", "changed"), default="review",
+        help=(
+            "review: 도구가 판단을 보류한 프레임 / "
+            "changed: affects_ego를 실제로 바꾼 프레임"
+        ),
+    )
     parser.add_argument("--workers", type=int, default=8)
     args = parser.parse_args(argv)
 
@@ -120,9 +167,18 @@ def main(argv: Sequence[str] | None = None) -> int:
         if not corrected.is_dir():
             print(f"[skip] 수정본 없음: {clip}", flush=True)
             continue
-        frames = ego_frames(detail, clip, args.frames_per_clip) if detail.is_file() else []
+        reports = relabel / clip / "traffic_light" / "reports"
+        if args.frames_from == "changed":
+            source_csv = reports / "affects_ego_changes.csv"
+            picker = changed_frames
+        else:
+            source_csv = reports / "relevance_frames.csv"
+            picker = review_frames
+        frames = picker(source_csv, args.frames_per_clip) if source_csv.is_file() else []
+        if not frames and args.frames_from == "review" and detail.is_file():
+            frames = ego_frames(detail, clip, args.frames_per_clip)
         if not frames:
-            print(f"[skip] ego 신호등 프레임 없음: {clip}", flush=True)
+            print(f"[skip] 볼 프레임이 없음: {clip}", flush=True)
             continue
         target = output_dir / clip
         for frame in frames:
