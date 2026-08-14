@@ -215,6 +215,13 @@ def collect_relabel(relabel_root: Path) -> dict[str, Any]:
 
     entries = sum(actions.values())
     total = lambda field: sum(int(row.get(field) or 0) for row in results)
+    by_family_entries, by_family_clips = Counter(), Counter()
+    for row in results:
+        changed = int(row.get("affects_ego_changed_entries") or 0)
+        if changed:
+            family = family_of(row["scenario"])
+            by_family_entries[family] += changed
+            by_family_clips[family] += 1
     changes = Counter()
     for path in relabel_root.glob("*/traffic_light/reports/affects_ego_changes.csv"):
         for row in read_csv(path):
@@ -243,6 +250,20 @@ def collect_relabel(relabel_root: Path) -> dict[str, Any]:
             "unverified": portion(ego["unverified"], ego["total"]),
             "unverified_clips": len(unverified_clips),
             "unverified_by_junction_size": dict(sorted(group_sizes.items())),
+            "by_family": {
+                name: {"entries": count, "clips": by_family_clips[name]}
+                for name, count in by_family_entries.most_common()
+            },
+            "signalized_families": {
+                "entries": sum(
+                    count for name, count in by_family_entries.items()
+                    if "Signalized" in name or "Stopsign" in name
+                ),
+                "clips": sum(
+                    count for name, count in by_family_clips.items()
+                    if "Signalized" in name or "Stopsign" in name
+                ),
+            },
         },
         "review": {
             "clips": sum(1 for row in results if row.get("status") == "review"),
@@ -385,6 +406,27 @@ def main(argv: Sequence[str] | None = None) -> int:
         {"stage": "UV 마스킹", "clips": rel["affects_ego"]["unverified_clips"],
          "frames": rel["affects_ego"]["unverified"]["count"],
          "note": f"UV 감독 대상의 {rel['affects_ego']['unverified']['percent']}%"},
+    ])
+
+    # 어느 클립이 어느 split 인지는 요약 수치로 답이 안 된다. 원본을 그대로 둔다.
+    split_source = classification / "filtered_train_val_split.json"
+    (output_dir / "filtered_train_val_split.json").write_text(
+        split_source.read_text(encoding="utf-8"), encoding="utf-8"
+    )
+    split_rows = []
+    split_data = read_json(split_source)
+    for component, block in split_data.get("components", {}).items():
+        for name in ("train", "val"):
+            for clip in block.get(name, ()):
+                split_rows.append(
+                    {"clip": clip, "component": component, "split": name}
+                )
+    split_rows.sort(key=lambda row: row["clip"])
+    write_csv(tables / "filtered_split.csv", split_rows)
+
+    write_csv(tables / "affects_ego_by_scenario.csv", [
+        {"scenario": name, "changed_entries": value["entries"], "clips": value["clips"]}
+        for name, value in metrics["relabel"]["affects_ego"]["by_family"].items()
     ])
 
     write_csv(tables / "by_scenario.csv", [

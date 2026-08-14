@@ -329,6 +329,112 @@
         "1": 4745,
         "2": 607,
         "3": 3631
+      },
+      "by_family": {
+        "AccidentTwoWays": {
+          "entries": 2755,
+          "clips": 6
+        },
+        "ParkingExit": {
+          "entries": 1991,
+          "clips": 5
+        },
+        "ParkingCutIn": {
+          "entries": 1636,
+          "clips": 5
+        },
+        "VanillaSignalizedTurnEncounterRedLight": {
+          "entries": 1530,
+          "clips": 120
+        },
+        "OppositeVehicleTakingPriority": {
+          "entries": 1184,
+          "clips": 2
+        },
+        "BlockedIntersection": {
+          "entries": 1047,
+          "clips": 10
+        },
+        "ParkingCrossingPedestrian": {
+          "entries": 914,
+          "clips": 2
+        },
+        "ParkedObstacle": {
+          "entries": 825,
+          "clips": 3
+        },
+        "VanillaSignalizedTurnEncounterGreenLight": {
+          "entries": 758,
+          "clips": 19
+        },
+        "Accident": {
+          "entries": 716,
+          "clips": 3
+        },
+        "TJunction": {
+          "entries": 635,
+          "clips": 8
+        },
+        "SignalizedJunctionLeftTurn": {
+          "entries": 556,
+          "clips": 12
+        },
+        "NonSignalizedJunctionLeftTurn": {
+          "entries": 534,
+          "clips": 1
+        },
+        "ParkedObstacleTwoWays": {
+          "entries": 459,
+          "clips": 1
+        },
+        "HazardAtSideLane": {
+          "entries": 371,
+          "clips": 1
+        },
+        "VanillaNonSignalizedTurnEncounterStopsign": {
+          "entries": 303,
+          "clips": 1
+        },
+        "OppositeVehicleRunningRedLight": {
+          "entries": 292,
+          "clips": 16
+        },
+        "SignalizedJunctionRightTurn": {
+          "entries": 178,
+          "clips": 12
+        },
+        "PedestrianCrossing": {
+          "entries": 157,
+          "clips": 16
+        },
+        "EnterActorFlow": {
+          "entries": 117,
+          "clips": 12
+        },
+        "VehicleTurningRoute": {
+          "entries": 68,
+          "clips": 7
+        },
+        "CrossingBicycleFlow": {
+          "entries": 67,
+          "clips": 21
+        },
+        "SignalizedJunctionLeftTurnEnterFlow": {
+          "entries": 56,
+          "clips": 23
+        },
+        "VehicleTurningRoutePedestrian": {
+          "entries": 39,
+          "clips": 8
+        },
+        "LaneChange": {
+          "entries": 8,
+          "clips": 1
+        }
+      },
+      "signalized_families": {
+        "entries": 3915,
+        "clips": 188
       }
     },
     "review": {
@@ -392,8 +498,8 @@
     "release_root": "/mnt/AILabDataset/03_Shared_Repository/2026-intern/Team_two/Bench2Drive_relabel/production_1329_corrected_v1",
     "manifest": "/home/ailab/AILabSSD/99_Management/2026_internship/kimminseong/production_1329_v1_code/Bench2Drive_dataset_manage/Weak_Scenario_Mining/data/bench2drive_base1000_weak329_train_val_split.json",
     "manifest_sha256": "448438d80b43886cd1d7d45730ee500033ae2c44e5b190ac9fcd5862f7433c65",
-    "bench_commit": "36b281f20a8afc905cd9cd87eee6744bc112067b",
-    "internship_commit": "eb51d8544f18e3ee4e22fa3f665309ab56bec66c",
+    "bench_commit": "3568ee1e783876e57aa58e5b34f83aca7459aa1d",
+    "internship_commit": "3a22efd52322c6e63d7964a3076f0720f8ec1a49",
     "command": [
       "collect_report_metrics.py",
       "--release-root",
