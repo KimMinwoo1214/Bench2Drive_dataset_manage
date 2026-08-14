@@ -66,7 +66,10 @@ BAND_HALF = 15.0        # 자동 산출된 중앙값 +- 이 값이 정상 대역
 CALIB_RESID = 10.0      # 보정 표본으로 쓸 교차로의 최대 각도 잔차 [deg]
 CALIB_MIN_N = 200       # 타운별 최소 표본 수 (미달이면 전역 대역 사용)
 CALIB_STRIDE = 10       # 보정 시 프레임 샘플링 간격
-MAX_ANG_RESID = 35.0     # [deg] 배정 후 평균 각도 잔차가 이보다 크면 신뢰 불가
+# 배정 각도 잔차는 진단용으로만 CSV 에 남긴다. 수용 여부는 재배정 결과가
+# 그룹 전원 정상 대역에 들어오는지(band_ok)로만 판정한다. 잔차는 대리 지표라
+# 결과가 검증되는 배정까지 버렸다 (표본 200클립에서 1,914 엔트리, 수용분의 67%).
+MAX_ANG_RESID = 35.0     # [deg] CSV ang_resid 해석용 참고값. 기각에는 쓰지 않는다
 
 COS_MIN = 0.70           # ego 진행 방향과 신호등 통제 방향의 최소 cos
 LAT_MAX = 2.5            # ego 차로 중심에서 허용할 횡방향 거리 [m]
@@ -247,9 +250,9 @@ def solve_frame(anno, band=None):
             for i in grp:
                 out[lights[i]["id"]] = lights[i]["id"]      # 이미 정상
             continue
-        m, resid = solve_group(heads, tvs, grp)
-        if resid > MAX_ANG_RESID:
-            continue
+        m, _ = solve_group(heads, tvs, grp)
+        # 잔차는 대리 지표이고, 아래 band_ok(after)가 재배정 결과를 직접
+        # 검증한다. 잔차로 먼저 거르면 결과가 검증되는 배정까지 버린다.
         if not band_ok([fe_of(i, m[i]) for i in grp]):
             continue
         for i in grp:
@@ -346,11 +349,7 @@ def fix_frame(anno, forced=None, rows=None, clip="", frame="", band=None):
                 st["already_correct"] += len(grp)
                 for i in grp: action[i] = "already_ok"
                 continue
-            m, resid = solve_group(heads, tvs, grp)
-            if resid > MAX_ANG_RESID:
-                st["skipped_unreliable"] += len(grp)
-                for i in grp: action[i] = "unreliable"
-                continue
+            m, _ = solve_group(heads, tvs, grp)
             if not band_ok([fe_of(i, m[i]) for i in grp]):
                 st["skipped_no_improvement"] += len(grp)
                 for i in grp: action[i] = "no_improvement"
@@ -1015,7 +1014,6 @@ def main():
     print(f"재배정된 엔트리         : {total['reassigned']}")
     print(f"원래 맞았던 엔트리      : {total['already_correct']}")
     print(f"그룹이 작아 건너뜀      : {total['skipped_small_group']}")
-    print(f"각도 잔차 커서 건너뜀   : {total['skipped_unreliable']}")
     print(f"개선 안 되어 건너뜀     : {total['skipped_no_improvement']}")
     print(f"합의 없음               : {total['no_consensus']}")
     print(f"대상이 프레임에 없음    : {total['target_absent_in_frame']}")
