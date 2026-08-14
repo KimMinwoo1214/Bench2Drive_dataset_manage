@@ -52,6 +52,7 @@ import shutil
 import re
 import sys
 from collections import Counter
+from concurrent.futures import ProcessPoolExecutor
 
 import numpy as np
 from scipy.optimize import linear_sum_assignment
@@ -671,6 +672,179 @@ def write_csv(path, rows, affects_by_clip=None):
     print(f"[csv] {spath}  ({len(agg)} clips)", file=sys.stderr)
 
 
+# ------------------------------------------------------- 병렬 실행 (워커 측)
+#
+# 세 패스 모두 클립 단위로 독립이다. pass 0 과 pass 1 은 읽기만 하고 결과를
+# 합치는 리듀스(타운별 표본 병합, 투표 Counter 병합)이며, pass 2 는 확정된
+# 합의를 받아 클립별로 쓴다. 그래서 클립을 워커에 나눠도 전역 합의는 그대로다.
+#
+# 주의: 클립 목록을 잘라 이 스크립트를 여러 번 돌리는 것은 전혀 다른 이야기다.
+# 그렇게 하면 샤드마다 다른 합의가 나와 결과가 틀린다. 나누는 것은 스캔이지
+# 합의가 아니다.
+
+_WORKER = {}
+
+
+def _worker_init(state):
+    _WORKER.clear()
+    _WORKER.update(state)
+
+
+def _worker_band(path):
+    return _WORKER["bands"].get(town_of(path, _WORKER["root"]), _WORKER["gband"])
+
+
+def _scan_calibration(paths):
+    """pass 0 한 클립: 타운별 facing error 표본."""
+    samples = {}
+    for path in paths[::CALIB_STRIDE]:
+        try:
+            anno = load(path)
+        except Exception:
+            continue
+        found = calib_samples(anno)
+        if found:
+            samples.setdefault(town_of(path, _WORKER["root"]), []).extend(found)
+    return samples
+
+
+def _scan_votes(paths):
+    """pass 1 한 클립: 월드 좌표 키별 배정 투표."""
+    votes = {}
+    for path in paths:
+        try:
+            anno = load(path)
+        except Exception:
+            continue
+        for key, value in solve_frame_world(anno, _worker_band(path)).items():
+            votes.setdefault(key, Counter())[value] += 1
+    return votes
+
+
+def resolve_consensus(votes):
+    """투표를 합의로 확정. (consensus, disputed) 반환.
+
+    동점은 값 자체로 깬다. Counter.most_common 은 동점일 때 먼저 들어온 쪽을
+    돌려주므로, 그대로 두면 어느 워커가 어느 프레임을 먼저 읽었는지에 따라
+    합의가 달라진다.
+    """
+    consensus = {}
+    disputed = 0
+    for key, counts in votes.items():
+        target, top = min(counts.items(), key=lambda item: (-item[1], item[0]))
+        if top < sum(counts.values()):
+            disputed += 1
+        consensus[key] = target
+    return consensus, disputed
+
+
+def _repair_clip(job):
+    """pass 2 한 클립: bbox 복구 -> affects_ego -> 저장."""
+    clipdir, paths = job
+    root = _WORKER["root"]
+    clip_rel = os.path.relpath(clipdir, root)
+    forced = _WORKER["consensus"]
+    total = Counter()
+    rows = [] if _WORKER["want_rows"] else None
+
+    items = []
+    skipped = []
+    for path in paths:
+        try:
+            items.append((path, load(path)))
+        except Exception as exc:
+            skipped.append(f"[skip] {path}: {exc}")
+            items.append((path, None))
+
+    if forced is None:                       # 클립 단위 폴백
+        local = {}
+        for path, anno in items:
+            if anno is None:
+                continue
+            for key, value in solve_frame_world(anno, _worker_band(path)).items():
+                local.setdefault(key, Counter())[value] += 1
+        forced, _ = resolve_consensus(local)
+        total["consensus_ids"] += len(forced)
+
+    frames = bbox_changed_frames = files_changed = 0
+    bbox_changed = []
+    for path, anno in items:
+        if anno is None:
+            bbox_changed.append(False)
+            continue
+        frames += 1
+        stats, changed = fix_frame(
+            anno, forced=forced or None, rows=rows, clip=clip_rel,
+            frame=os.path.splitext(os.path.basename(path))[0],
+            band=_worker_band(path))
+        total.update(stats)
+        if changed:
+            bbox_changed_frames += 1
+        bbox_changed.append(changed)
+
+    if _WORKER["bbox_only"]:
+        affects_stats = Counter()
+        affects_changed = [False] * len(items)
+        final_by_frame = []
+        for _, anno in items:
+            final = {}
+            if anno is not None:
+                final = {
+                    box.get("id"): bool(box.get("affects_ego", False))
+                    for box in anno.get("bounding_boxes", [])
+                    if box.get("class") == "traffic_light"
+                }
+            final_by_frame.append(final)
+    else:
+        affects_stats, affects_changed, final_by_frame = recompute_affects_ego(
+            [anno for _, anno in items])
+
+    if rows is not None:
+        final_lookup = {}
+        for (path, _), final in zip(items, final_by_frame):
+            frame = os.path.splitext(os.path.basename(path))[0]
+            for tl_id, value in final.items():
+                final_lookup[(frame, tl_id)] = int(value)
+        for row in rows:
+            row["affects_ego_after"] = final_lookup.get(
+                (row["frame"], row["tl_id"]), row["affects_ego_before"])
+
+    out = _WORKER["out"]
+    for (path, anno), bbox_did_change, affects_did_change in zip(
+            items, bbox_changed, affects_changed):
+        if anno is None:
+            continue
+        if bbox_did_change or affects_did_change:
+            files_changed += 1
+        if not (_WORKER["apply"] or out):
+            continue
+        if out:
+            destination = os.path.join(out, os.path.relpath(path, root))
+            os.makedirs(os.path.dirname(destination), exist_ok=True)
+        else:
+            destination = path
+            if not os.path.exists(destination + ".bak"):
+                shutil.copy2(destination, destination + ".bak")
+        dump(destination, anno)
+
+    return {
+        "clip": clip_rel, "total": total, "rows": rows, "skipped": skipped,
+        "affects": affects_stats, "frames": frames,
+        "files_changed": files_changed, "bbox_changed_frames": bbox_changed_frames,
+    }
+
+
+def _mapper(workers, initargs):
+    """(map 함수, 정리 함수) 반환. workers<=1 이면 프로세스를 띄우지 않는다."""
+    if workers <= 1:
+        _worker_init(initargs)
+        return map, lambda: None
+    pool = ProcessPoolExecutor(
+        max_workers=workers, initializer=_worker_init, initargs=(initargs,)
+    )
+    return (lambda fn, items: pool.map(fn, items, chunksize=1)), pool.shutdown
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", required=True)
@@ -698,9 +872,18 @@ def main():
             "목록에 있는 <root>/<clip>/anno만 처리"
         ),
     )
+    ap.add_argument(
+        "--workers", type=int, default=1,
+        help=(
+            "클립을 처리할 워커 프로세스 수 (기본 1 = 단일 프로세스). "
+            "세 패스 모두 클립 단위로 독립이고 합의는 리듀스라 결과는 동일하다"
+        ),
+    )
     args = ap.parse_args()
     if args.apply and args.out:
         ap.error("--apply와 --out은 동시에 사용할 수 없습니다")
+    if args.workers < 1:
+        ap.error("--workers는 1 이상이어야 합니다")
 
     total = Counter()
     affects_total = Counter()
@@ -734,16 +917,15 @@ def main():
     rows = [] if args.csv else None
 
     # ===== pass 0: 타운별 정상 facing error 대역 자동 산출 =====
+    frame_lists = [paths for _, paths in all_clips]
+    run, done = _mapper(args.workers, {"root": args.root})
     samples = {}
-    for _, paths in all_clips:
-        for path in paths[::CALIB_STRIDE]:
-            try:
-                anno = load(path)
-            except Exception:
-                continue
-            sm = calib_samples(anno)
-            if sm:
-                samples.setdefault(town_of(path, args.root), []).extend(sm)
+    try:
+        for part in run(_scan_calibration, frame_lists):
+            for town, values in part.items():
+                samples.setdefault(town, []).extend(values)
+    finally:
+        done()
     pooled = [v for vs in samples.values() for v in vs]
     gband = ((float(np.median(pooled)) - BAND_HALF, float(np.median(pooled)) + BAND_HALF)
              if len(pooled) >= CALIB_MIN_N else (FACE_OK_LO, FACE_OK_HI))
@@ -768,111 +950,45 @@ def main():
     # ===== pass 1: 데이터셋 전체를 스캔해 월드 좌표 키로 투표 =====
     votes = {}
     if args.glob:
-        for _, paths in all_clips:
-            for path in paths:
-                try:
-                    anno = load(path)
-                except Exception:
-                    continue
-                for k, v in solve_frame_world(anno, band_for(path)).items():
-                    votes.setdefault(k, Counter())[v] += 1
-        consensus = {}
-        for k, cnt in votes.items():
-            tgt, n = cnt.most_common(1)[0]
-            if n < sum(cnt.values()):
-                total["disputed_ids"] += 1
-            consensus[k] = tgt
+        run, done = _mapper(
+            args.workers, {"root": args.root, "bands": bands, "gband": gband}
+        )
+        try:
+            for part in run(_scan_votes, frame_lists):
+                for key, counts in part.items():
+                    votes.setdefault(key, Counter()).update(counts)
+        finally:
+            done()
+        consensus, disputed = resolve_consensus(votes)
+        total["disputed_ids"] += disputed
         total["consensus_ids"] = len(consensus)
         print(f"[pass 1] 전역 합의 확보: {len(consensus)} junction-approach", file=sys.stderr)
     else:
         consensus = None
 
     # ===== pass 2: bbox 복구 -> affects_ego 재계산 -> 프레임당 한 번 저장 =====
-    for clipdir, paths in all_clips:
-        clips += 1
-        clip_rel = os.path.relpath(clipdir, args.root)
-        forced = consensus
-        items = []
-        for path in paths:
-            try:
-                items.append((path, load(path)))
-            except Exception as exc:
-                print(f"[skip] {path}: {exc}", file=sys.stderr)
-                items.append((path, None))
-
-        if forced is None:                       # 클립 단위 폴백
-            local = {}
-            for path, anno in items:
-                if anno is None:
-                    continue
-                for k, v in solve_frame_world(anno, band_for(path)).items():
-                    local.setdefault(k, Counter())[v] += 1
-            forced = {k: c.most_common(1)[0][0] for k, c in local.items()}
-            total["consensus_ids"] += len(forced)
-
-        clip_row_start = len(rows) if rows is not None else 0
-        bbox_changed = []
-        for path, anno in items:
-            if anno is None:
-                bbox_changed.append(False)
-                continue
-            frames += 1
-            st, changed = fix_frame(
-                anno, forced=forced or None, rows=rows,
-                clip=clip_rel,
-                frame=os.path.splitext(os.path.basename(path))[0],
-                band=band_for(path))
-            total.update(st)
-            if changed:
-                bbox_changed_frames += 1
-            bbox_changed.append(changed)
-
-        if args.bbox_only:
-            affects_stats = Counter()
-            affects_changed = [False] * len(items)
-            final_by_frame = []
-            for _, anno in items:
-                final = {}
-                if anno is not None:
-                    final = {
-                        box.get("id"): bool(box.get("affects_ego", False))
-                        for box in anno.get("bounding_boxes", [])
-                        if box.get("class") == "traffic_light"
-                    }
-                final_by_frame.append(final)
-        else:
-            affects_stats, affects_changed, final_by_frame = recompute_affects_ego(
-                [anno for _, anno in items])
-        affects_total.update(affects_stats)
-        affects_by_clip[clip_rel] = affects_stats
-
-        if rows is not None:
-            final_lookup = {}
-            for (path, _), final in zip(items, final_by_frame):
-                frame = os.path.splitext(os.path.basename(path))[0]
-                for tl_id, value in final.items():
-                    final_lookup[(frame, tl_id)] = int(value)
-            for row in rows[clip_row_start:]:
-                row["affects_ego_after"] = final_lookup.get(
-                    (row["frame"], row["tl_id"]), row["affects_ego_before"])
-
-        for (path, anno), bbox_did_change, affects_did_change in zip(
-                items, bbox_changed, affects_changed):
-            if anno is None:
-                continue
-            if bbox_did_change or affects_did_change:
-                files_changed += 1
-            if not (args.apply or args.out):
-                continue
-            if args.out:
-                rel = os.path.relpath(path, args.root)
-                dst = os.path.join(args.out, rel)
-                os.makedirs(os.path.dirname(dst), exist_ok=True)
-            else:
-                dst = path
-                if not os.path.exists(dst + ".bak"):
-                    shutil.copy2(dst, dst + ".bak")
-            dump(dst, anno)
+    # 결과는 클립 이름 순으로 다시 모은다. 워커가 끝나는 순서는 매번 다르지만
+    # CSV 행 순서는 그러면 안 되기 때문이다.
+    run, done = _mapper(args.workers, {
+        "root": args.root, "out": args.out, "apply": args.apply,
+        "bbox_only": args.bbox_only, "want_rows": rows is not None,
+        "bands": bands, "gband": gband, "consensus": consensus,
+    })
+    try:
+        for result in run(_repair_clip, all_clips):
+            clips += 1
+            frames += result["frames"]
+            files_changed += result["files_changed"]
+            bbox_changed_frames += result["bbox_changed_frames"]
+            total.update(result["total"])
+            affects_total.update(result["affects"])
+            affects_by_clip[result["clip"]] = result["affects"]
+            for line in result["skipped"]:
+                print(line, file=sys.stderr)
+            if rows is not None:
+                rows.extend(result["rows"])
+    finally:
+        done()
 
     if rows is not None:
         write_csv(args.csv, rows, affects_by_clip)

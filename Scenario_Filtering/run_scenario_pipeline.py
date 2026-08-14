@@ -243,8 +243,15 @@ def run_bbox_fix(
     bbox_output_root: Path,
     detail_csv: Path,
     clip_list_path: Path | None = None,
+    workers: int = 1,
 ) -> Path:
-    """Repair all selected clips in one pass so consensus is dataset-wide."""
+    """Repair all selected clips in one pass so consensus is dataset-wide.
+
+    ``workers`` splits the scan inside that single pass, not the pass itself.
+    The consensus is a reduction over every selected clip, so sharding the
+    clip list across separate invocations would give each shard its own
+    consensus and a different answer; sharding the reading does not.
+    """
     command = [
         sys.executable,
         str(FIX_SCRIPT),
@@ -258,6 +265,8 @@ def run_bbox_fix(
     ]
     if clip_list_path is not None:
         command.extend(["--clip-list", str(clip_list_path)])
+    if workers > 1:
+        command.extend(["--workers", str(workers)])
     run_command(command, "BBOX")
     summary_csv = detail_csv.with_name(f"{detail_csv.stem}_summary.csv")
     if not summary_csv.is_file():
@@ -740,6 +749,15 @@ def build_parser() -> argparse.ArgumentParser:
         default=4,
         help="prepare_b2d_infos.py 변환 worker 수 (기본값: 4)",
     )
+    parser.add_argument(
+        "--bbox-workers",
+        type=int,
+        default=1,
+        help=(
+            "bbox permutation 복구 worker 수 (기본값: 1). 클립 단위로 나눌 뿐 "
+            "전역 합의는 그대로라 결과가 바뀌지 않는다"
+        ),
+    )
     return parser
 
 
@@ -1186,6 +1204,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         parser.error("--check-only와 --resume은 동시에 사용할 수 없습니다")
     if args.pkl_workers < 1:
         parser.error("--pkl-workers는 1 이상이어야 합니다")
+    if args.bbox_workers < 1:
+        parser.error("--bbox-workers는 1 이상이어야 합니다")
     if args.build_pkl and args.manifest is not None:
         prepare_script = INTERNSHIP_ROOT / "team_code" / "data" / "prepare_b2d_infos.py"
         if not prepare_script.is_file():
@@ -1269,6 +1289,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             bbox_output_root,
             bbox_detail_csv,
             clip_list_path,
+            workers=args.bbox_workers,
         )
         for index, (scenario, scenario_dir, anno_dir) in enumerate(scenarios, start=1):
             print(f"[{index}/{len(scenarios)}] {scenario}", flush=True)

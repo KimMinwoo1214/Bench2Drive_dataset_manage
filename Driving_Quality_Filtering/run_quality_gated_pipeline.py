@@ -112,6 +112,7 @@ def _scenario_command(args: argparse.Namespace, component: str, check: bool = Fa
         "--manifest", str(split), "--component", component,
         "--map-root", str(args.map_root),
         *RELABEL_HEADLESS_FLAGS,
+        "--bbox-workers", str(args.workers),
     ]
     if args.review_approvals is not None:
         command.extend(["--review-approvals", str(args.review_approvals)])
@@ -124,10 +125,14 @@ def _scenario_command(args: argparse.Namespace, component: str, check: bool = Fa
 def _relabel_label(args: argparse.Namespace, component: str, check: bool) -> str:
     """Return a log label that separates first run, approval resume, and check."""
     if check:
-        return f"relabel-check-{component}"
-    if args.review_approvals is not None:
-        return f"relabel-{component}-approved-resume"
-    return f"relabel-{component}"
+        base = f"relabel-check-{component}"
+    elif args.review_approvals is not None:
+        base = f"relabel-{component}-approved-resume"
+    else:
+        base = f"relabel-{component}"
+    # Logs are never overwritten, so a re-run has to say which run it is
+    # rather than delete the record of the last one.
+    return f"{base}-{args.run_label}" if args.run_label else base
 
 
 def _internship_module(args: argparse.Namespace, module: str, values: Sequence[str], label: str) -> None:
@@ -163,6 +168,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--clip-list", type=Path)
     parser.add_argument("--runtime-data-root", type=Path)
     parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument(
+        "--run-label",
+        default=None,
+        help="suffix appended to this stage's log name so a re-run keeps the earlier log",
+    )
     return parser
 
 
@@ -173,6 +183,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         parser.error("--workers must be positive")
     if re.fullmatch(r"calibration_v[1-9][0-9]*", args.calibration_version) is None:
         parser.error("--calibration-version must match calibration_vN")
+    if args.run_label is not None and re.fullmatch(r"[A-Za-z0-9._-]+", args.run_label) is None:
+        parser.error("--run-label must be a plain filename-safe token")
     for field in ("manifest", "base_root", "weak_root", "map_root", "internship_root", "release_root"):
         value = getattr(args, field).expanduser().resolve()
         setattr(args, field, value)
